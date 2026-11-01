@@ -8,6 +8,7 @@ const activity=[];let messageTimer,demoDrives;
 const sdPhases=['sd-verified','verified',...FIRMWARE_PHASES];
 const stepKeys=['release','radio','backup','sd','firmware','verify'];
 const stepDone=new Map();let revealStep=null;
+const radioRestartInstructions='Wait for Writing complete. Eject the radio drives on your computer, then unplug USB. Turn the radio off, enter bootloader mode again with USB unplugged, and reconnect USB. Reselect both drives, then confirm the restart in step 06. Keep this installer tab open.';
 function resetSteps(){stepDone.clear();for(const key of stepKeys)$('step-'+key).open=true;}
 function showStep(key){
   const card=$('step-'+key);card.open=true;
@@ -24,7 +25,7 @@ function drawSteps(){
     radio:complete?'Radio identity checked':sdReady?'Drives selected · continue to final verification':$('plan').hidden?'Drives selected · recovery checks available':$('plan-summary').textContent,
     backup:'Original firmware + SD files saved · backup ZIP verified',
     sd:'Installed files and preserved settings verified',
-    firmware:complete?'Firmware verified after reconnect':'UF2 copied · reconnect and verify next',
+    firmware:complete?'Firmware verified after reconnect':'UF2 copied · restart the radio, reconnect and verify',
     verify:'Firmware, bootloader and all SD files verified'
   };
   let advanced=false;
@@ -68,8 +69,8 @@ function draw(){
   $('choose-zip').disabled=active||demo||!release||!canUse;
   const pending=firmwareAttempted(),connected=sd&&boot&&$('one-radio').checked;
   const reconnecting=sdReady&&!complete&&(pending||!sd||!boot);
-  $('radio-title').textContent=reconnecting?'Reconnect your radio':'Connect your radio';
-  $('radio-instructions').textContent=reconnecting?'Wait for Writing complete, eject both drives, then reconnect in bootloader mode and select both drives again. Finish with step 06.':'Start in bootloader mode, then select both radio drives. The preview checks the radio and install targets; the backup fully verifies every SD file.';
+  $('radio-title').textContent=reconnecting?'Restart and reconnect your radio':'Connect your radio';
+  $('radio-instructions').textContent=reconnecting?radioRestartInstructions:'Start in bootloader mode, then select both radio drives. The preview checks the radio and install targets; the backup fully verifies every SD file.';
   for(const [id,enabled]of Object.entries({
     'choose-sd':ready&&canUse,'choose-boot':ready&&canUse,
     'scan':ready&&connected&&!engine?.journal,'choose-backup':ready&&connected&&canUse,
@@ -163,7 +164,7 @@ $('firmware').onclick=()=>action('Checking before the firmware copy…',async()=
   try{
     await getEngine().copyFirmware();
     log('UF2 stream closed. Firmware has NOT yet passed readback verification.');
-    stage('UF2 copied — reconnect to verify.',demo?'Simulate a reconnect below, then run the final check.':'Wait for Writing complete on the radio, eject both drives, then reconnect in bootloader mode. Reselect both drives above.');
+    stage('UF2 copied — restart and reconnect.',demo?'Use Simulate radio restart in step 06, then run the final check.':radioRestartInstructions);
   }finally{
     if(firmwareAttempted())reconnectRequired();
   }
@@ -171,14 +172,14 @@ $('firmware').onclick=()=>action('Checking before the firmware copy…',async()=
 $('demo-reconnect').onclick=()=>{
   if(!demo||!demoDrives||busy)return;
   ({sd,boot}=demoDrives);demoDrives=null;$('reconnected').checked=true;revealStep='verify';
-  stage('Demo radio reconnected.','Run the final check to compare the simulated firmware and all SD files.');
-  log('Demo reconnect simulated. No physical USB behavior tested.');draw();
+  stage('Demo radio restarted and reconnected.','Run the final check to compare the simulated firmware and all SD files.');
+  log('Radio power-off, bootloader restart and USB reconnect simulated. No physical USB behavior tested.');draw();
 };
 $('manual-firmware').onclick=()=>{
   if(demo||busy||!sdReady)return;
   download(files.get('@firmware'),'KSE-2.12.1-KS-MK3.uf2');
   revealStep='radio';
-  reconnectRequired();stage('Manual firmware copy selected.','Copy the downloaded UF2 to EDGETX_UF2. Wait for Writing complete, eject and reconnect in bootloader mode, reselect both drives, then verify.');draw();
+  reconnectRequired();stage('Manual firmware copy selected.','Copy the downloaded UF2 to EDGETX_UF2. '+radioRestartInstructions);draw();
 };
 $('verify').onclick=()=>action('Verifying installed files and firmware…',async()=>{
   complete=false;draw();

@@ -8,6 +8,7 @@ const protectedUser=p=>/^SCRIPTS\/RF2\/(PREFS\/|settings[^/]*\.(lua|luac)$|backg
 export const ownProgram=p=>ROOTS.some(r=>p.startsWith(r))&&!protectedUser(p)&&/\.(lua|luac)$/.test(p);
 const legacy=p=>/^SCRIPTS\/TOOLS\/Flight Modifier\.(lua|luac)$/.test(p);
 const check=(value,message)=>{if(!value)throw Error(message);};
+const restartRadio='Wait for any writing to finish. Eject the radio drives, unplug USB, turn the radio off, enter bootloader mode again, reconnect USB and reselect both drives.';
 export async function readOptional(fs,path){return await fs.exists(path)?fs.read(path):null;}
 export function parseUF2(bytes,{installer=false}={}){
   check(bytes.length>=512&&bytes.length%512===0&&bytes.length<=32*1024*1024,'Invalid UF2 length');
@@ -46,9 +47,9 @@ export function verifyFirmware(current,previous,target){
   const actual=parseUF2(current),before=parseUF2(previous),expected=parseUF2(target,{installer:true});
   let app=0;
   for(const [address,block]of expected){
-    if(address>=0x90000000){check(actual.has(address)&&equal(actual.get(address).data,block.data),'Installed firmware differs. Reconnect in bootloader mode and verify again.');app++;}
+    if(address>=0x90000000){check(actual.has(address)&&equal(actual.get(address).data,block.data),'Installed firmware differs. '+restartRadio+' Then verify again.');app++;}
   }
-  check([...actual.keys()].filter(a=>a>=0x90000000).length===app,'Firmware readback size differs. Reconnect and verify again.');
+  check([...actual.keys()].filter(a=>a>=0x90000000).length===app,'Firmware readback size differs. '+restartRadio+' Then verify again.');
   for(let address=0x08000000;address<0x08010000;address+=256)check(equal(actual.get(address).data,before.get(address).data),'Bootloader differs from the backup.');
   return {applicationBlocks:app,preservedBootloaderBlocks:256};
 }
@@ -226,7 +227,7 @@ export class Installer {
     }
   });}
   async rollback(){
-    check(!this.journal?.firmwareAttempt&&!FIRMWARE_PHASES.includes(this.journal?.phase)&&!this.journal?.firmwareWritten,'Firmware copying has been attempted. Reconnect and verify first; use the full backup instructions to restore firmware and SD files together.');
+    check(!this.journal?.firmwareAttempt&&!FIRMWARE_PHASES.includes(this.journal?.phase)&&!this.journal?.firmwareWritten,'Firmware copying has been attempted. '+restartRadio+' Verify first; use the full backup instructions to restore firmware and SD files together.');
     await this.validateJournal();const ops=new Map(this.journal.operations.map(o=>[o.path,o]));
     check(await sha256(await this.boot.read('CURRENT.UF2'))===this.journal.firmwareHash,'Firmware has changed. Restore firmware and SD files together using the full backup instructions.');
     // Validate all recovery bytes before the first restore write.
@@ -241,7 +242,7 @@ export class Installer {
   async copyFirmware(){return this.lock(async()=>{
     if(!this.journal)this.journal=JSON.parse(utf8.decode(await this.backup.read(JOURNAL)));
     check(this.manifest.firmwareWriteEnabled===true,'Firmware copying is disabled for this release.');
-    check(this.journal.phase==='sd-verified'&&!this.journal.firmwareAttempt,'Complete the SD installation first. If firmware copying was already attempted, reconnect and verify instead of copying again.');
+    check(this.journal.phase==='sd-verified'&&!this.journal.firmwareAttempt,'Complete the SD installation first. If firmware copying was already attempted, restart the radio in bootloader mode, reconnect USB and verify instead of copying again.');
     check(typeof this.boot?.copyFirmware==='function','This drive adapter cannot copy firmware.');
     // Own a stable copy for the entire transfer; check everything before the first
     // write to the firmware drive, including the original stock/non-KS backup.
@@ -250,7 +251,7 @@ export class Installer {
     await this.validateJournal();
     await verifyBackupZip(this.backup,this.journal.archive,{progress:this.progress,cancel:this.cancel});
     await verifyInventory(this.sd,expectedAfter(this.journal.before,this.journal.operations),this.progress);
-    check(await sha256(await this.boot.read('CURRENT.UF2'))===this.journal.firmwareHash,'Firmware changed since backup. Reconnect and verify before proceeding.');
+    check(await sha256(await this.boot.read('CURRENT.UF2'))===this.journal.firmwareHash,'Firmware changed since backup. '+restartRadio+' Verify before proceeding.');
     check(!this.cancel(),'Firmware copy cancelled before writing.');
     this.journal.phase='firmware-copying';this.journal.firmwareWritten=null;
     this.journal.firmwareAttempt={file:UF2_FILENAME,sha256:this.manifest.firmware.sha256,started:new Date().toISOString()};
@@ -263,13 +264,13 @@ export class Installer {
     }catch(error){
       this.journal.phase='firmware-check-required';this.journal.firmwareAttempt.error=error.message;
       await this.record().catch(()=>{});
-      throw Error('Firmware copy is not verified: '+error.message+'. Wait for the radio to finish any writing, reconnect in bootloader mode, reselect both drives and run the final check. No automatic retry or SD rollback was performed.');
+      throw Error('Firmware copy is not verified: '+error.message+'. '+restartRadio+' Confirm the restart and run the final check. No automatic retry or SD rollback was performed.');
     }
   });}
   async verifyFinal({reconnected=false}={}){return this.lock(async()=>{
     if(!this.journal)this.journal=JSON.parse(utf8.decode(await this.backup.read(JOURNAL)));
     check(['sd-verified','verified',...FIRMWARE_PHASES].includes(this.journal.phase),'SD installation has not completed.');
-    check(!this.journal.firmwareAttempt||reconnected,'Reconnect in bootloader mode and reselect both drives before verifying firmware.');
+    check(!this.journal.firmwareAttempt||reconnected,'Reconnect after a full radio restart: unplug USB, turn the radio off, enter bootloader mode again, reconnect USB and reselect both drives before verifying firmware.');
     await this.validateJournal();
     const target=this.files.get('@firmware');check(target&&await sha256(target)===this.manifest.firmware.sha256,'Load the verified release first.');
     await verifyInventory(this.sd,expectedAfter(this.journal.before,this.journal.operations),this.progress);
