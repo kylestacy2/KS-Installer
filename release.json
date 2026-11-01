@@ -1,0 +1,2409 @@
+{
+  "schema": 1,
+  "id": "trial-2026-10-31",
+  "label": "2.12.1-KS \u00b7 31 October 2026",
+  "board": "tx16smk3",
+  "commit": "2f9b47ff21d5a1d1f2df3ed1655f884a04aefa1f",
+  "releaseURL": "https://github.com/kylestacy2/KSE-Touch/releases/tag/trial-2026-10-31",
+  "zip": {
+    "name": "EdgeTXKSE.zip",
+    "sha256": "f872e4f3c5fe0cefca2ecbb5159104546621e863a29da91076aa03429de62209",
+    "size": 100436761
+  },
+  "files": [
+    {
+      "path": "IMAGES/EdgeTXKSE-README.txt",
+      "archive": "EdgeTXKSE/SD-CARD/IMAGES/EdgeTXKSE-README.txt",
+      "sha256": "0cd45afca84c0443ce213d6ba886f72a377fc2ba7efc2a605466e144c59e3435",
+      "size": 142
+    },
+    {
+      "path": "LOGS/EdgeTXKSE-README.txt",
+      "archive": "EdgeTXKSE/SD-CARD/LOGS/EdgeTXKSE-README.txt",
+      "sha256": "e1145bc815161cf57ad55e891a0957734fc5240f0ee7e07dcf3ef648aff7fd23",
+      "size": 160
+    },
+    {
+      "path": "SCRIPTS/FUNCTIONS/GBLED.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/FUNCTIONS/GBLED.lua",
+      "sha256": "2124bc1b4de20bb472dcbf2713fdea6cad2a481ff5c33159aceeccf3d523ca8a",
+      "size": 26107
+    },
+    {
+      "path": "SCRIPTS/IMGR/core.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/IMGR/core.lua",
+      "sha256": "e9881b046275707f638bac9352270bd453f10d14f549fa5d15e5e755b9de9740",
+      "size": 14402
+    },
+    {
+      "path": "SCRIPTS/RF2/COMPILE/compile.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/COMPILE/compile.lua",
+      "sha256": "5ac19b8f2a9ca05f67340f11fc2bb0d0fa94b2dbead5884d2396d855d973ec3e",
+      "size": 1253
+    },
+    {
+      "path": "SCRIPTS/RF2/COMPILE/scripts.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/COMPILE/scripts.lua",
+      "sha256": "fa13b39cb06aeee334f0c4b788c196071b6fcc30a12468692f1d1da732e5367b",
+      "size": 9061
+    },
+    {
+      "path": "SCRIPTS/RF2/COMPILE/scripts_compiled.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/COMPILE/scripts_compiled.lua",
+      "sha256": "7e4fe8351c22e2182278317a8998f400007540eea7aa5b52c3e50f9d4b0bb799",
+      "size": 11
+    },
+    {
+      "path": "SCRIPTS/RF2/CONFIRM/acc_cal.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/CONFIRM/acc_cal.lua",
+      "sha256": "899e8858ec87d77bff7d8d2e9dd2fd0062dd334962825a5b8201dd9bd597f2c3",
+      "size": 910
+    },
+    {
+      "path": "SCRIPTS/RF2/F/canUseLvgl.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/F/canUseLvgl.lua",
+      "sha256": "c5bc32a096dd581788527cf1455ef01b0e34b6b612727f20fd2e3b976af2cb60",
+      "size": 311
+    },
+    {
+      "path": "SCRIPTS/RF2/F/diagnostics.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/F/diagnostics.lua",
+      "sha256": "1a61200b47336997891d6ae7865f403df3b286934e962d816fea38ac5936629b",
+      "size": 2495
+    },
+    {
+      "path": "SCRIPTS/RF2/F/editSession.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/F/editSession.lua",
+      "sha256": "bd9268953b0864a6f6cd33f3f961269b43024ad78b01b28f05c7651434f25750",
+      "size": 3972
+    },
+    {
+      "path": "SCRIPTS/RF2/F/fontTools.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/F/fontTools.lua",
+      "sha256": "c0c9ef194cab9006c422f9138fda473c73a5b79eedd163fcd39e395f5297bf81",
+      "size": 3003
+    },
+    {
+      "path": "SCRIPTS/RF2/F/formatSeconds.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/F/formatSeconds.lua",
+      "sha256": "7a6853eba30e69155938873684dd1bf9a51a951bc0a4a51e4ab2fba248932929",
+      "size": 592
+    },
+    {
+      "path": "SCRIPTS/RF2/F/getBit.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/F/getBit.lua",
+      "sha256": "f5e9eef62b27fc14f1877ec3bec2168b2dc95011efe348b8ddcae481f9f7150a",
+      "size": 203
+    },
+    {
+      "path": "SCRIPTS/RF2/F/getLvglSubtitle.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/F/getLvglSubtitle.lua",
+      "sha256": "e200c9288a2012f1eeb5d4680897258cea6c01e0233dafcede55f942de26c804",
+      "size": 641
+    },
+    {
+      "path": "SCRIPTS/RF2/F/getProtocol.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/F/getProtocol.lua",
+      "sha256": "e3de530df2e39f94be6ac355f63f544886d6018feeb1d854a7982c5ea7dfa208",
+      "size": 321
+    },
+    {
+      "path": "SCRIPTS/RF2/F/hangarConfig.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/F/hangarConfig.lua",
+      "sha256": "053610a1b3ff26b5772f972d1bbea05ce57f85eae5a9e7a6c7e46ca7326ed5c1",
+      "size": 3794
+    },
+    {
+      "path": "SCRIPTS/RF2/F/hasSensor.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/F/hasSensor.lua",
+      "sha256": "d98cc110a46166f8d65b0454ca013975cc9524c13d6c615fb29d7eca04719990",
+      "size": 299
+    },
+    {
+      "path": "SCRIPTS/RF2/F/incMax.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/F/incMax.lua",
+      "sha256": "4585f38a52b1b474bdac02d3bfe714c8fe9992f9b707a055a9034a0b40155812",
+      "size": 106
+    },
+    {
+      "path": "SCRIPTS/RF2/F/modelPreferences.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/F/modelPreferences.lua",
+      "sha256": "794e031470a2ab28760948a767cc5c1ded4970d2060e4820fa1a32fd6506a5c5",
+      "size": 7626
+    },
+    {
+      "path": "SCRIPTS/RF2/F/navigation.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/F/navigation.lua",
+      "sha256": "0b4fbde9316867325ad7e1c628e7d1678cad3eb40c1b2eff07a0c266e048d8ef",
+      "size": 3679
+    },
+    {
+      "path": "SCRIPTS/RF2/F/pageCleanup.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/F/pageCleanup.lua",
+      "sha256": "d56c3c0b5f5669d23217f11770e515234c0b51cf449122594ef18bf74142df21",
+      "size": 1095
+    },
+    {
+      "path": "SCRIPTS/RF2/F/pageDefaults.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/F/pageDefaults.lua",
+      "sha256": "0e77e4a13d6260fd683340ad3e9c613e723d1dfa549e293ce80269f2b66a8881",
+      "size": 729
+    },
+    {
+      "path": "SCRIPTS/RF2/F/pilotConfigReset.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/F/pilotConfigReset.lua",
+      "sha256": "1c6fdeec314e02416dca0734abbe033c57998fbc34e56eee2bc57b26a3025502",
+      "size": 141
+    },
+    {
+      "path": "SCRIPTS/RF2/F/rateCurve.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/F/rateCurve.lua",
+      "sha256": "8e8f1e0201a1e8faa5246a5eb4588f0d0cfbe00bd334e248869923b9d9e869a4",
+      "size": 1357
+    },
+    {
+      "path": "SCRIPTS/RF2/F/sensorTools.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/F/sensorTools.lua",
+      "sha256": "2b30d5480a1ec713d66f04af25feeaaa5c4f4d244ac83bee9d1f7013280cff05",
+      "size": 1274
+    },
+    {
+      "path": "SCRIPTS/RF2/F/setBit.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/F/setBit.lua",
+      "sha256": "a155f042588591828f9e3a2aa728724151e62936a4290ab93a09f5ac71cb6faf",
+      "size": 288
+    },
+    {
+      "path": "SCRIPTS/RF2/F/uiThemes.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/F/uiThemes.lua",
+      "sha256": "a907aaebcebc180e03b5522d89d7560c74cbe6ae36214cf89ba778c73bac0762",
+      "size": 1026
+    },
+    {
+      "path": "SCRIPTS/RF2/F/writeSafety.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/F/writeSafety.lua",
+      "sha256": "360ceff49397e7c26279c0e4eb5a67b6efd41706191291bb16048644728c9c2b",
+      "size": 2871
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/0-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/0-20.png",
+      "sha256": "55a77b798298d13611df390989192b3b13f9fade80143e7a61be237d0589483d",
+      "size": 607
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/0-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/0-28.png",
+      "sha256": "35f78cc0e57fd6b9ee6c06523c98ec85dee35a1040f6891649e3e3ef1a9cc304",
+      "size": 779
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/1-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/1-20.png",
+      "sha256": "0dec4e3e83b637cca6dafb5bf357963135216a4369614489ff7441ae637b7b78",
+      "size": 391
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/1-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/1-28.png",
+      "sha256": "c9677f7f0dac7e578a420008d19f7ec8bbfe1e8aaa1a0b01fab4c5be09f7b5b9",
+      "size": 482
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/2-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/2-20.png",
+      "sha256": "7f853b72d565da84e23465d23e04579bf1591c0aba0918d4e210610afb65aab4",
+      "size": 367
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/2-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/2-28.png",
+      "sha256": "bbb8b38f71c0625f150f519bfbbd868bd394d081bf8432f2183f96ae6b1d2195",
+      "size": 437
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/3-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/3-20.png",
+      "sha256": "595b9ee5adf712ebe90375a3b79ca98ed3ec711b2a4ebbe3fd27e8eb41994d5e",
+      "size": 659
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/3-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/3-28.png",
+      "sha256": "359ea32faca674b027ed04c1ce2055a4160d760586ffed0b33b213c3426ac438",
+      "size": 907
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/4-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/4-20.png",
+      "sha256": "ee193da47e81b6695f0337cd2ee0c44b3241bed4ad29ad1a09964d2bd9f2e2ad",
+      "size": 602
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/4-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/4-28.png",
+      "sha256": "b4e43da90ecc2b2b1ec68a5d1bfe81b50add58995243e89d560f0356f224421f",
+      "size": 836
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/5-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/5-20.png",
+      "sha256": "4588acd4ba8d2f9e6958673955ce7b97c7af46034a22e4f44eb52af2747617de",
+      "size": 276
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/5-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/5-28.png",
+      "sha256": "5e8920696612d4bf33fa284c1e27a95968877625ef1896dbdee0ac424806f1de",
+      "size": 340
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/6-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/6-20.png",
+      "sha256": "4d62d1e93e836fc0ef7fc8daa9c97c60cec2ecad066b2bb26ef8909a2535cdab",
+      "size": 306
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/6-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/6-28.png",
+      "sha256": "613697350089e37a9f1c6dcabdad3fc52ee836ce84d656be0b86796805e43f09",
+      "size": 395
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/7-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/7-20.png",
+      "sha256": "742b3291a005e0fd1634dbc46624309e37a0e1319c10b41bcea760be0f4e6e9c",
+      "size": 512
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/7-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/7-28.png",
+      "sha256": "6463cecf957a00e3c240ca9d7c77c4090def3c51dbd449fa438ba2a04ad04726",
+      "size": 679
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/8-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/8-20.png",
+      "sha256": "6a89d28889650b24b6c9fa051099460ee0de893581164edbfa0bad4d79f2b39f",
+      "size": 419
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/8-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/8-28.png",
+      "sha256": "e032a5f51bef7ef183d021ae91100e73889579b03742fac46a156e45f2624ca3",
+      "size": 532
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/LICENSE",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/LICENSE",
+      "sha256": "b495047bd93a9b06913511076f504daba17d5bbeb3e0650f3bb53a4220329c57",
+      "size": 3208
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/dark/0-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/dark/0-20.png",
+      "sha256": "76b59e1072535562ae124ca751716ae9b2b5b32c2b9c5bb08ce56aa1bd8f731d",
+      "size": 573
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/dark/0-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/dark/0-28.png",
+      "sha256": "bcf739b290817dfb278d57648c43c61fa6461b5702609dadc01e77d8071e062d",
+      "size": 738
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/dark/1-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/dark/1-20.png",
+      "sha256": "0fa80fd039161326b4bae656d8c19ab75ab3f1a7873d6f7b52f56457f8444e9c",
+      "size": 368
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/dark/1-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/dark/1-28.png",
+      "sha256": "c104029a5debd864ca6af5c049bb73777a54148be7e5a05badb83534ded5b060",
+      "size": 524
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/dark/2-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/dark/2-20.png",
+      "sha256": "af4631f08f5bd8c744a2a892a810bd558cdba098797235d8adc3d6993a6e21bb",
+      "size": 364
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/dark/2-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/dark/2-28.png",
+      "sha256": "9dae094e26f50e95c860997e6a4f3ceccecba7a6ae4cf64b80c2a28701dc3ff2",
+      "size": 432
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/dark/3-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/dark/3-20.png",
+      "sha256": "e9fa3a169e3125c2d1959f037d8601879dadf7869b84b76515c04e393935afc0",
+      "size": 651
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/dark/3-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/dark/3-28.png",
+      "sha256": "f424e99e205e63dd272bf527338faf85ba25b3c5d6fb33aa94d6cfe2db0df4e1",
+      "size": 882
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/dark/4-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/dark/4-20.png",
+      "sha256": "55dbd728351f54ca02a88f71cadf83ea77b824a408a204c351adf87162e8ac19",
+      "size": 567
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/dark/4-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/dark/4-28.png",
+      "sha256": "fe1ddf1062496e1e4c4450b2b4a96baa0eeab75e732e073389eefe655b812ee1",
+      "size": 797
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/dark/5-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/dark/5-20.png",
+      "sha256": "1e0eac2b2d38aa437bd31ee19f86eeab7f252de790f05d6626dea5ab0c3ba10f",
+      "size": 275
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/dark/5-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/dark/5-28.png",
+      "sha256": "974766d306188d79d010bf9757770122c465c464d8228eab2a328e0afb8f16d2",
+      "size": 337
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/dark/6-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/dark/6-20.png",
+      "sha256": "4f42f435a4fea1e13c12e4f9f86e0ab58263a6ea2820249a9104ed567aecb354",
+      "size": 305
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/dark/6-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/dark/6-28.png",
+      "sha256": "48b893ec36d443ba0145f5627c1f7a040f4f96de8ab56252c61a79e8fc882283",
+      "size": 350
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/dark/7-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/dark/7-20.png",
+      "sha256": "574b088e6d55adfab365a4df59be3a214e36ba73004669e055757b6b893da96e",
+      "size": 472
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/dark/7-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/dark/7-28.png",
+      "sha256": "25be402a41f237aeca853f93d7def5065adb56fa53c31063fa3f63e5ccdf82b3",
+      "size": 628
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/dark/8-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/dark/8-20.png",
+      "sha256": "b2782b17432f467c660836b6cc8c5ccb19cf3a1dfffb3ea1319b60dc51d2d483",
+      "size": 411
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/dark/8-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/dark/8-28.png",
+      "sha256": "33d472a46a97986fb3c5ed2e1e9a0f12f72cd44ebeb6ddd5dc120c1b4d8bd02f",
+      "size": 506
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/ember/0-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/ember/0-20.png",
+      "sha256": "2fae77e8948daea2346c1dbedccf945bd911f8fca8dcf1512aad477a24a28e4b",
+      "size": 567
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/ember/0-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/ember/0-28.png",
+      "sha256": "c3f82582ac0a5e67c2d8fe92ee2ec6fe2c9f752f72c991bb48bb98989b85da74",
+      "size": 737
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/ember/1-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/ember/1-20.png",
+      "sha256": "fdc89c2fe81c2edc4918dcfe773ab3b719d37b4f23a605392c550c4f62024021",
+      "size": 378
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/ember/1-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/ember/1-28.png",
+      "sha256": "83e14d75c52f619b23139645f31fb6de0899c9d8c0aaa829dd5ce7374e903d46",
+      "size": 521
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/ember/2-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/ember/2-20.png",
+      "sha256": "470671fb5292d758c32c684902279bd731dac4f8dd9b0ccc1cfa0cb4c0a3c6a7",
+      "size": 368
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/ember/2-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/ember/2-28.png",
+      "sha256": "6d5bb9118f36fbaa4dd3c294ac9fbf1a50633ff8877e345cab3e223f04fb1e30",
+      "size": 444
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/ember/3-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/ember/3-20.png",
+      "sha256": "966533e4b662ce15bdb92218112d23d0f90ee7ba36a24d4b1084d39987a93f74",
+      "size": 656
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/ember/3-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/ember/3-28.png",
+      "sha256": "78f3d20bcb5ca5c6474046635dcb3448d335f7b6bc09e82e14633f1f0f7c80bd",
+      "size": 866
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/ember/4-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/ember/4-20.png",
+      "sha256": "2ab5017f37032976ba9e1ef73b7c3606f052af6fb728356e4c9c8e1b1983f1a5",
+      "size": 557
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/ember/4-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/ember/4-28.png",
+      "sha256": "2a1433aec122e54123bb24ba0047fcc680bb8415c869bbb3f331a2012379d661",
+      "size": 786
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/ember/5-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/ember/5-20.png",
+      "sha256": "611df8de15f3ef890f063b394ff07ae31bb89dfec7efce9079f630daaaad1fc4",
+      "size": 269
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/ember/5-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/ember/5-28.png",
+      "sha256": "f927f5e577e0c5df4b7e1e19193f75a24039a76b9584bbfd0d9a942531454c65",
+      "size": 324
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/ember/6-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/ember/6-20.png",
+      "sha256": "fd1abfd9278adb1a36cc1299650354c10fa332dfeead5bcc93d7423db35a14ca",
+      "size": 308
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/ember/6-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/ember/6-28.png",
+      "sha256": "c310efcb5a5f729752d9abae64b67177954dd62f5d35e8b36660b39207bd50b9",
+      "size": 347
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/ember/7-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/ember/7-20.png",
+      "sha256": "4835182f3f7d599e7a3dd5fec06db49bac0de09eb7a696a82490affea1ff33ce",
+      "size": 458
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/ember/7-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/ember/7-28.png",
+      "sha256": "2ca28d8b58ae8e0e53bac01c55b70c96062ed70df27d04fe44209a1848d7b919",
+      "size": 628
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/ember/8-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/ember/8-20.png",
+      "sha256": "47d6723296cc33ae8964826f129db5570937d3f11355d083a1188055ab6e8d93",
+      "size": 419
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/ember/8-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/ember/8-28.png",
+      "sha256": "a99de4515a826ce7c985aecf5b61c597b1b54c878b3e29339dfa5b0e8cb48772",
+      "size": 505
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/forest/0-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/forest/0-20.png",
+      "sha256": "2d8d2aec4f652a9879b76a0feeb07bda9c0f9f0c45db4ea767fbf7b27d960c34",
+      "size": 602
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/forest/0-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/forest/0-28.png",
+      "sha256": "27f021be0158e7e266f2aed41160e95618fee28ce431f4ee47ce41203b216107",
+      "size": 793
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/forest/1-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/forest/1-20.png",
+      "sha256": "48a33a71500b6667d6ed94e3f2067b7b5b52ba28d859dd2e0ff10201a7ef14ec",
+      "size": 391
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/forest/1-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/forest/1-28.png",
+      "sha256": "29f0673e7215e25564e16b150e74f954951bd06f2d34eb765b833a5131da8cf0",
+      "size": 558
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/forest/2-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/forest/2-20.png",
+      "sha256": "ed3a5658238d02ac7e5affb79df39c449a8baa6a379381b199afafc9675172e9",
+      "size": 388
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/forest/2-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/forest/2-28.png",
+      "sha256": "5dfde3afe620b718c6aa0b634ff0bb37c66faf0fcdd493ea8de3cdfc56685009",
+      "size": 456
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/forest/3-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/forest/3-20.png",
+      "sha256": "71af2894d62593e728deb952475d4e4b0028d167830fa53885ea129fd78b4ce0",
+      "size": 704
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/forest/3-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/forest/3-28.png",
+      "sha256": "74f5ddba8e047800483091ba29fc8345fa8114ef86822d8b587f5310139f41ee",
+      "size": 918
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/forest/4-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/forest/4-20.png",
+      "sha256": "e5b7229a2c78bf5400231b3897a1f343e6dcd07575619454068e575be95c7eec",
+      "size": 597
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/forest/4-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/forest/4-28.png",
+      "sha256": "af683673f1d2167e6dd5a2db0773379526ddb108792580da2c36ed427c28db65",
+      "size": 839
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/forest/5-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/forest/5-20.png",
+      "sha256": "6e9ed3fb9aaf6e0a149e9c82a3b99828a6d916889a065c2d86a889c486663924",
+      "size": 291
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/forest/5-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/forest/5-28.png",
+      "sha256": "9bf5d1ee9c329637105a96e885675e3ddaafc50aae3b611b2e1a1dc652208cfd",
+      "size": 350
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/forest/6-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/forest/6-20.png",
+      "sha256": "db8d3eb1ef3363e30981eca57c8817deb4e2cdbb57b71cef417fb3568b049680",
+      "size": 317
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/forest/6-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/forest/6-28.png",
+      "sha256": "030d95f5cdd09fa53c78ae6961f726f8e363f92746e429de8d971f3bdf5df576",
+      "size": 368
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/forest/7-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/forest/7-20.png",
+      "sha256": "6b5a29bb8e7e96ab10b33b5fd22d57b6841488163bb1dd044ccdd8756bd31150",
+      "size": 498
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/forest/7-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/forest/7-28.png",
+      "sha256": "dd4d56dc9e07c90d2d5d9dcfd7dffd45f2ad7f803bb624b053950649fdb62f13",
+      "size": 671
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/forest/8-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/forest/8-20.png",
+      "sha256": "8bc931d7d8a911d8f9ee75c30f0b6c603c00828312c90fbec267ff24f3f219e9",
+      "size": 436
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/forest/8-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/forest/8-28.png",
+      "sha256": "5e5d0b77e042bae1eb0583722808d9511fb2aae0f73b108147a88a4b72a250b6",
+      "size": 535
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/midnight/0-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/midnight/0-20.png",
+      "sha256": "3006d58ae5e87fd267db3029d64dc2166c4a740613fa3733f67f3b9a18dcb16b",
+      "size": 568
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/midnight/0-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/midnight/0-28.png",
+      "sha256": "3d760d5f6097b7f428cff6db4e6a1ce409bd8df2051e3a97a989376458e23dde",
+      "size": 739
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/midnight/1-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/midnight/1-20.png",
+      "sha256": "23dfb21fe381f540233e7d7698ab009b696d3bd4b5233af861d7be22e9038e82",
+      "size": 380
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/midnight/1-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/midnight/1-28.png",
+      "sha256": "1cb78b13bff162af29e94887d639e18e48c1030a0ed75c6cfc6b76466a1b7eb7",
+      "size": 536
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/midnight/2-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/midnight/2-20.png",
+      "sha256": "b231603d4cf67425f07de524ab5fedf947befa87cc15f8e0c8bd70df31ec9778",
+      "size": 375
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/midnight/2-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/midnight/2-28.png",
+      "sha256": "2470be46af7a4e3f81cb10c03edfbc91f2f1474a451a19229c9aac1a1f9d9340",
+      "size": 439
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/midnight/3-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/midnight/3-20.png",
+      "sha256": "8da845aa4dcfc22da87e16a506cec2827d0d664ace0b716ba2c8a48046cbbff3",
+      "size": 648
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/midnight/3-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/midnight/3-28.png",
+      "sha256": "d0cccff17297625ee52fc2c971f004af78a0b7961080de0f0a30f22ca70bbd80",
+      "size": 876
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/midnight/4-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/midnight/4-20.png",
+      "sha256": "2eaa6f3f10c7986c92206f74446d7155522c569f395dcf6952da37243a733c50",
+      "size": 559
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/midnight/4-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/midnight/4-28.png",
+      "sha256": "9b58f10e5c0dc69dc3962431731c1dfa4468d458f35f99900099783147d79752",
+      "size": 795
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/midnight/5-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/midnight/5-20.png",
+      "sha256": "ac63cfd4a748cd700817d2255801e1c41455c5361bd342c09b0b68e2e54640ec",
+      "size": 276
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/midnight/5-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/midnight/5-28.png",
+      "sha256": "917430d75af58f7c7fe497299484de133811a272c1ffc64731236a30770c511b",
+      "size": 339
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/midnight/6-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/midnight/6-20.png",
+      "sha256": "cd80f3b7aac2fda5bbf9c164eb8c4b10f0b303f53a1eec75f1cd15ff7687e4e2",
+      "size": 304
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/midnight/6-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/midnight/6-28.png",
+      "sha256": "805d549ccbe71e9241ee6e0fed1f60cd782c9707aef8d5918e89533692350e47",
+      "size": 359
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/midnight/7-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/midnight/7-20.png",
+      "sha256": "b4dbe032467e80947db13917e0f6ddb6d67f8067059a40d3376da3473c97a0bb",
+      "size": 473
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/midnight/7-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/midnight/7-28.png",
+      "sha256": "e430a6d95d5c5cda08c30ae0cfa58007c4f758e775fbe9203e42d6681527b554",
+      "size": 630
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/midnight/8-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/midnight/8-20.png",
+      "sha256": "097c39deda31c5d63f055d0e51e3e456be0fbec5ab9a7c0aec68c27780b3b090",
+      "size": 417
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/midnight/8-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/midnight/8-28.png",
+      "sha256": "6ee6a0cf163e3e56ee41fc004cf261d035787ad1ec99720cfd54d0903d3e5bba",
+      "size": 504
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/titanium_ember/0-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/titanium_ember/0-20.png",
+      "sha256": "b36003aa7e110d9172175af86378edf11cf35f6897e6deddf89b7ef73145d54d",
+      "size": 542
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/titanium_ember/0-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/titanium_ember/0-28.png",
+      "sha256": "7ca63c2af15fea0b74725a8beddbaca83c36d8c7115d20bb567b5d78c3f00815",
+      "size": 708
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/titanium_ember/1-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/titanium_ember/1-20.png",
+      "sha256": "d6c46757489f51d3628a4edcd0936853a4b8526c1a4de241d760b76d7a3167ca",
+      "size": 447
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/titanium_ember/1-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/titanium_ember/1-28.png",
+      "sha256": "b782cdbd1e83df0c2441918b7c5cf4b27fda659f3b4584c759019f8a51b3eccb",
+      "size": 627
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/titanium_ember/2-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/titanium_ember/2-20.png",
+      "sha256": "3a7f9f48268a07329a8e705f71570034498bb38b44aab44c6b8939185e392dc4",
+      "size": 408
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/titanium_ember/2-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/titanium_ember/2-28.png",
+      "sha256": "7aac2292976ebf912cc53c3014d2583f058ec4ed5e9120b8cad5638b154e759a",
+      "size": 526
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/titanium_ember/3-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/titanium_ember/3-20.png",
+      "sha256": "f9b1e68cde66ff139a7a09d9f18ed40914a0cab4191e2d5a2b1dd133627698eb",
+      "size": 627
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/titanium_ember/3-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/titanium_ember/3-28.png",
+      "sha256": "e5bb1aef920542e9938dbc9dbde38b3c108e783bd82f03eccda87ceb12670de1",
+      "size": 895
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/titanium_ember/4-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/titanium_ember/4-20.png",
+      "sha256": "adb9fc4f954d6308adb33b1fec7d7443a20fc4fc8e260db3326f8ac37f1a3b1a",
+      "size": 618
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/titanium_ember/4-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/titanium_ember/4-28.png",
+      "sha256": "c3b2bbe06f5d36d4634e23c68accd2bd1590f3fb9797cd672d6243940660a048",
+      "size": 806
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/titanium_ember/5-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/titanium_ember/5-20.png",
+      "sha256": "c4129c4864e3d9dd13c76fccc0015a4d0637b8838942ac4371f86f97721cbfb3",
+      "size": 290
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/titanium_ember/5-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/titanium_ember/5-28.png",
+      "sha256": "686c0ed05886c9da8674af6d1725388e662e573861e3bab133af15e8bbe250c1",
+      "size": 335
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/titanium_ember/6-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/titanium_ember/6-20.png",
+      "sha256": "a57b8a6bec02652d337fcf46c34621aff9e29053654c1fc07666a90facf0f8c4",
+      "size": 394
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/titanium_ember/6-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/titanium_ember/6-28.png",
+      "sha256": "a36856b77aa9078d9ae0dac7820bf01777d9fce2845cac5ba6b6e3ac11214780",
+      "size": 594
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/titanium_ember/7-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/titanium_ember/7-20.png",
+      "sha256": "97137724e38f61b567b0a1d9596539cbccf530740c1bcb30cb726662448c6a1a",
+      "size": 473
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/titanium_ember/7-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/titanium_ember/7-28.png",
+      "sha256": "814c87eb2b0645176227c15e693022f639bc037325ed54f085a486b94b6bf217",
+      "size": 627
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/titanium_ember/8-20.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/titanium_ember/8-20.png",
+      "sha256": "59759cef58c29ac90ce3f874dce0e9589ff78ba2095b26a207d65ec6380f9048",
+      "size": 428
+    },
+    {
+      "path": "SCRIPTS/RF2/IMAGES/precision/titanium_ember/8-28.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/precision/titanium_ember/8-28.png",
+      "sha256": "4c9f6cf5b6b2ace4d6cb0a8b22f88e034f3c4c53fafee664eebef583a104fe98",
+      "size": 617
+    },
+    {
+      "path": "SCRIPTS/RF2/LCD/mainMenu.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LCD/mainMenu.lua",
+      "sha256": "3e38acb91237982447f81a9f9481c21666c9b2ae756b5f945ae17a619a3165a7",
+      "size": 1353
+    },
+    {
+      "path": "SCRIPTS/RF2/LCD/messageBox.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LCD/messageBox.lua",
+      "sha256": "2954051763c7582c5d5a447d70e0a62442d97204127985b870f4d9b642a1ded5",
+      "size": 1167
+    },
+    {
+      "path": "SCRIPTS/RF2/LCD/page.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LCD/page.lua",
+      "sha256": "c259472016275aa7c044d38a7f4f31ff1c09e8a14ccbe48a8a5a13c177b9ac8e",
+      "size": 5553
+    },
+    {
+      "path": "SCRIPTS/RF2/LCD/popupMenu.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LCD/popupMenu.lua",
+      "sha256": "8d077472936d0a2ae6bbe5f3490725b4b36b2f9953ab23b6a563158339575b1c",
+      "size": 1604
+    },
+    {
+      "path": "SCRIPTS/RF2/LCD/shared.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LCD/shared.lua",
+      "sha256": "93f73f87317e58f7e8bb126711b16dd67c5005e781780652177b8cb34981934f",
+      "size": 1399
+    },
+    {
+      "path": "SCRIPTS/RF2/LCD/waitMessage.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LCD/waitMessage.lua",
+      "sha256": "9374bad11b569aee34d0ffa8acafbb58ea75cccbb1bace40854a6a18fd1770d2",
+      "size": 533
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/480x320/README.txt",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/480x320/README.txt",
+      "sha256": "23226259de67512448a08250be74c8d7ba85cb7d511f880b922cd745718bec57",
+      "size": 1325
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/480x320/form.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/480x320/form.lua",
+      "sha256": "8bf6c6991c4c6d1f8e9cc9119f9f20f2c47467a677d60b9960c5e0bf309090f3",
+      "size": 3941
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/480x320/header.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/480x320/header.lua",
+      "sha256": "23e4898497570f5a8b1ddd01b53db1dfe252047f0b70e8a44c6e52158e7734ca",
+      "size": 2617
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/480x320/mainMenu.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/480x320/mainMenu.lua",
+      "sha256": "e34572dc12bd43b23863aabaccaf50e2da0b84cc7952f9caaf30ca5c812bc606",
+      "size": 7480
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/480x320/page.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/480x320/page.lua",
+      "sha256": "105bce89606029b6551f5ae8964fe41866b066a182f7fcb6683534cc75f20ed2",
+      "size": 1223
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/480x320/pids.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/480x320/pids.lua",
+      "sha256": "40eaf0f497cb05f1c467f99f03c9db2786c95d6196cb14db2ad4701f6ec09608",
+      "size": 130
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/480x320/rates.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/480x320/rates.lua",
+      "sha256": "c4eb6d00e458a048998c5c51da6b23165eec3267aed084e547e504e045b79ddb",
+      "size": 1567
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/Hangar/battery_monitoring.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/Hangar/battery_monitoring.lua",
+      "sha256": "48fb7ed05156a044f34d4f0cd857f0936ae302bfbfde0bf6f304f833f6a1f2e0",
+      "size": 3196
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/Hangar/battery_packs.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/Hangar/battery_packs.lua",
+      "sha256": "fdf071dec7104a0fa2321ce5365074535c78b79d1c11e435e4f8cf2b9340ecd0",
+      "size": 4522
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/Hangar/battery_voltage.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/Hangar/battery_voltage.lua",
+      "sha256": "c6ee65a5c216e4eb51d49fdd5f2b74ba3a959f53b2bd06c2def30dd3670309a4",
+      "size": 3370
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/Hangar/catalog.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/Hangar/catalog.lua",
+      "sha256": "3e4cc4eb761ca6388a688996f903ba3f48f0d85612f3b89067e71c0e7df264a7",
+      "size": 1550
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/Hangar/controller_decay.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/Hangar/controller_decay.lua",
+      "sha256": "24580bb0569d729d36c2a8823928b20087c46d2a0c40b7dcb2bde352a7bfabd2",
+      "size": 4129
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/Hangar/controller_filtering.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/Hangar/controller_filtering.lua",
+      "sha256": "0a7df494188758020f47294aae7363eaa0776fbc6b4ddf4ae6adafbd2013f1c0",
+      "size": 5347
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/Hangar/controller_limits.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/Hangar/controller_limits.lua",
+      "sha256": "7b5750ef4584c441aab461176e19b7e9f7ddd0e566004717b746bc52b13bcd6f",
+      "size": 2341
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/Hangar/controller_relax.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/Hangar/controller_relax.lua",
+      "sha256": "b973ab0afc576f02133f86f95ff8dc1e7294038f0537e81ddf8edcbc93263c4a",
+      "size": 3428
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/Hangar/dynamics_axes.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/Hangar/dynamics_axes.lua",
+      "sha256": "3b6c8735028c9de72e1ab460e8d6c8aefb0b9621572cc0feef2d63e785b6a2d4",
+      "size": 8061
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/Hangar/dynamics_dynamic.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/Hangar/dynamics_dynamic.lua",
+      "sha256": "77bce45988e62913590f7b6861f6178df66260fed7c6c072307ecb72bb86a9b4",
+      "size": 2373
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/Hangar/fields.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/Hangar/fields.lua",
+      "sha256": "5705fdfe7cc7b940013cab82b7ed9a40150d15a03b17e3c733b46f9fb802b5b6",
+      "size": 22360
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/Hangar/filters_dynamic.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/Hangar/filters_dynamic.lua",
+      "sha256": "bb8bb422103e56dd7287c4444ba5fc06b072a0d07b237cc1023c9f05930d88c2",
+      "size": 3079
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/Hangar/filters_lowpass.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/Hangar/filters_lowpass.lua",
+      "sha256": "a54c159a7167be6e20beecdb5c375be0cd9363c3147d028af3eac7f9369363f6",
+      "size": 4400
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/Hangar/filters_notches.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/Hangar/filters_notches.lua",
+      "sha256": "88822c5408c6f603ff4f813627ccb0f91e374bc7885c5222f06a89f15f4d8004",
+      "size": 3395
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/Hangar/flight_main.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/Hangar/flight_main.lua",
+      "sha256": "b6d843cce59df43795a6ecadfa6d54fef9876e4421be0d97b616a9c93158b9e3",
+      "size": 2910
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/Hangar/flight_tail.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/Hangar/flight_tail.lua",
+      "sha256": "d7e7f0e5dc9bca470af003a5180502965678c69492331901bd9d2168001ed5c2",
+      "size": 3372
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/Hangar/governor_gains.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/Hangar/governor_gains.lua",
+      "sha256": "2e50519aa9009db3f0498eb36749ae60ca48b6d65d93d3fd472fa55fd6806a1c",
+      "size": 3417
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/Hangar/governor_overview.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/Hangar/governor_overview.lua",
+      "sha256": "17e98c01e0dcdd393ca6acfedfa70f04acfe622e5512dc198f652cbd0c661f13",
+      "size": 3504
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/Hangar/governor_precomp.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/Hangar/governor_precomp.lua",
+      "sha256": "c04e0af0cb73ac7c17b35682ae91286a7b47ed55009bbfe45c651959221d8759",
+      "size": 2783
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/Hangar/governor_tta.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/Hangar/governor_tta.lua",
+      "sha256": "6c364474365808a9b94f889e6e9aff92d4e3e9b86aca0fcd952f0c167dd93a76",
+      "size": 2337
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/Hangar/pids_all.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/Hangar/pids_all.lua",
+      "sha256": "fa64cf84dd908c281cccb670a8e4fbfe221103e3f82b8c0f66f31498a6d73f5b",
+      "size": 8967
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/Hangar/pids_pitch.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/Hangar/pids_pitch.lua",
+      "sha256": "e45b8d5ce6fbd2a8efbc039e9c9f2622d194d98cbf5d6a3c33ed9df9010de456",
+      "size": 3823
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/Hangar/pids_roll.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/Hangar/pids_roll.lua",
+      "sha256": "617a2a7bc2bd4b7208a848df45d417eccd4b15123ecabacb8bb712b6f46fe52f",
+      "size": 3799
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/Hangar/pids_yaw.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/Hangar/pids_yaw.lua",
+      "sha256": "d9d99088f6927d5ff88c7c641717c9d0483ca8449d1877f10a19721b0e716258",
+      "size": 4237
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/Hangar/platinumSections.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/Hangar/platinumSections.lua",
+      "sha256": "97ebd87caa8c63834b10801b115f03406267b26fd3f451e6b4ecfc225e0070ea",
+      "size": 227
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/Hangar/rates_main.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/Hangar/rates_main.lua",
+      "sha256": "4da6a73fae7a26d6d09e7d3f89ae142a58ea20d0ba3d7e59bc311f3383edc641",
+      "size": 5805
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/Hangar/rescue_climb.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/Hangar/rescue_climb.lua",
+      "sha256": "6e399a1fea6b49a84cd83043d539e1303a01f1f35d36eb4f1d5b8bbb066a1161",
+      "size": 3282
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/Hangar/rescue_overview.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/Hangar/rescue_overview.lua",
+      "sha256": "278bc16c01cfa83422d02bcae0836e1db4ac72d00eba83e66f34b498fc2f2c85",
+      "size": 2982
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/Hangar/rescue_pullup.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/Hangar/rescue_pullup.lua",
+      "sha256": "b2830bc12306d3339ec5e838c991c32412e9517183a55f80137360a4b4ac79fa",
+      "size": 3664
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/Hangar/settings_audio.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/Hangar/settings_audio.lua",
+      "sha256": "91ff5f382f7baedecdfce7d2b04faaeeda7d5b2f31c39a5df393df22b451c795",
+      "size": 3246
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/Hangar/settings_editing.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/Hangar/settings_editing.lua",
+      "sha256": "ebf7a2464d9e643712baf6843b0e04e9d9e095a7d7a10e0a9d937b2ef914626d",
+      "size": 3644
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/Hangar/settings_favorites.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/Hangar/settings_favorites.lua",
+      "sha256": "e11d3dc2419ff4f7cf4485c354a9d9df02395d79c577998092fc90b2673293e7",
+      "size": 7056
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/Hangar/settings_general.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/Hangar/settings_general.lua",
+      "sha256": "f0b8a0df5e6c8c4caf13a4a33f76ece51103e25218b665cd1eea665562a60bd3",
+      "size": 3630
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/Hangar/settings_limits.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/Hangar/settings_limits.lua",
+      "sha256": "3d4374510e7dc665bcf12a16e89d696230b0dd4714ab3f094858e8656b4c502c",
+      "size": 3795
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/Hangar/settings_pidlimits.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/Hangar/settings_pidlimits.lua",
+      "sha256": "7d41cb06a1175b25bd1b6006835c3be0d9457ead290d73b170663af8b5a298b8",
+      "size": 4349
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/Hangar/swash_main.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/Hangar/swash_main.lua",
+      "sha256": "e270419e2038cf6e966c63899cdb36043a047fa0f599c05e4de99080d21a250f",
+      "size": 2530
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/Hangar/themes.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/Hangar/themes.lua",
+      "sha256": "01c43dfae6c125eee543302d5192bf9ed4719f369ca6ce4150f10f726fa7ce19",
+      "size": 1066
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/Hangar/views.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/Hangar/views.lua",
+      "sha256": "922a7bc61e6c75d8b7d2bf1f353903f1be75a92cbbc36f81bf303e7277f60cf8",
+      "size": 615
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/battery.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/battery.lua",
+      "sha256": "393716b8498a1f021aa5be29c39732b2f080220ebac47f9de3db87baf2a23c4f",
+      "size": 2535
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/columns.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/columns.lua",
+      "sha256": "30888e4e0aaabca01b93b4d895c34ea98b12633838f5f97f31ff73af42af2f56",
+      "size": 7194
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/compact.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/compact.lua",
+      "sha256": "7dd63335955bf069647b5739e86b29a53728149474cd073a51b66946ca60ed15",
+      "size": 13254
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/compactRates.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/compactRates.lua",
+      "sha256": "fd1b1636bfdc071f700490b5fe1d53ad1258b0d8645e1a79f7f65dc06b5f1270",
+      "size": 6073
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/hangarEditor.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/hangarEditor.lua",
+      "sha256": "7c05ec3f63f0178a8a6018a0353541384814209d7ae37c0fc3734cfbdf86222a",
+      "size": 10316
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/hangarHome.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/hangarHome.lua",
+      "sha256": "81cfad505415c13ee476649d98b8e49a4f9919c1ce82cbb150f5918f3fe8fa8d",
+      "size": 3806
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/hangarPage.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/hangarPage.lua",
+      "sha256": "e7b969b043e344c64a40b8e9bd8acbce21f188548d78e219950a02475c261b5f",
+      "size": 7536
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/hangarPlatinum.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/hangarPlatinum.lua",
+      "sha256": "7d6bf357d9546df615835e5334619a38dda3c74afe252ff1066de06e96afc651",
+      "size": 2296
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/hangarWidgets.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/hangarWidgets.lua",
+      "sha256": "ae9f0fa2b999657d030845f110ce81216a887085de8efab34c0af3a40965a65f",
+      "size": 3298
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/hangarWorkflow.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/hangarWorkflow.lua",
+      "sha256": "2941e05d0121441ff6b7ddd0199f33205fbdbfc3fbcce84c10f93574942dc25c",
+      "size": 1926
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/headspeedFavorites.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/headspeedFavorites.lua",
+      "sha256": "e1f5144664f46f08c243e8a3c05f149c7c82a69944279db860ffa429bc6103bc",
+      "size": 3370
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/helper.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/helper.lua",
+      "sha256": "fbf62f7a76099dbe8cd082b0a74ac97158c5909a7d1511cf9f3a3219875d37b2",
+      "size": 1345
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/mainMenu.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/mainMenu.lua",
+      "sha256": "ce1520bb78218cc27ea51ed8fcde97a3b93a6e33341292728b2758ed704fe86c",
+      "size": 8012
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/messageBox.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/messageBox.lua",
+      "sha256": "b60ae4e9bd49c230b6dc95713b60b9dda27f1aa9cad7d1ee1d682c4ab8cdab3d",
+      "size": 307
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/page.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/page.lua",
+      "sha256": "002fb30b1050a823b0f31b3cbb96652b4328c993dccec4946685ac84970f0d3e",
+      "size": 10985
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/popupMenu.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/popupMenu.lua",
+      "sha256": "56d804a8febbb72d998ccbf23e3a80c779bab38528c68390ad7036aa7470d4bf",
+      "size": 1021
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/precision.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/precision.lua",
+      "sha256": "f773f8811405284712ca3d162cfd3c2d9f8612bce538473825a4a84f32676764",
+      "size": 8596
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/precisionPids.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/precisionPids.lua",
+      "sha256": "a4e5ce08b298011f74d3f3dbc6a24e5ff0fef068ccea7dd5c3106c155dd5888f",
+      "size": 4869
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/ratePlot.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/ratePlot.lua",
+      "sha256": "8d4756ff362cad9dd3e43fc55144a5539985eb331b8f1424dbbb5555f98c6a6b",
+      "size": 3716
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/settings.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/settings.lua",
+      "sha256": "3fc73b18e10d4dee1b93e1d9e4227e5b35062f487d3c17be682b4e48a109e337",
+      "size": 3182
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/studio.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/studio.lua",
+      "sha256": "7d57d2eb18f8c02d1bf314607fe7a07cc32f13297cd0b29d4c746516328233de",
+      "size": 4856
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/studioForm.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/studioForm.lua",
+      "sha256": "4f7a7188933c1b8c0dba8c1ce83dc3b1ec9264b3a46a7d0ee5065378e05c8f17",
+      "size": 4105
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/swashTrim.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/swashTrim.lua",
+      "sha256": "dd05138f45cc8d1979539a78f1791f5247e38d2c92962a8d6f576d53caddc16e",
+      "size": 917
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/touch.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/touch.lua",
+      "sha256": "63788202d6b893988bc6bc1af5b6fe325d4dd4aebdc260a56518ed6209c375d0",
+      "size": 13737
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/waitMessage.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/waitMessage.lua",
+      "sha256": "1bc771aec232dd843ada13ae9acedc07f955f214298eea40b6c21c3d6782f673",
+      "size": 1060
+    },
+    {
+      "path": "SCRIPTS/RF2/LVGL/workflow.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/workflow.lua",
+      "sha256": "bc0b2735b151f33f2190de8956402a419a3ec1a826a647aebf631f3e9e9fe9b0",
+      "size": 3100
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/RATES/ACTUAL.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/RATES/ACTUAL.lua",
+      "sha256": "1d69da8b9c58525d155c1551a459d77dc778d180d8321925dcd25c8cf93c7889",
+      "size": 924
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/RATES/BETAFL.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/RATES/BETAFL.lua",
+      "sha256": "cddd0f0814a4ff953fa5c3e9be5cdf55209b3c0f403618ddbe0eb72f1cf522dc",
+      "size": 893
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/RATES/KISS.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/RATES/KISS.lua",
+      "sha256": "cfff60ecc01761fb05782bbacdf74ecae301059d949ca06d1be63be5d0f7544f",
+      "size": 890
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/RATES/NONE.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/RATES/NONE.lua",
+      "sha256": "ef231d388a510862384772cd94bd07564a6043a10fc052aecd3fdcaf9f25e5ce",
+      "size": 706
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/RATES/QUICK.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/RATES/QUICK.lua",
+      "sha256": "2ff96fe04be5ee97149479a1338ef953094711a8e1687daf1bbd49ae8e8f6ff9",
+      "size": 978
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/RATES/RACEFL.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/RATES/RACEFL.lua",
+      "sha256": "b6fde7fdb1958cfb63badd0029f47ca57e518b390c1dda6824008effc7251e22",
+      "size": 780
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/RATES/ROTORFL.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/RATES/ROTORFL.lua",
+      "sha256": "9c8ecbfd2f01a7edac2cb41361c02fdd90bef32835f599eb7299ad3b1123d9e3",
+      "size": 887
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/common.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/common.lua",
+      "sha256": "e59cb404d5ecfc53ee145f9b2aac9633457880dbbccdfc419fa46eafc162a2a9",
+      "size": 5728
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/crsf.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/crsf.lua",
+      "sha256": "9424229c14d698a886baae1819c8fc82c1a6c303721f7742f2d715a32c87f584",
+      "size": 1513
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/ghst.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/ghst.lua",
+      "sha256": "481920655fb44d73bf4561bea345c5389bd66f401a974a89c7b1bb2cc5191406",
+      "size": 494
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/mspAccCalibration.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/mspAccCalibration.lua",
+      "sha256": "eb11de035e2062fda81cb63a8d64565795afb0240d6a1db43f1ca89b28f8f5b5",
+      "size": 375
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/mspAccTrim.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/mspAccTrim.lua",
+      "sha256": "fc362dad933c1c67d8896cebc0f46eb22ee71dcb70ff196b7708add1c80d8cce",
+      "size": 1071
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/mspApiVersion.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/mspApiVersion.lua",
+      "sha256": "47a0e921798a35f104ec643fed159a8e9847261121d8ccd399d46a0aa14144ce",
+      "size": 426
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/mspBatteryConfig.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/mspBatteryConfig.lua",
+      "sha256": "96283b31b02fa249cb9c21e3f0f260576338bd1fdaca5cd0d7075bd0239b5f5f",
+      "size": 4040
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/mspBatteryProfile.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/mspBatteryProfile.lua",
+      "sha256": "81e988f08c264b5eb7d69dc9865350a9013fd3a79f24fcbe479243c0c1c27d1a",
+      "size": 1123
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/mspDataflash.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/mspDataflash.lua",
+      "sha256": "45aad23ddf29f7bf9ebf99d58035a9bdfc80e860f29a1afd3b46d0041de7d0fd",
+      "size": 1506
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/mspEsc4wif.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/mspEsc4wif.lua",
+      "sha256": "70cc5cb95f1d4dabf0ab66b4620922bd8640090bfbd75701fdc001cdcc5ebe6f",
+      "size": 986
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/mspEscAm32.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/mspEscAm32.lua",
+      "sha256": "097a5b2c4eae3d4b8dcf503ee79dd0c172ce73ec365b812086fe7f82dfc7d577",
+      "size": 9597
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/mspEscBlheliS.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/mspEscBlheliS.lua",
+      "sha256": "835b891235282fdb9977df9fa992500ad9c2e3b93b00d292925e1695ba8c6529",
+      "size": 9072
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/mspEscBluejay.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/mspEscBluejay.lua",
+      "sha256": "8841cd97ca585c141f73390d9e2183f9668670b2dfdaa04648204c134acb56ea",
+      "size": 9014
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/mspEscFlyrotor.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/mspEscFlyrotor.lua",
+      "sha256": "ae7e3eed40a3a6424f23bc4e1329e434422ee6e8d9cb15463852eb730c8ebac6",
+      "size": 10739
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/mspEscHwPl5.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/mspEscHwPl5.lua",
+      "sha256": "41133e1c7c4796a4ac3d1ef0131f8491da1437feb9b415340e835a3077479fb4",
+      "size": 13071
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/mspEscScorp.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/mspEscScorp.lua",
+      "sha256": "4cf5c2c45669faa2679653dd7a049a303d28ab9600842bf5ed04f3e1823dfe58",
+      "size": 6810
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/mspEscSensorConfig.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/mspEscSensorConfig.lua",
+      "sha256": "f1ef03fb4cadc75175a2db7cc709582ee66d10ef4e762f0896d43e083dfb197a",
+      "size": 4164
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/mspEscXdfly.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/mspEscXdfly.lua",
+      "sha256": "c3a8417723b5077304cdc132b94a439e5723668bbac2a2b67e1fda21b8cef9e9",
+      "size": 8593
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/mspEscYge.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/mspEscYge.lua",
+      "sha256": "6a426f1b1006559f1e385b5241dd1e633ca1667d2eb03814907a5177b98ee77b",
+      "size": 10524
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/mspExperimental.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/mspExperimental.lua",
+      "sha256": "0e8fd56ec4a017596367a0f4a195e9940ac8c02ff53228aba5dd665f510a8d8e",
+      "size": 987
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/mspFeatureConfig.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/mspFeatureConfig.lua",
+      "sha256": "7e2a14106457fe956d140395a6857ec83da8a10f0d69a96e9a7c8cd949854e61",
+      "size": 551
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/mspFilterConfig.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/mspFilterConfig.lua",
+      "sha256": "fe79e45aefed2e77892402b4b8ab61ebea855cfbc91b7f27c298cca603bd9c5b",
+      "size": 4580
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/mspFlightStats.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/mspFlightStats.lua",
+      "sha256": "97c5577f7c7e16040af9bb3deb379baca0283ac2ec4191db804f847177516933",
+      "size": 1999
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/mspGovernorConfig.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/mspGovernorConfig.lua",
+      "sha256": "d4258bca4daebdae48f2dca6c5fa2371a79cbf3a21d10c77bf046ef75b5c1d68",
+      "size": 7777
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/mspGovernorProfile.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/mspGovernorProfile.lua",
+      "sha256": "3f75404765e5bd631a4c8d19b19e157e2b4804368481d502bdcd661322f89b09",
+      "size": 4088
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/mspHelper.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/mspHelper.lua",
+      "sha256": "979aadd9961c2e67a07005bc2ba48da71cbc7fcbe47f80e1fca00090314797ce",
+      "size": 1884
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/mspMixer.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/mspMixer.lua",
+      "sha256": "c35e4b6f7524f3763fa952f0613bbc092061f1e94d6d47afac8d2c96a15b3b82",
+      "size": 5102
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/mspMixerInputs.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/mspMixerInputs.lua",
+      "sha256": "c52b15f143c2b4633f1d776537b0d278ccde4e5c6403f35c600a8d8818114142",
+      "size": 5207
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/mspName.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/mspName.lua",
+      "sha256": "cbb1fbb1fe4a990bbd7eef73cb96b3fcf1f8d2ff944c9cd5a5e59de0f7089cea",
+      "size": 982
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/mspPidProfile.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/mspPidProfile.lua",
+      "sha256": "ff8c9a37929fa12ea634d0ad71fe77bcae7a647e4beadd53e56da91affdcfe89",
+      "size": 8774
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/mspPidTuning.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/mspPidTuning.lua",
+      "sha256": "b56a741389b5092444ccfa8b2e26f7c12a532e17ec018078a88c8dd4a3c634c2",
+      "size": 3319
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/mspPilotConfig.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/mspPilotConfig.lua",
+      "sha256": "d74413c17e841827d942aa628947918421ec9d0270054cf1c3186fce751be00c",
+      "size": 2942
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/mspQueue.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/mspQueue.lua",
+      "sha256": "42451dba0a2b8000ffea4c59b9815d8320eb24be2eec35b9fc1b1cddd6b34011",
+      "size": 16553
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/mspRcTuning.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/mspRcTuning.lua",
+      "sha256": "c68b1ef897915c00de02db2dc0bec512ade8c8ee12b572e6eac966f2633e03c8",
+      "size": 7187
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/mspRescueProfile.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/mspRescueProfile.lua",
+      "sha256": "b3ebf4832d547139e1786cd33a8507a415e5b67df0a637f586544f2cf5a09ecc",
+      "size": 4930
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/mspServos.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/mspServos.lua",
+      "sha256": "eaf3c534976f055e4110bf4f6667e78571d56293f1004731aca7879b59027956",
+      "size": 3131
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/mspSetProfile.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/mspSetProfile.lua",
+      "sha256": "0d3988f8d14a2085e563f32417df9962a206568e55c774a8e13f9904867ca4f1",
+      "size": 553
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/mspSetRtc.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/mspSetRtc.lua",
+      "sha256": "7c7658d29a752e29ee4fd43f6e3b6a7d83add2dd817d824ef480c19f80eecbda",
+      "size": 668
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/mspSmartFuel.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/mspSmartFuel.lua",
+      "sha256": "cd5bebf81be90c573cf077a3208b1379cdcc8a0d171bb050d9afef1656606830",
+      "size": 1955
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/mspStatus.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/mspStatus.lua",
+      "sha256": "2b771fa944143e1b504f1e4fb5aaa065556d1344ad5aac997c5c11756850eabd",
+      "size": 1666
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/mspTelemetryConfig.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/mspTelemetryConfig.lua",
+      "sha256": "e23cb233ecdc248a482a72d3b072e4a6c7bda975114645e769ec0534bfe35a42",
+      "size": 1566
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/simulator.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/simulator.lua",
+      "sha256": "9e99fba438ee4bfbc52890dfa59e96803083bda0cffa34540ee00ae1301b868b",
+      "size": 3257
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/simulatorData.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/simulatorData.lua",
+      "sha256": "5d845528ef7578e374b5b549f7988ddca605d23420a6902a83262f942f4c2cbe",
+      "size": 4976
+    },
+    {
+      "path": "SCRIPTS/RF2/MSP/sp.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/sp.lua",
+      "sha256": "c1fd069964856d1eb370a5631e0886f19c51f88ca83d922ec5de2802e83ded25",
+      "size": 2478
+    },
+    {
+      "path": "SCRIPTS/RF2/PAGES/accelerometer.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/PAGES/accelerometer.lua",
+      "sha256": "6b6023a168ce11602b4d1e5709d8692a33689c53bfdae98da31da11ee833e5f0",
+      "size": 1286
+    },
+    {
+      "path": "SCRIPTS/RF2/PAGES/battery.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/PAGES/battery.lua",
+      "sha256": "64f83ebc2b7790b9ed4e974f7eb436fc33141c0ef25274321b8805d96e010eed",
+      "size": 3774
+    },
+    {
+      "path": "SCRIPTS/RF2/PAGES/collective_pitch.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/PAGES/collective_pitch.lua",
+      "sha256": "dae22d998845c6fea8557d83f11ca3b1a719cf9c236ac9d0970cf98b02c4cdf9",
+      "size": 54
+    },
+    {
+      "path": "SCRIPTS/RF2/PAGES/esc_am32.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/PAGES/esc_am32.lua",
+      "sha256": "ebd251353956151bd2f5069f8db85c398815846c6e38e927259aaad655cc72d2",
+      "size": 1547
+    },
+    {
+      "path": "SCRIPTS/RF2/PAGES/esc_am32_form.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/PAGES/esc_am32_form.lua",
+      "sha256": "280abcb7873ab04051c0eea5cb7f25e8d956cbe23ca3117b64ba6cc2c99030d5",
+      "size": 3154
+    },
+    {
+      "path": "SCRIPTS/RF2/PAGES/esc_blhelis.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/PAGES/esc_blhelis.lua",
+      "sha256": "4140b4028f24a1d359e271ec254ae37db43d3a366af66c513a1786c9d6b91302",
+      "size": 1716
+    },
+    {
+      "path": "SCRIPTS/RF2/PAGES/esc_blhelis_form.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/PAGES/esc_blhelis_form.lua",
+      "sha256": "b59fefb7a1d3be33eac8213ffedf375ab1203b2d1144551976bc16f0b444f4f0",
+      "size": 2229
+    },
+    {
+      "path": "SCRIPTS/RF2/PAGES/esc_bluejay.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/PAGES/esc_bluejay.lua",
+      "sha256": "d14cee28814ca98acf40d50c52f1c515b04bba1bdd203be7780e481c48dfa474",
+      "size": 1568
+    },
+    {
+      "path": "SCRIPTS/RF2/PAGES/esc_bluejay_form.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/PAGES/esc_bluejay_form.lua",
+      "sha256": "032d2556f65a13a22f6c8888ef531009be9768e1025effe47c37af76d083b534",
+      "size": 2217
+    },
+    {
+      "path": "SCRIPTS/RF2/PAGES/esc_flyrotor.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/PAGES/esc_flyrotor.lua",
+      "sha256": "1c9f951881d967b1bd34ba23666698ed8b27b1357afb0c41fea332ea24bcb0db",
+      "size": 6426
+    },
+    {
+      "path": "SCRIPTS/RF2/PAGES/esc_hwpl5.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/PAGES/esc_hwpl5.lua",
+      "sha256": "7f53a35706f0430b0973f288f06a8a963bd92947a5eee821dc1fd17a7b61d2d3",
+      "size": 4888
+    },
+    {
+      "path": "SCRIPTS/RF2/PAGES/esc_scorp.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/PAGES/esc_scorp.lua",
+      "sha256": "3143cd32272b6ad6a19e6f43688d217c14c0cc8adfb3986242ac5e475823c1f4",
+      "size": 4985
+    },
+    {
+      "path": "SCRIPTS/RF2/PAGES/esc_sensor.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/PAGES/esc_sensor.lua",
+      "sha256": "2c862106d1f8c40b105de4335ac95b3e11a22979482b5e2f9b4f3d86dcd2471d",
+      "size": 2822
+    },
+    {
+      "path": "SCRIPTS/RF2/PAGES/esc_xdfly.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/PAGES/esc_xdfly.lua",
+      "sha256": "d2f18384d3a2738cb734161047c61b6fa17dbbae3f2d5d21fb9a65cc45d91397",
+      "size": 2833
+    },
+    {
+      "path": "SCRIPTS/RF2/PAGES/esc_yge.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/PAGES/esc_yge.lua",
+      "sha256": "d3d631137a271e8f93c942c8dd4d037f18937b70d134a87574223226e5eb33af",
+      "size": 5378
+    },
+    {
+      "path": "SCRIPTS/RF2/PAGES/experimental.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/PAGES/experimental.lua",
+      "sha256": "f6fa8a5966d0aa70e2754e574f30044add937ce99130b008a4a79632791d30f2",
+      "size": 2264
+    },
+    {
+      "path": "SCRIPTS/RF2/PAGES/filters.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/PAGES/filters.lua",
+      "sha256": "959a04bafbb8592f7217aa624d1479ac2624e230ad1e7f3246d39a5e874a3be6",
+      "size": 3838
+    },
+    {
+      "path": "SCRIPTS/RF2/PAGES/governor.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/PAGES/governor.lua",
+      "sha256": "789ac6ba970bb7326a70e60ae79644a91c11e680f3792ba0dfbc3fb600757371",
+      "size": 6604
+    },
+    {
+      "path": "SCRIPTS/RF2/PAGES/hangarSettings.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/PAGES/hangarSettings.lua",
+      "sha256": "c6e6952d7784828ccff488be1677923160e2300ad246b7ad36f1c66ea4211c35",
+      "size": 3051
+    },
+    {
+      "path": "SCRIPTS/RF2/PAGES/helpers/batSwitcher.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/PAGES/helpers/batSwitcher.lua",
+      "sha256": "b6a1125564b9e7f7ea01c36b77e76e68d466b395311e02a0df870cd162dfc11b",
+      "size": 1800
+    },
+    {
+      "path": "SCRIPTS/RF2/PAGES/helpers/profileSwitcher.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/PAGES/helpers/profileSwitcher.lua",
+      "sha256": "72ebd4571be597a7999ecb291375ad02f9dee9128f57443d23d6143ffeb40518",
+      "size": 1361
+    },
+    {
+      "path": "SCRIPTS/RF2/PAGES/helpers/rateSwitcher.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/PAGES/helpers/rateSwitcher.lua",
+      "sha256": "7c8a357fba00c675fe219631f99b806327468ee28ac8f401f792e43ec9ded577",
+      "size": 1366
+    },
+    {
+      "path": "SCRIPTS/RF2/PAGES/helpers/rates.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/PAGES/helpers/rates.lua",
+      "sha256": "06d650c7c389bad94f3936aeee7a6f44c8603bf645a3af27cca96f13472a031e",
+      "size": 10395
+    },
+    {
+      "path": "SCRIPTS/RF2/PAGES/helpers/settingsHelper.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/PAGES/helpers/settingsHelper.lua",
+      "sha256": "6eddec9a0e294383c1b91a5e79824faab9cd48b01454fddad35abee6712b4676",
+      "size": 8923
+    },
+    {
+      "path": "SCRIPTS/RF2/PAGES/mixer.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/PAGES/mixer.lua",
+      "sha256": "b6111139bd9fee82b88bf6a0117e796834971975f0e6ea17ab081c9e83c64b44",
+      "size": 5563
+    },
+    {
+      "path": "SCRIPTS/RF2/PAGES/model.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/PAGES/model.lua",
+      "sha256": "2a66f25d5bed11cfe416fef82059f3ef36b607e4ce7dbab72e39dea1b22b3ce1",
+      "size": 6415
+    },
+    {
+      "path": "SCRIPTS/RF2/PAGES/profile_governor.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/PAGES/profile_governor.lua",
+      "sha256": "c5e594a2f8957363217c0444d037b67743b8beabdc26abb6a9a79b36a65c9826",
+      "size": 3635
+    },
+    {
+      "path": "SCRIPTS/RF2/PAGES/profile_pidcon.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/PAGES/profile_pidcon.lua",
+      "sha256": "c83b0f2db1c71ebadb6dd9eeb4eb110ac871126b4d65d1c7b196bf9955701340",
+      "size": 6333
+    },
+    {
+      "path": "SCRIPTS/RF2/PAGES/profile_pids.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/PAGES/profile_pids.lua",
+      "sha256": "0a7503ea698ba0ead55d7df7d2145c995094b902cb2b9d31ebf448c2a1766484",
+      "size": 7878
+    },
+    {
+      "path": "SCRIPTS/RF2/PAGES/profile_rescue.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/PAGES/profile_rescue.lua",
+      "sha256": "d0a50f4ff88e85b122ca22e477a8fef92fe7357351cf583a5b3d935be2719e87",
+      "size": 4705
+    },
+    {
+      "path": "SCRIPTS/RF2/PAGES/profile_various.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/PAGES/profile_various.lua",
+      "sha256": "27215a0aa532ea0fa967196ce4016ce2b437127f8446c81641218846c4d3fab7",
+      "size": 4933
+    },
+    {
+      "path": "SCRIPTS/RF2/PAGES/rate_dynamics.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/PAGES/rate_dynamics.lua",
+      "sha256": "5445281334d1e50e3d51a767630cd1ab971d14442566c9a0602f2ff7839e98ca",
+      "size": 5987
+    },
+    {
+      "path": "SCRIPTS/RF2/PAGES/rates.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/PAGES/rates.lua",
+      "sha256": "9b600178f52cd7201d747af07c7629a4990ba188fa41fe186248a58815af2d20",
+      "size": 55
+    },
+    {
+      "path": "SCRIPTS/RF2/PAGES/servos.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/PAGES/servos.lua",
+      "sha256": "9747a6d2f68ac7aecc448c24bee6c3e58b09aa7720fb61e4ae620b3adf8ea9ef",
+      "size": 5024
+    },
+    {
+      "path": "SCRIPTS/RF2/PAGES/settings.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/PAGES/settings.lua",
+      "sha256": "32d3c79fdfc9a81a538e763f5b0c937a0201fff685467889fe239bb90a3ad1ba",
+      "size": 10361
+    },
+    {
+      "path": "SCRIPTS/RF2/PAGES/smartfuel.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/PAGES/smartfuel.lua",
+      "sha256": "cf6c49c4ee6f7440e8377d67e9fc48c195b1076d9533aba1b421fdc45baefb53",
+      "size": 1646
+    },
+    {
+      "path": "SCRIPTS/RF2/PAGES/status.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/PAGES/status.lua",
+      "sha256": "5db685c0f29e5a82c89c92b9a171af2cbec1527b291e14e1bf0bfe09d2cebe14",
+      "size": 6423
+    },
+    {
+      "path": "SCRIPTS/RF2/PAGES/swash_trim.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/PAGES/swash_trim.lua",
+      "sha256": "4f02883efabad70080832234d79d8f0cb9d820bcc33015c20a5825f15a9eeeca",
+      "size": 1533
+    },
+    {
+      "path": "SCRIPTS/RF2/PREFS/README.txt",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/PREFS/README.txt",
+      "sha256": "5808a31e1d3f07764de5a79358b4616388ef3ccc159d632344fe35bce462b9b6",
+      "size": 221
+    },
+    {
+      "path": "SCRIPTS/RF2/SOUNDS/accpitchtrim.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/SOUNDS/accpitchtrim.wav",
+      "sha256": "c81fd327db578bfeb7b0b3a50972b3d4af6978f0f822bf55a8a3375adb075fe6",
+      "size": 78286
+    },
+    {
+      "path": "SCRIPTS/RF2/SOUNDS/accrolltrim.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/SOUNDS/accrolltrim.wav",
+      "sha256": "729710f2329fe8aa0be799f9e61cd0dc01679310c8caecdb4e796d9e87491240",
+      "size": 78446
+    },
+    {
+      "path": "SCRIPTS/RF2/SOUNDS/acro.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/SOUNDS/acro.wav",
+      "sha256": "249fc828c09e0ed5d84e630c6e0f36b2c73434fa0cc6d8f6377ddfd6661edd70",
+      "size": 32140
+    },
+    {
+      "path": "SCRIPTS/RF2/SOUNDS/alt.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/SOUNDS/alt.wav",
+      "sha256": "537b04ff5a8ac214f2edcb53e1af154aeff72ca1c0aa2248b07f1e91975285b8",
+      "size": 24000
+    },
+    {
+      "path": "SCRIPTS/RF2/SOUNDS/angle.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/SOUNDS/angle.wav",
+      "sha256": "ad051e90a1a0571b9b3d4c146136eac7f6c9a580d824912ae5a0b0ececa82116",
+      "size": 19602
+    },
+    {
+      "path": "SCRIPTS/RF2/SOUNDS/b.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/SOUNDS/b.wav",
+      "sha256": "1a8202d78cecfc060c3cb757bdb7cc81861c520ee4f412932b94b466c056c59c",
+      "size": 13426
+    },
+    {
+      "path": "SCRIPTS/RF2/SOUNDS/ccw.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/SOUNDS/ccw.wav",
+      "sha256": "181b738944d0b784bfc33588055e25a39c901d9f765d2e852315a52e1e90d9ff",
+      "size": 46166
+    },
+    {
+      "path": "SCRIPTS/RF2/SOUNDS/climb.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/SOUNDS/climb.wav",
+      "sha256": "43ab823fc2e445874881dbfc0a1b69ba7f5ff11df12dc143099d0cdd108ad0a5",
+      "size": 21972
+    },
+    {
+      "path": "SCRIPTS/RF2/SOUNDS/co-se-bo-ga.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/SOUNDS/co-se-bo-ga.wav",
+      "sha256": "79089d643ada5dbf37d661443a24c2b32a818b561cdc7b1047665588ce72cafc",
+      "size": 83726
+    },
+    {
+      "path": "SCRIPTS/RF2/SOUNDS/collective.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/SOUNDS/collective.wav",
+      "sha256": "8074750d1ab55378f936c45850547fbb9d4ddab7faff49cb51142354b345a80b",
+      "size": 27058
+    },
+    {
+      "path": "SCRIPTS/RF2/SOUNDS/crossc.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/SOUNDS/crossc.wav",
+      "sha256": "fca24a5b05297aa547195f7559495c18010d95e4bdfcfd30613d4d1fed581c2f",
+      "size": 33602
+    },
+    {
+      "path": "SCRIPTS/RF2/SOUNDS/cutoff.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/SOUNDS/cutoff.wav",
+      "sha256": "18e06f8b6e1596a5d147fc11f6ace0c8b91d93768a5201ac571932e00fa22077",
+      "size": 23296
+    },
+    {
+      "path": "SCRIPTS/RF2/SOUNDS/cw.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/SOUNDS/cw.wav",
+      "sha256": "027451e62d9c037fdb452393c36a4bf2481ba2bfea9ae1e97c2263eeceb04c19",
+      "size": 32996
+    },
+    {
+      "path": "SCRIPTS/RF2/SOUNDS/cyclic.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/SOUNDS/cyclic.wav",
+      "sha256": "8f8bb25a1a672d803d83233bf6b1abfd1438a30291ef2de5596bcf35e4f59636",
+      "size": 27338
+    },
+    {
+      "path": "SCRIPTS/RF2/SOUNDS/d.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/SOUNDS/d.wav",
+      "sha256": "8d07fa0961b05cf8e41bf981243f0ea2a33289f487d7c26cb00e3eb2c29ab810",
+      "size": 14192
+    },
+    {
+      "path": "SCRIPTS/RF2/SOUNDS/decay.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/SOUNDS/decay.wav",
+      "sha256": "1fe4d09c24da56d72c235e486fe5612d7002d76e023c3120adf7d687efbba4b2",
+      "size": 19048
+    },
+    {
+      "path": "SCRIPTS/RF2/SOUNDS/dterm.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/SOUNDS/dterm.wav",
+      "sha256": "e9c2796df5fd23e4bf5d2b214d961e2ad09a5861afe1f87296b128e9ffcff333",
+      "size": 24316
+    },
+    {
+      "path": "SCRIPTS/RF2/SOUNDS/dyn.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/SOUNDS/dyn.wav",
+      "sha256": "8b5f825e7d89cb93debff852ce3ec6f6ac4afb24b6aa2d31bedf95cbc021aba7",
+      "size": 28222
+    },
+    {
+      "path": "SCRIPTS/RF2/SOUNDS/expo.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/SOUNDS/expo.wav",
+      "sha256": "f7c532f202caea0523fd15a087d3e3f76ed9a64e5a62797da298cac1ff444e66",
+      "size": 27484
+    },
+    {
+      "path": "SCRIPTS/RF2/SOUNDS/f.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/SOUNDS/f.wav",
+      "sha256": "1c62f1b71ae9fe2962d440034e950daa00678cdecf0c07a25d722fef90ea35cc",
+      "size": 16350
+    },
+    {
+      "path": "SCRIPTS/RF2/SOUNDS/ff.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/SOUNDS/ff.wav",
+      "sha256": "35c2993c2d5cd1df84e28097d9174143ca89b6121101721f2cf3091901e0249d",
+      "size": 32970
+    },
+    {
+      "path": "SCRIPTS/RF2/SOUNDS/gain.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/SOUNDS/gain.wav",
+      "sha256": "2513d867fa7a4d4ce2a7be9db443a7eb5b1df1b5ae4f920226fb063db261f91c",
+      "size": 19926
+    },
+    {
+      "path": "SCRIPTS/RF2/SOUNDS/gov.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/SOUNDS/gov.wav",
+      "sha256": "81740a46df52090f3948468b0853459d6a942500e1d775653b7f08b1648d6f88",
+      "size": 22874
+    },
+    {
+      "path": "SCRIPTS/RF2/SOUNDS/gyro.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/SOUNDS/gyro.wav",
+      "sha256": "967b03d61e9747a877c76f03c9850cdc418e03694affa826672ee98a828034ae",
+      "size": 23240
+    },
+    {
+      "path": "SCRIPTS/RF2/SOUNDS/horizon.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/SOUNDS/horizon.wav",
+      "sha256": "031052f472c62215b0fa643486d0260ec9feeb10e9a209e299bea442de6a10a7",
+      "size": 27772
+    },
+    {
+      "path": "SCRIPTS/RF2/SOUNDS/hover.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/SOUNDS/hover.wav",
+      "sha256": "2176af20ad25a550aec370d9cb4e6be1d820a0ccb554bc86f8169c27df63b7d7",
+      "size": 18110
+    },
+    {
+      "path": "SCRIPTS/RF2/SOUNDS/i.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/SOUNDS/i.wav",
+      "sha256": "c51162b0eddcbda716890f99458feec8f6e97a619890594296a9e074064caf97",
+      "size": 13706
+    },
+    {
+      "path": "SCRIPTS/RF2/SOUNDS/level.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/SOUNDS/level.wav",
+      "sha256": "ea31c6932d81ab8d9ca298a8bf50361c50d36f1e229d065812a5a6abc85fe934",
+      "size": 19010
+    },
+    {
+      "path": "SCRIPTS/RF2/SOUNDS/o.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/SOUNDS/o.wav",
+      "sha256": "4b7ed33ccab465961578ded16dfe426414e36ef9b6fbfb3d00247378bb5db07e",
+      "size": 12930
+    },
+    {
+      "path": "SCRIPTS/RF2/SOUNDS/p.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/SOUNDS/p.wav",
+      "sha256": "4009b63ae6544922a256ca61fbcd4791b35bb8150aacf3bc385f99fdf62b929f",
+      "size": 14302
+    },
+    {
+      "path": "SCRIPTS/RF2/SOUNDS/pi-se-bo-ga.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/SOUNDS/pi-se-bo-ga.wav",
+      "sha256": "d05bf961c65abeb39f4e18dc4dc249a270229b773fa81710243b4a079f563fe6",
+      "size": 75726
+    },
+    {
+      "path": "SCRIPTS/RF2/SOUNDS/pitch.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/SOUNDS/pitch.wav",
+      "sha256": "81c8dbd53748b8864a6c05f7920af33fede6b92dff04853418b3b66b0ae6cf2a",
+      "size": 16274
+    },
+    {
+      "path": "SCRIPTS/RF2/SOUNDS/rate.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/SOUNDS/rate.wav",
+      "sha256": "192a24d6ef9d0021731fc47a48a647686a3ae1aa1eaa142ac975b615f3aa4c4a",
+      "size": 19350
+    },
+    {
+      "path": "SCRIPTS/RF2/SOUNDS/ratio.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/SOUNDS/ratio.wav",
+      "sha256": "0662e28aed9fda4a2ef96664d00aa4acf10a5542210dcc85d55b61b7122f28e7",
+      "size": 21348
+    },
+    {
+      "path": "SCRIPTS/RF2/SOUNDS/rc.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/SOUNDS/rc.wav",
+      "sha256": "ec8c86854b9d510dd3e980cccbffad23bc9d9b646015fbac580ff73c6d306e9e",
+      "size": 25546
+    },
+    {
+      "path": "SCRIPTS/RF2/SOUNDS/rescue.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/SOUNDS/rescue.wav",
+      "sha256": "ba374e1b8776d799c9409d4e0e57c1336c2b8c6235008e7361b8eb62f7ab4fd6",
+      "size": 27342
+    },
+    {
+      "path": "SCRIPTS/RF2/SOUNDS/ro-se-bo-ga.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/SOUNDS/ro-se-bo-ga.wav",
+      "sha256": "e791210bc60425547be61b255c53a8820da514a196ca5a042d4e481599f1d52c",
+      "size": 77326
+    },
+    {
+      "path": "SCRIPTS/RF2/SOUNDS/roll.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/SOUNDS/roll.wav",
+      "sha256": "788b4aa9b7b9e6a6c4642fc17ba2850b4b165863b13a5924b0d2c4fb03771727",
+      "size": 17496
+    },
+    {
+      "path": "SCRIPTS/RF2/SOUNDS/tta.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/SOUNDS/tta.wav",
+      "sha256": "9908a2339b0595c9edc7215b6630a0a5a53ce73b22554bbc76bfe21ede77ba78",
+      "size": 28988
+    },
+    {
+      "path": "SCRIPTS/RF2/SOUNDS/ya-dy-ce-ga.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/SOUNDS/ya-dy-ce-ga.wav",
+      "sha256": "ee2bc7bdb4ba97d04afdc9b616879bf94246f0a6d2e0fb4774fdecb29785e8d3",
+      "size": 75726
+    },
+    {
+      "path": "SCRIPTS/RF2/SOUNDS/ya-dy-de-fi.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/SOUNDS/ya-dy-de-fi.wav",
+      "sha256": "72eaf95f3fda586de24c6df4bbae31ab07a0e333402128b184106fb3871051f3",
+      "size": 84206
+    },
+    {
+      "path": "SCRIPTS/RF2/SOUNDS/ya-dy-de-ga.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/SOUNDS/ya-dy-de-ga.wav",
+      "sha256": "9a1c81126af74f5dcc35e1f71477dbe057a94c748ac0a6b603f8e9790ce3369b",
+      "size": 80526
+    },
+    {
+      "path": "SCRIPTS/RF2/SOUNDS/ya-in-pr-cu.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/SOUNDS/ya-in-pr-cu.wav",
+      "sha256": "b8d9d1301eca751a0da32ed082bdf156645214c92e392b4c457f32dbd56acd69",
+      "size": 77646
+    },
+    {
+      "path": "SCRIPTS/RF2/SOUNDS/ya-in-pr-ga.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/SOUNDS/ya-in-pr-ga.wav",
+      "sha256": "6da526c0dd8c68a304a4fdf55559768d8f48263a9b5bf3f2948e8efffb31fd51",
+      "size": 73326
+    },
+    {
+      "path": "SCRIPTS/RF2/SOUNDS/ya-pr-cu.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/SOUNDS/ya-pr-cu.wav",
+      "sha256": "e2dd865606af22ce47e36f35dd1c57da2a3af2d076e5b7fb7ff369ffdda1d305",
+      "size": 65646
+    },
+    {
+      "path": "SCRIPTS/RF2/SOUNDS/ya-se-bo-ga.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/SOUNDS/ya-se-bo-ga.wav",
+      "sha256": "bc3eab808dacb13519284608b96facdb9afe70c1cb09da72ed71deae585f1309",
+      "size": 74446
+    },
+    {
+      "path": "SCRIPTS/RF2/SOUNDS/yaw.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/SOUNDS/yaw.wav",
+      "sha256": "83adf4d978912976af43856cd69fe419f7bcd606a2574ac779f40ebc73ac4097",
+      "size": 15150
+    },
+    {
+      "path": "SCRIPTS/RF2/TEMPLATES/128x64.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/TEMPLATES/128x64.lua",
+      "sha256": "1742254e83810e93b4500df9ef00a0f98745a2dfb435d7b59983e86890932c41",
+      "size": 177
+    },
+    {
+      "path": "SCRIPTS/RF2/TEMPLATES/128x96.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/TEMPLATES/128x96.lua",
+      "sha256": "1742254e83810e93b4500df9ef00a0f98745a2dfb435d7b59983e86890932c41",
+      "size": 177
+    },
+    {
+      "path": "SCRIPTS/RF2/TEMPLATES/212x64.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/TEMPLATES/212x64.lua",
+      "sha256": "1742254e83810e93b4500df9ef00a0f98745a2dfb435d7b59983e86890932c41",
+      "size": 177
+    },
+    {
+      "path": "SCRIPTS/RF2/TEMPLATES/320x240.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/TEMPLATES/320x240.lua",
+      "sha256": "8283aea80b470d7fcd96a23a7a0344784821aa6fb736b2605d88159ee8ea5e5a",
+      "size": 182
+    },
+    {
+      "path": "SCRIPTS/RF2/TEMPLATES/320x480.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/TEMPLATES/320x480.lua",
+      "sha256": "8283aea80b470d7fcd96a23a7a0344784821aa6fb736b2605d88159ee8ea5e5a",
+      "size": 182
+    },
+    {
+      "path": "SCRIPTS/RF2/TEMPLATES/480x272.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/TEMPLATES/480x272.lua",
+      "sha256": "8283aea80b470d7fcd96a23a7a0344784821aa6fb736b2605d88159ee8ea5e5a",
+      "size": 182
+    },
+    {
+      "path": "SCRIPTS/RF2/TEMPLATES/480x320.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/TEMPLATES/480x320.lua",
+      "sha256": "b226ae14871edf2d770d3aeabf229fd36b1c919231a62e3cd608fd0bac93907c",
+      "size": 182
+    },
+    {
+      "path": "SCRIPTS/RF2/TEMPLATES/800x480.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/TEMPLATES/800x480.lua",
+      "sha256": "f83ec63f8ae968f038d9c3dc2a0572419443ba4627def0652ca2e9d3bffac5db",
+      "size": 171
+    },
+    {
+      "path": "SCRIPTS/RF2/acc_cal.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/acc_cal.lua",
+      "sha256": "d36d904ca3880689632024d57b19a0927cf1c8446d961cb2fa8c3dfeeb2ca849",
+      "size": 354
+    },
+    {
+      "path": "SCRIPTS/RF2/adj_teller.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/adj_teller.lua",
+      "sha256": "d8ccac019c7eb286435da6e7167483d1c1c8e470f91b056401c27a23d1fac97f",
+      "size": 7529
+    },
+    {
+      "path": "SCRIPTS/RF2/background.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/background.lua",
+      "sha256": "f40814a065a3146d04efd6f59e886a2a524e18b4edcb9a5832aa7a92a2a637ba",
+      "size": 7154
+    },
+    {
+      "path": "SCRIPTS/RF2/background_init.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/background_init.lua",
+      "sha256": "ed59439f183d0cde1e2e8c4918ae11204ab10b4333fced2ad8b5e375a0e16144",
+      "size": 11865
+    },
+    {
+      "path": "SCRIPTS/RF2/pages.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/pages.lua",
+      "sha256": "b24b72418ea1d89740e71973209859cdfc6b88a021924be7da0cd7ce70cc40a7",
+      "size": 2216
+    },
+    {
+      "path": "SCRIPTS/RF2/protocols.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/protocols.lua",
+      "sha256": "944c55625cdfc241fbf954c61e1bf320bb4b3ee059dfc266afc141d0fa1841bb",
+      "size": 112
+    },
+    {
+      "path": "SCRIPTS/RF2/radios.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/radios.lua",
+      "sha256": "2ac10a00752c120ace152bbef3e5a7b6d2e1bce67cf6b82bb1279122d92a2feb",
+      "size": 3509
+    },
+    {
+      "path": "SCRIPTS/RF2/rf2.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/rf2.lua",
+      "sha256": "21a720355327aeaa5ddd23a75aba791b83d1bbf0deac8ad6bdc0f31d2d5a3e4c",
+      "size": 6123
+    },
+    {
+      "path": "SCRIPTS/RF2/rf2.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/rf2.png",
+      "sha256": "8b4ad4e3422b87e07f1c5ab308fdc57f56c368b52af5b26e76e9f6b12e7ecdb9",
+      "size": 697
+    },
+    {
+      "path": "SCRIPTS/RF2/rf2frsky_tlm.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/rf2frsky_tlm.lua",
+      "sha256": "eab25a8342659c72a6a9e0216072e670b8e6eebbe0522e5263c4952243cf0982",
+      "size": 5022
+    },
+    {
+      "path": "SCRIPTS/RF2/rf2tlm.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/rf2tlm.lua",
+      "sha256": "ff2a837e1a9db16956a2ebdc12137b869711dcd88862d39f9b907a3d31dc08cb",
+      "size": 2431
+    },
+    {
+      "path": "SCRIPTS/RF2/rf2tlm_sensors.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/rf2tlm_sensors.lua",
+      "sha256": "891aa9ec28b351c2ec418caad52e3adc18860f8a23916b90d1c58e0d64acc2e5",
+      "size": 9316
+    },
+    {
+      "path": "SCRIPTS/RF2/tool.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/tool.lua",
+      "sha256": "4508ca146ca73a7fa029402b7e287639f3a1bc6644def351e5198a8f9160ca18",
+      "size": 963
+    },
+    {
+      "path": "SCRIPTS/RF2/ui_init.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/ui_init.lua",
+      "sha256": "60267f0ab39de9aadbcc6846bea4e0bf7ef225f76607fc2cb2bc95bcaf80af2e",
+      "size": 1452
+    },
+    {
+      "path": "SCRIPTS/RF2/ui_lcd.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/ui_lcd.lua",
+      "sha256": "29716c442f57026014b7856e15f005f8dbf3c80074b4ab4b18292a202a432db1",
+      "size": 10703
+    },
+    {
+      "path": "SCRIPTS/RF2/ui_lvgl_framework.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/ui_lvgl_framework.lua",
+      "sha256": "ddf1f90c891fa41cb10befd31d4eebf36019b24f6511bcac10466b3e56772e70",
+      "size": 30345
+    },
+    {
+      "path": "SCRIPTS/RF2/ui_lvgl_runner.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/ui_lvgl_runner.lua",
+      "sha256": "ff991d8645d785863579ffa438542f07985739a24b606c1e6b5b7384f3885d13",
+      "size": 3456
+    },
+    {
+      "path": "SCRIPTS/RGBLED/README.txt",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RGBLED/README.txt",
+      "sha256": "7b78617f4aab3b95ef584154a943adaec4340c5a821db94e743601d1942c2e0f",
+      "size": 155
+    },
+    {
+      "path": "SCRIPTS/TOOLS/Custom Colors.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/TOOLS/Custom Colors.lua",
+      "sha256": "652af3fa4954277d112085a9fda06a7303740567c983264b11fc77faef327d5e",
+      "size": 49404
+    },
+    {
+      "path": "SCRIPTS/TOOLS/IMGR.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/TOOLS/IMGR.lua",
+      "sha256": "673c42774f8cf5fdfcb467cee937eea6ba9d8ba4912f65726393602f1437d7dc",
+      "size": 10837
+    },
+    {
+      "path": "SCRIPTS/TOOLS/RM Sensor Configurator.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/TOOLS/RM Sensor Configurator.lua",
+      "sha256": "5e7968f38c71fb5eb6e524100c2d2c28c7dfb00a410d4b374d04262c6ef033e5",
+      "size": 95972
+    },
+    {
+      "path": "SCRIPTS/TOOLS/elrsV3 (2).lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/TOOLS/elrsV3 (2).lua",
+      "sha256": "1ec77428c701ab3464780288118e5c03a999ee2c900671e33953244262e5867a",
+      "size": 31022
+    },
+    {
+      "path": "SCRIPTS/TOOLS/rf2.lua",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/TOOLS/rf2.lua",
+      "sha256": "3efe7252b1098cc4488502009780e9cb43e2ff20c8a69bcb17727c15b4785d0e",
+      "size": 125
+    },
+    {
+      "path": "WIDGETS/KSETouch/BatterySounds/0%.wav",
+      "archive": "EdgeTXKSE/SD-CARD/WIDGETS/KSETouch/BatterySounds/0%.wav",
+      "sha256": "9813d75b83df0978212f9d6186b5cff905522c25b356f830fbdc3d66d3cec77d",
+      "size": 67744
+    },
+    {
+      "path": "WIDGETS/KSETouch/BatterySounds/10%.wav",
+      "archive": "EdgeTXKSE/SD-CARD/WIDGETS/KSETouch/BatterySounds/10%.wav",
+      "sha256": "6d111595412055c7de72e897df585924712bdcd8a247f5ca3ee6b36d1602bb35",
+      "size": 56844
+    },
+    {
+      "path": "WIDGETS/KSETouch/BatterySounds/20%.wav",
+      "archive": "EdgeTXKSE/SD-CARD/WIDGETS/KSETouch/BatterySounds/20%.wav",
+      "sha256": "5d3399e91b8e6cf34c3361bcb336affaaeffa718ca4b6f4d1dfdf5a4944783a2",
+      "size": 62790
+    },
+    {
+      "path": "WIDGETS/KSETouch/BatterySounds/30%.wav",
+      "archive": "EdgeTXKSE/SD-CARD/WIDGETS/KSETouch/BatterySounds/30%.wav",
+      "sha256": "754574944a5c1ce1419089f9f9ff96ba50280da67fb54058a99e853e98fa0a22",
+      "size": 65860
+    },
+    {
+      "path": "WIDGETS/KSETouch/BatterySounds/40%.wav",
+      "archive": "EdgeTXKSE/SD-CARD/WIDGETS/KSETouch/BatterySounds/40%.wav",
+      "sha256": "3c2b99c1b09d628cd54fcc0bb59b3f3c51c53b9803c2894564b7906575556bc7",
+      "size": 66604
+    },
+    {
+      "path": "WIDGETS/KSETouch/BatterySounds/50%.wav",
+      "archive": "EdgeTXKSE/SD-CARD/WIDGETS/KSETouch/BatterySounds/50%.wav",
+      "sha256": "272d2b407452ad04df254b8df02e5d1d47411d5601224f3debf89814371df648",
+      "size": 68832
+    },
+    {
+      "path": "WIDGETS/KSETouch/BatterySounds/dead.wav",
+      "archive": "EdgeTXKSE/SD-CARD/WIDGETS/KSETouch/BatterySounds/dead.wav",
+      "sha256": "83e02613ee8452f3059f045d14615ce85bd864a3dc538ee79068b792b28b2296",
+      "size": 75564
+    },
+    {
+      "path": "WIDGETS/KSETouch/default.png",
+      "archive": "EdgeTXKSE/SD-CARD/WIDGETS/KSETouch/default.png",
+      "sha256": "d209edb87d976fd88e304d51698fc01e76e2fd46b54afa7587446e8024f2bcc0",
+      "size": 23142
+    },
+    {
+      "path": "WIDGETS/KSETouch/default1.png",
+      "archive": "EdgeTXKSE/SD-CARD/WIDGETS/KSETouch/default1.png",
+      "sha256": "98a7945847736f765b4f14ce3fd4390431b1bc6d8cc71576944225a41996d19b",
+      "size": 9257
+    },
+    {
+      "path": "WIDGETS/KSETouch/layoutEditor.lua",
+      "archive": "EdgeTXKSE/SD-CARD/WIDGETS/KSETouch/layoutEditor.lua",
+      "sha256": "026395a7165784f56abdaeeb74192741c01b7661e2d6ca2ef5876398f19ed3fe",
+      "size": 9421
+    },
+    {
+      "path": "WIDGETS/KSETouch/main.lua",
+      "archive": "EdgeTXKSE/SD-CARD/WIDGETS/KSETouch/main.lua",
+      "sha256": "8a4a64ce17b3f8cdb44f539d4ace6d7ccc2a2ee0681082d6c132def7de41a6aa",
+      "size": 311792
+    },
+    {
+      "path": "WIDGETS/KSETouch/telemetryTiles.lua",
+      "archive": "EdgeTXKSE/SD-CARD/WIDGETS/KSETouch/telemetryTiles.lua",
+      "sha256": "2e62af33becd817abf9e628e6a04da23cda6550f6e58b34212ef4033ce6ed0b1",
+      "size": 6689
+    },
+    {
+      "path": "WIDGETS/RfTool/app.lua",
+      "archive": "EdgeTXKSE/SD-CARD/WIDGETS/RfTool/app.lua",
+      "sha256": "e786c5dbb366bcc920608b74c7369ffac32d37f0773e40f79d157e4456cef915",
+      "size": 13372
+    },
+    {
+      "path": "WIDGETS/RfTool/main.lua",
+      "archive": "EdgeTXKSE/SD-CARD/WIDGETS/RfTool/main.lua",
+      "sha256": "04cf34d3383b2b83192cd3b2d6b2933bd52f3a831007e6a0d3b2b78e788e8b85",
+      "size": 1609
+    }
+  ],
+  "firmware": {
+    "archive": "EdgeTXKSE/Firmware/TX16S-MK3-MAX-2.12.1-KS.uf2",
+    "sha256": "ed9a744945c2ecbea1f1f23ab403bcb0d279a9a42bfa22fe4a8b9eb2196372cb",
+    "size": 3099136
+  },
+  "settings": {
+    "path": "SCRIPTS/RF2/settings.lua",
+    "archive": "EdgeTXKSE/First Install/SCRIPTS/RF2/settings.lua",
+    "sha256": "209a66d38a7083f33a4aa56e45799db08750293516f0a36b6e2f2cef0ee2b7bb",
+    "size": 165
+  },
+  "firmwareWriteEnabled": true
+}
