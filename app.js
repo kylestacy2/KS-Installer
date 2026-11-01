@@ -8,6 +8,7 @@ const activity=[];let messageTimer,demoDrives;
 const sdPhases=['sd-verified','verified',...FIRMWARE_PHASES];
 const stepKeys=['release','radio','backup','sd','firmware','verify'];
 const stepDone=new Map();let revealStep=null;
+const PICKER_CANCELLED=Symbol('picker-cancelled');
 const radioRestartInstructions='Wait for Writing complete. Eject the radio drives on your computer, then unplug USB. Turn the radio off, enter bootloader mode again with USB unplugged, and reconnect USB. Reselect both drives, then confirm the restart in step 06. Keep this installer tab open.';
 function resetSteps(){stepDone.clear();for(const key of stepKeys)$('step-'+key).open=true;}
 function showStep(key){
@@ -103,15 +104,16 @@ function getEngine(){
   if(!engine)engine=new Installer({manifest:release,files,sd,boot,backup,progress,cancel:()=>cancel,status:(title,detail)=>{stage(title,detail);draw();}});
   Object.assign(engine,{sd,boot,backup,files,manifest:release});return engine;
 }
-async function action(title,fn,step){
+async function action(title,fn,step,onPickerCancel){
   if(busy)return;const started=performance.now();busy=true;cancel=false;$('message').hidden=true;progress(0,1);stage(title,'Keep this tab open and the USB cable connected.');draw();log(title);
-  try{await fn();progress(1,1);}catch(e){
+  let pickerCancelled=false;
+  try{pickerCancelled=(await fn())===PICKER_CANCELLED;if(!pickerCancelled)progress(1,1);}catch(e){
     const text=e.name==='AbortError'?'Selection cancelled.':e.message;log(text,true);message(text);stage(firmwareAttempted()?'Firmware verification needed.':'Stopped.',text);
     journalState();
     if(engine?.journal?.phase==='restored'){scanned=false;resumeReady=false;stage('Previous SD files restored.', 'The firmware was not written. Start a fresh scan and choose an empty backup folder to try again.');}
     if(engine?.journal?.phase==='recovery-required')stage('Reconnect to recover.',text);
     revealStep=firmwareAttempted()?'verify':step;
-  }finally{log('Step duration: '+((performance.now()-started)/1000).toFixed(1)+' seconds.');busy=false;draw();}
+  }finally{log('Step duration: '+((performance.now()-started)/1000).toFixed(1)+' seconds.');busy=false;draw();if(pickerCancelled)onPickerCancel();}
 }
 async function checkHandles(candidate,kind){
   const handles=[];for(const [k,fs]of Object.entries({sd,boot,backup}))if(k!==kind&&fs?.handle)handles.push(fs.handle);handles.push(candidate);await separateHandles(handles);
@@ -127,11 +129,21 @@ $('zip').onchange=()=>action('Checking the release…',async()=>{
   stage('Release verified.','Connect the radio in bootloader mode, then choose its two drives.');log('Release hash and all '+files.size+' install resources match '+release.id+'.');
 },'release');
 for(const kind of ['sd','boot','backup'])$('choose-'+kind).onclick=()=>{
+  if(busy)return;
   if(demo){log('Demo '+kind+' folder is already selected.');return;}
+  const previous={title:$('stage-title').textContent,detail:$('stage-detail').textContent,progress:$('progress').value};
+  const step=kind==='backup'?'backup':'radio';
   // Start the native picker in the click handler, before slow work can consume activation.
-  const selection=window.showDirectoryPicker({id:'kse-'+kind,mode:'readwrite'});
-  action('Selecting '+(kind==='boot'?'firmware drive':kind==='sd'?'SD drive':'backup folder')+'…',async()=>{
-    const handle=await selection;await checkHandles(handle,kind);
+  let selection;try{selection=window.showDirectoryPicker({id:'kse-'+kind,mode:'readwrite'});}catch(error){selection=Promise.reject(error);}
+  return action('Selecting '+(kind==='boot'?'firmware drive':kind==='sd'?'SD drive':'backup folder')+'…',async()=>{
+    let handle;
+    try{handle=await selection;}catch(error){
+      // Only cancellation of the picker is a no-op. Read/permission failures
+      // after selection still use the normal error and recovery path.
+      if(error.name==='AbortError')return PICKER_CANCELLED;
+      throw error;
+    }
+    await checkHandles(handle,kind);
     const fs=new BrowserFS(handle,{readOnly:kind==='boot'});
     complete=false;
     if(kind==='sd'){sd=fs;$('reconnected').checked=false;}else if(kind==='boot'){boot=fs;$('reconnected').checked=false;}else{
@@ -140,7 +152,11 @@ for(const kind of ['sd','boot','backup'])$('choose-'+kind).onclick=()=>{
     }
     if(kind!=='backup'&&!engine?.journal)scanned=false;
     stage('Folder selected.','Check the radio, or continue a verification/recovery using the same radio and backup.');log('Selected '+kind+': '+fs.name);
-  },kind==='backup'?'backup':'radio');
+  },step,()=>{
+    stage(previous.title,previous.detail);$('progress').value=previous.progress;
+    log((kind==='boot'?'UF2 drive':kind==='sd'?'SD card':'Backup folder')+' selection cancelled. Existing selections and installation progress kept; you can select the folder again.');
+    showStep(step);$('choose-'+kind).focus({preventScroll:true});
+  });
 };
 $('one-radio').onchange=draw;$('reconnected').onchange=()=>{if($('reconnected').checked)revealStep='verify';draw();};
 $('scan').onclick=()=>action('Checking the radio…',async()=>{
