@@ -7,6 +7,8 @@ const ROOTS=['SCRIPTS/RF2/','SCRIPTS/IMGR/','WIDGETS/KSETouch/','WIDGETS/RfTool/
 const protectedUser=p=>/^SCRIPTS\/RF2\/(PREFS\/|settings[^/]*\.(lua|luac)$|background_error\.log$)/i.test(p)||/^SCRIPTS\/IMGR\/pending\./i.test(p);
 export const ownProgram=p=>ROOTS.some(r=>p.startsWith(r))&&!protectedUser(p)&&/\.(lua|luac)$/.test(p);
 const legacy=p=>/^SCRIPTS\/TOOLS\/Flight Modifier\.(lua|luac)$/.test(p);
+const hasExistingElrs=before=>Object.keys(before).some(p=>/^SCRIPTS\/TOOLS\/[^/]*(elrs|expresslrs)[^/]*\.(lua|luac)$/i.test(p));
+const preservedElrs=(path,hasElrs)=>hasElrs&&/elrs/i.test(path)&&path.startsWith('SCRIPTS/TOOLS/');
 const check=(value,message)=>{if(!value)throw Error(message);};
 const restartRadio='Wait for any writing to finish. Eject the radio drives, unplug USB, turn the radio off, enter bootloader mode again, reconnect USB and reselect both drives.';
 export async function readOptional(fs,path){return await fs.exists(path)?fs.read(path):null;}
@@ -93,13 +95,13 @@ export function buildPlan(manifest,before){
   const existing=new Map();
   for(const path of Object.keys(before)){safePath(path);const key=path.toLowerCase();check(!existing.has(key),'Ambiguous SD filename: '+path);existing.set(key,path);}
   for(const f of [...manifest.files,manifest.settings]){const alias=existing.get(f.path.toLowerCase());check(!alias||alias===f.path,'Filename casing differs from the package: '+alias+'. Resolve it before installing.');}
-  const hasElrs=Object.keys(before).some(p=>/^SCRIPTS\/TOOLS\/[^/]*(elrs|expresslrs)[^/]*\.(lua|luac)$/i.test(p));
+  const hasElrs=hasExistingElrs(before);
   const packagePaths=new Set(manifest.files.map(f=>safePath(f.path)));
   const add=(path,after)=>{const prior=before[path]?.sha256||null;if(prior!==after)plan.push({path,before:prior,after,operation:after===null?'remove':prior?'update':'add'});};
   for(const f of manifest.files){
     check(!/^RADIO\/|^MODELS\/|^flights-count/i.test(f.path),'Package contains protected radio files');
     check(!protectedUser(f.path)||f.path==='SCRIPTS/RF2/PREFS/README.txt','Package contains personal preferences');
-    if(/elrs/i.test(f.path)&&f.path.startsWith('SCRIPTS/TOOLS/')&&hasElrs){notes.push('Your existing ExpressLRS tool will be kept.');continue;}
+    if(preservedElrs(f.path,hasElrs)){notes.push('Your existing ExpressLRS tool will be kept.');continue;}
     add(f.path,f.sha256);
   }
   const settings=Object.keys(before).some(p=>/^SCRIPTS\/RF2\/settings(?:_backup|_pending)?\.lua$/i.test(p));
@@ -136,8 +138,8 @@ export class Installer {
   async lock(action){check(!this.busy,'An operation is already running.');this.busy=true;try{return await action();}finally{this.busy=false;}}
   async record(){await writeVerified(this.backup,JOURNAL,encode(JSON.stringify(this.journal,null,2)));}
   async checkpoint(expected){
-    // Full path-set checks always run. Only untouched bulk media/log contents
-    // wait for the final full comparison; nothing in these folders is written
+    // Pre-write checkpoints retain complete path-set checks. Untouched bulk
+    // media/log contents are backed up but not compared again; nothing there is written
     // unless it is an explicit, checksummed release/operation target.
     const targets=new Set([...this.manifest.files.map(f=>f.path),this.manifest.settings.path,...(this.journal?.operations||[]).map(o=>o.path)]);
     return verifyInventory(this.sd,expected,this.progress,p=>! /^(?:IMAGES|SOUNDS|LOGS)\//i.test(p)||targets.has(p));
@@ -191,7 +193,7 @@ export class Installer {
       const path='KSE-radio-backup-'+this.journal.created.replace(/[:.]/g,'-')+'.zip';
       this.status('Creating and verifying your backup ZIP…','The current firmware and all backed-up SD files are being archived on your computer.');
       this.journal.archive=await createBackupZip(this.backup,path,entries,{created:this.journal.created,progress:this.progress,cancel:this.cancel});
-      this.status('Checking settings and installation files…','The complete backup is verified. Checking the file list, programs and settings now; untouched images, sounds and logs are compared again in the final check.');
+      this.status('Checking settings and installation files…','The complete backup is verified. Checking the file list, programs and settings before installation.');
       await this.checkpoint(this.before);
       check(await sha256(await this.boot.read('CURRENT.UF2'))===this.identity.firmwareHash,'Firmware changed during ZIP creation.');
       check(!this.cancel(),'Backup cancelled. Radio unchanged.');this.journal.phase='backup-verified';await this.record();
@@ -202,13 +204,15 @@ export class Installer {
     if(op.after!==null)return !!supplied&&op.after===supplied.sha256;
     return ownProgram(op.path)||legacy(op.path)||/^SCRIPTS\/RF2\/settings(?:_backup|_pending)?\.luac$/i.test(op.path)||(op.path.endsWith('.luac')&&this.manifest.files.some(f=>f.path===op.path.slice(0,-1)));
   }
-  async validateJournal(){
+  async validateJournal({compareRadioSettings=true}={}){
     const j=this.journal;check(j?.schema===1&&j.release===this.manifest.id&&j.board==='tx16smk3','Backup belongs to another installer release.');
     check(Array.isArray(j.operations)&&Array.isArray(j.touched)&&j.before&&typeof j.before==='object','Invalid recovery journal');
     const seen=new Set();for(const op of j.operations){check(!seen.has(op.path)&&this.allowed(op),'Journal contains an unrecognized file operation');seen.add(op.path);check(op.before===(j.before[op.path]?.sha256||null),'Backup journal mismatch');}
     check(new Set(j.touched).size===j.touched.length&&j.touched.every(p=>seen.has(p)),'Invalid recovery list');
     check(await sha256(await this.backup.read('CURRENT.UF2'))===j.firmwareHash,'Firmware backup is damaged');
-    check(await sha256(await this.sd.read('RADIO/radio.yml'))===j.radioHash,'This SD card does not match the backup.');
+    const radio=await this.sd.read('RADIO/radio.yml');
+    if(compareRadioSettings)check(await sha256(radio)===j.radioHash,'This SD card does not match the backup.');
+    else check(/^board:\s*["']?tx16smk3["']?\s*$/im.test(utf8.decode(radio)),'Select the root of an existing MK3 radio SD card.');
     const info=utf8.decode(await this.boot.read('INFO_UF2.TXT'));check(/^Board-ID:\s*tx16smk3\s*$/im.test(info),'Wrong bootloader drive');
   }
   async install(){return this.lock(async()=>{
@@ -277,14 +281,31 @@ export class Installer {
       throw Error('Firmware copy is not verified: '+error.message+'. '+restartRadio+' Confirm the restart and run the final check. No automatic retry or SD rollback was performed.');
     }
   });}
+  async verifyInstalledFiles(){
+    // Use the release checksums, not the original SD snapshot. Include files
+    // already current in step 4; exclude the user's deliberately preserved ELRS
+    // and settings. Regenerated caches and unrelated files are not install targets.
+    const hasElrs=hasExistingElrs(this.journal.before);
+    const targets=this.manifest.files.filter(f=>!preservedElrs(f.path,hasElrs));
+    if(this.journal.operations.some(op=>op.path===this.manifest.settings.path&&op.after!==null))targets.push(this.manifest.settings);
+    for(let i=0;i<targets.length;i++){
+      const f=targets[i];let bytes;
+      try{bytes=await this.sd.read(safePath(f.path));}catch(error){throw Error('Cannot read installed file '+f.path+': '+error.message);}
+      check(await sha256(bytes)===f.sha256,'Installed file differs from the release: '+f.path);
+      this.progress(i+1,targets.length,f.path);
+    }
+    return targets.length;
+  }
   async verifyFinal({reconnected=false}={}){return this.lock(async()=>{
     if(!this.journal)this.journal=JSON.parse(utf8.decode(await this.backup.read(JOURNAL)));
     check(['sd-verified','verified',...FIRMWARE_PHASES].includes(this.journal.phase),'SD installation has not completed.');
     check(!this.journal.firmwareAttempt||reconnected,'Reconnect after a full radio restart: unplug USB, turn the radio off, enter bootloader mode again, reconnect USB and reselect both drives before verifying firmware.');
-    await this.validateJournal();
+    // A radio restart can rewrite radio.yml. It is user data, not an installed
+    // program. Keep board/recovery validation without requiring its old hash.
+    await this.validateJournal({compareRadioSettings:false});
     const target=this.files.get('@firmware');check(target&&await sha256(target)===this.manifest.firmware.sha256,'Load the verified release first.');
-    await verifyInventory(this.sd,expectedAfter(this.journal.before,this.journal.operations),this.progress);
+    const installedFiles=await this.verifyInstalledFiles();
     const result=verifyFirmware(await this.boot.read('CURRENT.UF2'),await this.backup.read('CURRENT.UF2'),target);
-    this.journal.phase='verified';this.journal.firmwareWritten=true;this.journal.verification={...result,at:new Date().toISOString(),hardwareRuntimeVerified:false};await this.record();return this.journal;
+    this.journal.phase='verified';this.journal.firmwareWritten=true;this.journal.verification={...result,installedFiles,sdScope:'installed-release-files',at:new Date().toISOString(),hardwareRuntimeVerified:false};await this.record();return this.journal;
   });}
 }

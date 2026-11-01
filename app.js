@@ -27,7 +27,7 @@ function drawSteps(){
     backup:'Original firmware + SD files saved · backup ZIP verified',
     sd:'Installed files and preserved settings verified',
     firmware:complete?'Firmware verified after reconnect':'UF2 copied · restart the radio, reconnect and verify',
-    verify:'Firmware, bootloader and all SD files verified'
+    verify:'Installed release files, firmware and bootloader verified'
   };
   let advanced=false;
   for(const key of stepKeys){
@@ -176,7 +176,7 @@ $('backup').onclick=()=>action('Backing up your radio…',async()=>{
   await getEngine().createBackup();backupReady=true;recoveryReady=true;stage('Backup folder + ZIP verified.','Your original firmware and SD files are saved on your computer. You can now install the SD files.');log('Backup folder and '+engine.journal.archive.path+' verified. Every ZIP entry was reopened and checked. Radio unchanged.');
 },'backup');
 $('install').onclick=()=>action('Installing the SD files…',async()=>{
-  await getEngine().install();sdReady=true;stage('SD files verified.','Complete the firmware step, then reconnect for the final check.');$('sd-result').textContent='Installed files and personal settings verified. The final check also compares all images, sounds and logs.';log('SD programs and preserved settings verified. Untouched media will be fully compared in step 06. Firmware remains unchanged.');
+  await getEngine().install();sdReady=true;stage('SD files verified.','Complete the firmware step, then reconnect for the final check.');$('sd-result').textContent='Installed files and personal settings verified. After restarting, step 06 checks the installed release files and firmware.';log('SD programs and preserved settings verified. Step 06 checks the installed release files after restarting. Firmware remains unchanged.');
 },'sd');
 $('cancel').onclick=()=>{cancel=true;draw();log('Cancellation requested. Waiting for the current file operation to finish.');};
 $('firmware').onclick=()=>action('Checking before the firmware copy…',async()=>{
@@ -192,7 +192,7 @@ $('firmware').onclick=()=>action('Checking before the firmware copy…',async()=
 $('demo-reconnect').onclick=()=>{
   if(!demo||!demoDrives||busy)return;
   ({sd,boot}=demoDrives);demoDrives=null;$('reconnected').checked=true;revealStep='verify';
-  stage('Demo radio restarted and reconnected.','Run the final check to compare the simulated firmware and all SD files.');
+  stage('Demo radio restarted and reconnected.','Run the final check to compare the simulated firmware and installed release files.');
   log('Radio power-off, bootloader restart and USB reconnect simulated. No physical USB behavior tested.');draw();
 };
 $('manual-firmware').onclick=()=>{
@@ -203,9 +203,9 @@ $('manual-firmware').onclick=()=>{
 $('verify').onclick=()=>action('Verifying installed files and firmware…',async()=>{
   complete=false;draw();
   const result=await getEngine().verifyFinal({reconnected:$('reconnected').checked});backupReady=sdReady=complete=true;
-  stage(demo?'Demo complete.':'Installation verified.','Firmware readback and all SD files match. Eject both drives through your computer before restarting the radio.');
-  $('final-result').textContent=result.verification.applicationBlocks+' application blocks verified; original bootloader preserved. Radio operation still needs a bench check.';
-  log('PASS: SD files, firmware payload and preserved bootloader verified. This is a file check, not a radio/flight test.');
+  stage(demo?'Demo complete.':'Installation verified.','Firmware readback and installed release files match. Eject both drives through your computer before restarting the radio.');
+  $('final-result').textContent=result.verification.installedFiles+' installed SD files and '+result.verification.applicationBlocks+' application blocks verified; original bootloader preserved. Radio operation still needs a bench check.';
+  log('PASS: installed release files, firmware payload and preserved bootloader verified. This is a file check, not a radio/flight test.');
 },'verify');
 $('restore').onclick=()=>{
   if(!confirm('Restore the previous SD program files from this backup? This does not restore firmware.'))return;
