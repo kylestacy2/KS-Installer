@@ -24,6 +24,7 @@ export class BrowserFS {
     await walk(this.handle);return result.sort();
   }
   async read(path){const f=await(await this.file(path)).getFile();if(f.size>256*1024*1024)throw Error('File exceeds the prototype backup limit (256 MB): '+path);return new Uint8Array(await f.arrayBuffer());}
+  async stat(path){const f=await(await this.file(path)).getFile();return {size:f.size};}
   async blob(path){return (await this.file(path)).getFile();}
   async exists(path){try{await this.file(path);return true;}catch(e){if(e.name==='NotFoundError')return false;throw e;}}
   async openWriter(path){

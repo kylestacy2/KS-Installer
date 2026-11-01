@@ -58,13 +58,13 @@ function getEngine(){
   Object.assign(engine,{sd,boot,backup,files,manifest:release});return engine;
 }
 async function action(title,fn){
-  if(busy)return;busy=true;cancel=false;$('message').hidden=true;progress(0,1);stage(title,'Keep this tab open and the USB cable connected.');draw();log(title);
+  if(busy)return;const started=performance.now();busy=true;cancel=false;$('message').hidden=true;progress(0,1);stage(title,'Keep this tab open and the USB cable connected.');draw();log(title);
   try{await fn();progress(1,1);}catch(e){
     const text=e.name==='AbortError'?'Selection cancelled.':e.message;log(text,true);message(text);stage(firmwareAttempted()?'Firmware verification needed.':'Stopped.',text);
     journalState();
     if(engine?.journal?.phase==='restored'){scanned=false;resumeReady=false;stage('Previous SD files restored.', 'The firmware was not written. Start a fresh scan and choose an empty backup folder to try again.');}
     if(engine?.journal?.phase==='recovery-required')stage('Reconnect to recover.',text);
-  }finally{busy=false;draw();}
+  }finally{log('Step duration: '+((performance.now()-started)/1000).toFixed(1)+' seconds.');busy=false;draw();}
 }
 async function checkHandles(candidate,kind){
   const handles=[];for(const [k,fs]of Object.entries({sd,boot,backup}))if(k!==kind&&fs?.handle)handles.push(fs.handle);handles.push(candidate);await separateHandles(handles);
@@ -99,10 +99,11 @@ $('one-radio').onchange=draw;$('reconnected').onchange=draw;
 $('scan').onclick=()=>action('Checking the radio…',async()=>{
   if(!demo&&!(await boot.exists('INFO_UF2.TXT')))throw Error('Select the root of EDGETX_UF2.');
   const summary=await getEngine().scan();scanned=true;backupReady=sdReady=complete=false;
-  $('plan').hidden=false;$('plan-summary').textContent=summary.operations.length+' file changes · '+summary.files+' existing files · '+(summary.bytes/1048576).toFixed(1)+' MB to back up';
+  $('plan').hidden=false;$('plan-summary').textContent=summary.operations.length+' file changes · '+summary.files+' existing files · '+(summary.bytes/1048576).toFixed(1)+' MB of SD files to back up';
   $('plan-files').replaceChildren();for(const op of summary.operations){const li=document.createElement('li');li.textContent=op.operation.toUpperCase()+'  '+op.path;$('plan-files').append(li);}
   $('plan-notes').replaceChildren();for(const text of summary.notes){const p=document.createElement('p');p.textContent=text;$('plan-notes').append(p);}
-  stage('MK3 radio identified.','Choose an empty folder on your computer and make the backup.');log('MK3 board and SD configuration match. No radio files changed.');
+  if(summary.deferredFiles){const p=document.createElement('p');p.textContent=summary.deferredFiles+' other SD files were checked by name and size. Their contents will be fully read and verified during backup.';$('plan-notes').append(p);}
+  stage('MK3 radio identified.','Preview ready. Choose an empty computer folder for the complete backup and content verification.');log('MK3 identity and install targets checked. '+summary.deferredFiles+' untouched files await full content verification during backup. No radio files changed.');
 });
 $('backup').onclick=()=>action('Backing up your radio…',async()=>{
   await getEngine().createBackup();backupReady=true;recoveryReady=true;stage('Backup folder + ZIP verified.','Your original firmware and SD files are saved on your computer. You can now install the SD files.');log('Backup folder and '+engine.journal.archive.path+' verified. Every ZIP entry was reopened and checked. Radio unchanged.');

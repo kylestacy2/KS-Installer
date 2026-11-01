@@ -57,9 +57,26 @@ export async function identify(sd,boot){
   check(/^Board-ID:\s*tx16smk3\s*$/im.test(info),'Select the TX16S MK3 / MK3 MAX bootloader drive.');
   const radio=await sd.read('RADIO/radio.yml');
   check(/^board:\s*["']?tx16smk3["']?\s*$/im.test(utf8.decode(radio)),'Select the root of an existing MK3 radio SD card.');
-  check((await sd.list()).some(p=>/^MODELS\/[^/]+\.yml$/i.test(p)),'This folder has no EdgeTX models. Choose the SD card root.');
+  const names=await sd.list();
+  check(names.some(p=>/^MODELS\/[^/]+\.yml$/i.test(p)),'This folder has no EdgeTX models. Choose the SD card root.');
   const firmware=await boot.read('CURRENT.UF2');parseUF2(firmware);
-  return {board:'tx16smk3',radioHash:await sha256(radio),firmwareHash:await sha256(firmware),firmware,info:encode(info)};
+  return {board:'tx16smk3',radioHash:await sha256(radio),firmwareHash:await sha256(firmware),firmware,info:encode(info),names};
+}
+// Preview hashes every possible install/removal target and important settings.
+// Untouched media/logs get size/path checks only. Their content baseline is
+// established during backup, never inferred from timestamps or file sizes.
+export async function previewInventory(fs,manifest,{names,progress=()=>{},cancel=()=>false}={}){
+  names=names||await fs.list();const result={},targets=new Set([...manifest.files.map(f=>f.path),manifest.settings.path]);let total=0;
+  for(let i=0;i<names.length;i++){
+    check(!cancel(),'Cancelled before completing the preview.');const path=safePath(names[i]);
+    const hash=targets.has(path)||(path.endsWith('.luac')&&targets.has(path.slice(0,-1)))||ownProgram(path)||legacy(path)||/^(?:RADIO\/|MODELS\/|SCRIPTS\/RF2\/(?:PREFS\/|settings[^/]*\.(?:lua|luac)$))/i.test(path);
+    if(hash){const bytes=await fs.read(path);result[path]={sha256:await sha256(bytes),size:bytes.length};}
+    else result[path]={size:(await fs.stat(path)).size};
+    const size=result[path].size;
+    check(Number.isSafeInteger(size)&&size>=0&&size<=256*1024*1024,'File exceeds the prototype backup limit (256 MB) or has an invalid size: '+path);
+    total+=size;check(total<=32*1024**3,'Backup exceeds the 32 GB prototype limit.');progress(i+1,names.length,path);
+  }
+  return result;
 }
 export async function inventory(fs,progress=()=>{},cancel=()=>false){
   const names=await fs.list(),result={};let total=0;
@@ -117,25 +134,38 @@ export class Installer {
   async lock(action){check(!this.busy,'An operation is already running.');this.busy=true;try{return await action();}finally{this.busy=false;}}
   async record(){await writeVerified(this.backup,JOURNAL,encode(JSON.stringify(this.journal,null,2)));}
   async scan(){return this.lock(async()=>{
+    this.preview=this.before=this.plan=this.identity=this.journal=null;
     this.identity=await identify(this.sd,this.boot);
-    this.before=await inventory(this.sd,this.progress,this.cancel);
-    const plan=buildPlan(this.manifest,this.before);this.plan=plan.operations;this.notes=plan.notes;
-    this.journal=null;return {operations:this.plan,notes:this.notes,files:Object.keys(this.before).length,bytes:Object.values(this.before).reduce((s,f)=>s+f.size,0)};
+    const preview=await previewInventory(this.sd,this.manifest,{names:this.identity.names,progress:this.progress,cancel:this.cancel});
+    const radioPath=Object.keys(preview).find(p=>p.toLowerCase()==='radio/radio.yml');
+    check(preview[radioPath]?.sha256===this.identity.radioHash,'Radio settings changed during the preview. Scan again.');
+    const plan=buildPlan(this.manifest,preview);
+    // An incomplete fingerprint must never silently classify an existing target
+    // as a new file or omit it from the recovery journal.
+    for(const op of plan.operations)check(!preview[op.path]||/^[a-f0-9]{64}$/.test(preview[op.path].sha256),'Preview is missing an install-target checksum: '+op.path);
+    this.preview=preview;this.plan=plan.operations;this.notes=plan.notes;
+    const entries=Object.values(preview),deferred=entries.filter(f=>!f.sha256);
+    return {operations:this.plan,notes:this.notes,files:entries.length,bytes:entries.reduce((s,f)=>s+f.size,0),deferredFiles:deferred.length,deferredBytes:deferred.reduce((s,f)=>s+f.size,0)};
   });}
   async createBackup(){return this.lock(async()=>{
-    check(this.before&&this.identity,'Scan the radio first.');check(this.backup,'Choose a backup folder.');
+    check(this.preview&&this.identity&&this.plan,'Scan the radio first.');check(this.backup,'Choose a backup folder.');
     check(!(await this.backup.list()).length,'Choose an empty backup folder.');
+    this.before=this.journal=null;
     const identity=await identify(this.sd,this.boot);
     check(identity.radioHash===this.identity.radioHash&&identity.firmwareHash===this.identity.firmwareHash,'The selected radio changed. Scan again.');
-    await verifyInventory(this.sd,this.before,this.progress);
+    const names=Object.keys(this.preview),before={};
+    check(JSON.stringify(identity.names.slice().sort())===JSON.stringify(names.slice().sort()),'The SD file list changed. Scan again before backing up.');
+    this.status('Backing up and checking every SD file…','Images, sounds and all other accessible files are fully read, checksummed and backed up before installation can begin.');
     await writeVerified(this.backup,'CURRENT.UF2',identity.firmware);await writeVerified(this.backup,'INFO_UF2.TXT',identity.info);
-    const names=Object.keys(this.before);
     for(let i=0;i<names.length;i++){
       check(!this.cancel(),'Backup cancelled. Radio unchanged. Choose a new empty backup folder to retry.');const p=names[i],bytes=await this.sd.read(p);
-      check(await sha256(bytes)===this.before[p].sha256,'File changed during backup: '+p);
+      const hash=await sha256(bytes),preview=this.preview[p];
+      check(bytes.length===preview.size&&(!preview.sha256||hash===preview.sha256),'File changed since preview or during backup: '+p);
+      before[p]={sha256:hash,size:bytes.length};
       await writeVerified(this.backup,'SD/'+p,bytes);this.progress(i+1,names.length,p);
     }
-    await verifyInventory(this.sd,this.before,this.progress);
+    check(JSON.stringify(buildPlan(this.manifest,before).operations)===JSON.stringify(this.plan),'The install plan changed. Scan again before installing.');
+    this.before=before;
     check(await sha256(await this.boot.read('CURRENT.UF2'))===this.identity.firmwareHash,'Firmware changed during backup.');
     this.journal={schema:1,release:this.manifest.id,created:new Date().toISOString(),board:this.identity.board,radioHash:this.identity.radioHash,firmwareHash:this.identity.firmwareHash,before:this.before,operations:this.plan,touched:[],phase:'backup-incomplete',firmwareWritten:false};
     try{
@@ -150,6 +180,7 @@ export class Installer {
       const path='KSE-radio-backup-'+this.journal.created.replace(/[:.]/g,'-')+'.zip';
       this.status('Creating and verifying your backup ZIP…','The current firmware and all backed-up SD files are being archived on your computer.');
       this.journal.archive=await createBackupZip(this.backup,path,entries,{created:this.journal.created,progress:this.progress,cancel:this.cancel});
+      this.status('Verifying the radio against its complete backup…','Every SD file is read again and compared with the backup checksums. Installation remains locked until this passes.');
       await verifyInventory(this.sd,this.before,this.progress);
       check(await sha256(await this.boot.read('CURRENT.UF2'))===this.identity.firmwareHash,'Firmware changed during ZIP creation.');
       check(!this.cancel(),'Backup cancelled. Radio unchanged.');this.journal.phase='backup-verified';await this.record();

@@ -5,6 +5,7 @@ export class MemoryFS {
   async list(){return [...this.files.keys()].sort();}
   async exists(p){return this.files.has(p);}
   async read(p){if(!this.files.has(p))throw Error('Disconnected or missing file: '+p);return this.files.get(p).slice();}
+  async stat(p){if(!this.files.has(p))throw Error('Disconnected or missing file: '+p);return {size:this.files.get(p).length};}
   async blob(p){return new Blob([await this.read(p)]);}
   async openWriter(p){
     const parts=[];let stopped=false;
