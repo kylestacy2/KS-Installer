@@ -116,10 +116,11 @@ export function buildPlan(manifest,before){
   const keys=new Set();for(const op of plan){check(!keys.has(op.path),'Duplicate install operation');keys.add(op.path);}
   return {operations:plan.sort((a,b)=>a.path.localeCompare(b.path)),notes:[...new Set(notes)]};
 }
-export async function verifyInventory(fs,expected,progress=()=>{}){
+export async function verifyInventory(fs,expected,progress=()=>{},include=()=>true){
   const names=await fs.list();check(JSON.stringify(names.slice().sort())===JSON.stringify(Object.keys(expected).sort()),'The SD file list changed. Scan again before installing.');
-  for(let i=0;i<names.length;i++){
-    const p=names[i];check(await sha256(await fs.read(p))===expected[p].sha256,'File changed or failed verification: '+p);progress(i+1,names.length,p);
+  const selected=names.filter(include);
+  for(let i=0;i<selected.length;i++){
+    const p=selected[i];check(await sha256(await fs.read(p))===expected[p].sha256,'File changed or failed verification: '+p);progress(i+1,selected.length,p);
   }
 }
 export function expectedAfter(before,operations){
@@ -134,6 +135,13 @@ export class Installer {
   }
   async lock(action){check(!this.busy,'An operation is already running.');this.busy=true;try{return await action();}finally{this.busy=false;}}
   async record(){await writeVerified(this.backup,JOURNAL,encode(JSON.stringify(this.journal,null,2)));}
+  async checkpoint(expected){
+    // Full path-set checks always run. Only untouched bulk media/log contents
+    // wait for the final full comparison; nothing in these folders is written
+    // unless it is an explicit, checksummed release/operation target.
+    const targets=new Set([...this.manifest.files.map(f=>f.path),this.manifest.settings.path,...(this.journal?.operations||[]).map(o=>o.path)]);
+    return verifyInventory(this.sd,expected,this.progress,p=>! /^(?:IMAGES|SOUNDS|LOGS)\//i.test(p)||targets.has(p));
+  }
   async scan(){return this.lock(async()=>{
     this.preview=this.before=this.plan=this.identity=this.journal=null;
     this.identity=await identify(this.sd,this.boot);
@@ -163,7 +171,9 @@ export class Installer {
       const hash=await sha256(bytes),preview=this.preview[p];
       check(bytes.length===preview.size&&(!preview.sha256||hash===preview.sha256),'File changed since preview or during backup: '+p);
       before[p]={sha256:hash,size:bytes.length};
-      await writeVerified(this.backup,'SD/'+p,bytes);this.progress(i+1,names.length,p);
+      // ZIP creation reopens and hashes every loose copy, then independently
+      // verifies the closed ZIP. Avoid an extra duplicate local read here.
+      await this.backup.write('SD/'+p,bytes);this.progress(i+1,names.length,p);
     }
     check(JSON.stringify(buildPlan(this.manifest,before).operations)===JSON.stringify(this.plan),'The install plan changed. Scan again before installing.');
     this.before=before;
@@ -181,8 +191,8 @@ export class Installer {
       const path='KSE-radio-backup-'+this.journal.created.replace(/[:.]/g,'-')+'.zip';
       this.status('Creating and verifying your backup ZIP…','The current firmware and all backed-up SD files are being archived on your computer.');
       this.journal.archive=await createBackupZip(this.backup,path,entries,{created:this.journal.created,progress:this.progress,cancel:this.cancel});
-      this.status('Verifying the radio against its complete backup…','Every SD file is read again and compared with the backup checksums. Installation remains locked until this passes.');
-      await verifyInventory(this.sd,this.before,this.progress);
+      this.status('Checking settings and installation files…','The complete backup is verified. Checking the file list, programs and settings now; untouched images, sounds and logs are compared again in the final check.');
+      await this.checkpoint(this.before);
       check(await sha256(await this.boot.read('CURRENT.UF2'))===this.identity.firmwareHash,'Firmware changed during ZIP creation.');
       check(!this.cancel(),'Backup cancelled. Radio unchanged.');this.journal.phase='backup-verified';await this.record();
     }catch(error){this.journal.phase='backup-incomplete';throw error;}return this.journal;
@@ -204,7 +214,7 @@ export class Installer {
   async install(){return this.lock(async()=>{
     check(this.journal?.phase==='backup-verified','Complete a verified backup first.');await this.validateJournal();
     await verifyBackupZip(this.backup,this.journal.archive,{progress:this.progress,cancel:this.cancel});
-    await verifyInventory(this.sd,this.journal.before,this.progress);
+    await this.checkpoint(this.journal.before);
     check(await sha256(await this.boot.read('CURRENT.UF2'))===this.journal.firmwareHash,'Firmware changed since backup.');
     for(const op of this.journal.operations){
       if(op.before)check(await sha256(await this.backup.read('SD/'+op.path))===op.before,'Backup is damaged: '+op.path);
@@ -218,7 +228,7 @@ export class Installer {
         if(op.after)await writeVerified(this.sd,op.path,this.files.get(op.path));else await this.sd.remove(op.path);
         this.progress(i+1,this.journal.operations.length,op.path);
       }
-      await verifyInventory(this.sd,expectedAfter(this.journal.before,this.journal.operations),this.progress);
+      await this.checkpoint(expectedAfter(this.journal.before,this.journal.operations));
       check(await sha256(await this.boot.read('CURRENT.UF2'))===this.journal.firmwareHash,'Firmware changed unexpectedly.');
       this.journal.phase='sd-verified';await this.record();return this.journal;
     }catch(error){
@@ -250,7 +260,7 @@ export class Installer {
     check(target&&await sha256(target)===this.manifest.firmware.sha256,'Firmware checksum mismatch');parseUF2(target,{installer:true});
     await this.validateJournal();
     await verifyBackupZip(this.backup,this.journal.archive,{progress:this.progress,cancel:this.cancel});
-    await verifyInventory(this.sd,expectedAfter(this.journal.before,this.journal.operations),this.progress);
+    await this.checkpoint(expectedAfter(this.journal.before,this.journal.operations));
     check(await sha256(await this.boot.read('CURRENT.UF2'))===this.journal.firmwareHash,'Firmware changed since backup. '+restartRadio+' Verify before proceeding.');
     check(!this.cancel(),'Firmware copy cancelled before writing.');
     this.journal.phase='firmware-copying';this.journal.firmwareWritten=null;

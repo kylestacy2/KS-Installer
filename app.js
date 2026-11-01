@@ -19,11 +19,11 @@ function showStep(key){
 function drawSteps(){
   if(busy)return; // Never hide controls or move focus during a file operation.
   const connected=!!sd&&!!boot&&$('one-radio').checked;
-  const done={release:!!files,radio:scanned&&connected,backup:backupReady,sd:sdReady,
+  const done={release:!!files,radio:scanned&&$('one-radio').checked&&(connected||sdReady),backup:backupReady,sd:sdReady,
     firmware:complete||engine?.journal?.phase==='firmware-copied',verify:complete};
   const summaries={
     release:demo?'Demo release verified':release?.label+' · ZIP verified',
-    radio:complete?'Radio identity checked':sdReady?'Drives selected · continue to final verification':$('plan').hidden?'Drives selected · recovery checks available':$('plan-summary').textContent,
+    radio:sdReady?'Initial radio check complete · reconnect in step 06':$('plan').hidden?'Drives selected · recovery checks available':$('plan-summary').textContent,
     backup:'Original firmware + SD files saved · backup ZIP verified',
     sd:'Installed files and preserved settings verified',
     firmware:complete?'Firmware verified after reconnect':'UF2 copied · restart the radio, reconnect and verify',
@@ -53,6 +53,7 @@ const firmwareAttempted=()=>!!engine?.journal?.firmwareAttempt||FIRMWARE_PHASES.
 function reconnectRequired(){
   if(demo)demoDrives={sd,boot};
   sd=boot=null;$('reconnected').checked=false;
+  revealStep='verify';
 }
 function journalState(){
   const phase=engine?.journal?.phase;
@@ -69,11 +70,11 @@ function draw(){
   const active=busy,ready=!!files,canUse=demo||supported();
   $('choose-zip').disabled=active||demo||!release||!canUse;
   const pending=firmwareAttempted(),connected=sd&&boot&&$('one-radio').checked;
-  const reconnecting=sdReady&&!complete&&(pending||!sd||!boot);
-  $('radio-title').textContent=reconnecting?'Restart and reconnect your radio':'Connect your radio';
-  $('radio-instructions').textContent=reconnecting?radioRestartInstructions:'Start in bootloader mode, then select both radio drives. The preview checks the radio and install targets; the backup fully verifies every SD file.';
+  $('radio-title').textContent='Connect your radio';
+  $('radio-instructions').textContent='Start in bootloader mode, then select both radio drives. After copying firmware, reselect the drives directly in step 06.';
   for(const [id,enabled]of Object.entries({
     'choose-sd':ready&&canUse,'choose-boot':ready&&canUse,
+    'reselect-sd':ready&&canUse&&(sdReady||resumeReady),'reselect-boot':ready&&canUse&&(sdReady||resumeReady),
     'scan':ready&&connected&&!engine?.journal,'choose-backup':ready&&connected&&canUse,
     'backup':scanned&&backup&&!backupReady&&!pending&&connected,
     'install':backupReady&&!sdReady&&!complete&&connected,
@@ -94,6 +95,7 @@ function draw(){
   $('release-status').textContent=ready?'Verified':'Not loaded';$('release-status').classList.toggle('good',ready);
   $('backup-status').textContent=backupReady?'Verified':'Required';$('backup-status').classList.toggle('good',backupReady);
   $('sd-name').textContent=sd?.name||'Contains RADIO, MODELS and SCRIPTS';$('boot-name').textContent=boot?.name||'Contains INFO_UF2.TXT and CURRENT.UF2';
+  $('reselect-sd-name').textContent=sd?.name||'Select the reconnected SD card';$('reselect-boot-name').textContent=boot?.name||'Select the reconnected EDGETX_UF2 drive';
   $('backup-name').textContent=backup?'Backup folder: '+backup.name:'Choose a folder outside the radio drives. Keep it for recovery.';
   const archive=backupReady&&engine?.journal?.archive;
   $('backup-archive').textContent=archive?'Verified ZIP: '+archive.path+' · '+(archive.size/1048576).toFixed(1)+' MB. Saved inside your backup folder.':'A dated ZIP is created automatically and checked before installation can begin.';
@@ -128,11 +130,10 @@ $('zip').onchange=()=>action('Checking the release…',async()=>{
   files=loaded;engine=null;scanned=backupReady=sdReady=complete=resumeReady=recoveryReady=false;$('plan').hidden=true;resetSteps();
   stage('Release verified.','Connect the radio in bootloader mode, then choose its two drives.');log('Release hash and all '+files.size+' install resources match '+release.id+'.');
 },'release');
-for(const kind of ['sd','boot','backup'])$('choose-'+kind).onclick=()=>{
+function chooseFolder(kind,step,buttonId){
   if(busy)return;
   if(demo){log('Demo '+kind+' folder is already selected.');return;}
   const previous={title:$('stage-title').textContent,detail:$('stage-detail').textContent,progress:$('progress').value};
-  const step=kind==='backup'?'backup':'radio';
   // Start the native picker in the click handler, before slow work can consume activation.
   let selection;try{selection=window.showDirectoryPicker({id:'kse-'+kind,mode:'readwrite'});}catch(error){selection=Promise.reject(error);}
   return action('Selecting '+(kind==='boot'?'firmware drive':kind==='sd'?'SD drive':'backup folder')+'…',async()=>{
@@ -151,13 +152,16 @@ for(const kind of ['sd','boot','backup'])$('choose-'+kind).onclick=()=>{
       if(await fs.exists(JOURNAL)){const j=JSON.parse(utf8.decode(await fs.read(JOURNAL)));if(j.schema!==1||j.release!==release.id)throw Error('This backup belongs to another release.');getEngine().journal=j;journalState();scanned=true;complete=false;$('reconnected').checked=false;}
     }
     if(kind!=='backup'&&!engine?.journal)scanned=false;
-    stage('Folder selected.','Check the radio, or continue a verification/recovery using the same radio and backup.');log('Selected '+kind+': '+fs.name);
+    stage('Folder selected.',sdReady?'Select both drives here in step 06, confirm the radio restart, then verify.':'Check the radio, or continue a verification/recovery using the same radio and backup.');log('Selected '+kind+': '+fs.name);
+    if(sdReady)revealStep='verify';
   },step,()=>{
     stage(previous.title,previous.detail);$('progress').value=previous.progress;
     log((kind==='boot'?'UF2 drive':kind==='sd'?'SD card':'Backup folder')+' selection cancelled. Existing selections and installation progress kept; you can select the folder again.');
-    showStep(step);$('choose-'+kind).focus({preventScroll:true});
+    showStep(step);$(buttonId).focus({preventScroll:true});
   });
-};
+}
+for(const kind of ['sd','boot','backup'])$('choose-'+kind).onclick=()=>chooseFolder(kind,kind==='backup'?'backup':'radio','choose-'+kind);
+for(const kind of ['sd','boot'])$('reselect-'+kind).onclick=()=>chooseFolder(kind,'verify','reselect-'+kind);
 $('one-radio').onchange=draw;$('reconnected').onchange=()=>{if($('reconnected').checked)revealStep='verify';draw();};
 $('scan').onclick=()=>action('Checking the radio…',async()=>{
   if(!demo&&!(await boot.exists('INFO_UF2.TXT')))throw Error('Select the root of EDGETX_UF2.');
@@ -172,7 +176,7 @@ $('backup').onclick=()=>action('Backing up your radio…',async()=>{
   await getEngine().createBackup();backupReady=true;recoveryReady=true;stage('Backup folder + ZIP verified.','Your original firmware and SD files are saved on your computer. You can now install the SD files.');log('Backup folder and '+engine.journal.archive.path+' verified. Every ZIP entry was reopened and checked. Radio unchanged.');
 },'backup');
 $('install').onclick=()=>action('Installing the SD files…',async()=>{
-  await getEngine().install();sdReady=true;stage('SD files verified.','Complete the firmware step, then reconnect for the final check.');$('sd-result').textContent='Installed and readback-verified. Personal files match the backup.';log('SD update verified, including preserved personal files. Firmware remains unchanged.');
+  await getEngine().install();sdReady=true;stage('SD files verified.','Complete the firmware step, then reconnect for the final check.');$('sd-result').textContent='Installed files and personal settings verified. The final check also compares all images, sounds and logs.';log('SD programs and preserved settings verified. Untouched media will be fully compared in step 06. Firmware remains unchanged.');
 },'sd');
 $('cancel').onclick=()=>{cancel=true;draw();log('Cancellation requested. Waiting for the current file operation to finish.');};
 $('firmware').onclick=()=>action('Checking before the firmware copy…',async()=>{
@@ -194,7 +198,6 @@ $('demo-reconnect').onclick=()=>{
 $('manual-firmware').onclick=()=>{
   if(demo||busy||!sdReady)return;
   download(files.get('@firmware'),'KSE-2.12.1-KS-MK3.uf2');
-  revealStep='radio';
   reconnectRequired();stage('Manual firmware copy selected.','Copy the downloaded UF2 to EDGETX_UF2. '+radioRestartInstructions);draw();
 };
 $('verify').onclick=()=>action('Verifying installed files and firmware…',async()=>{
