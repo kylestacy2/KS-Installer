@@ -1,21 +1,21 @@
 {
   "schema": 1,
-  "id": "trial-2026-10-31",
-  "label": "2.12.1-KS \u00b7 31 October 2026",
+  "id": "trial-2026-11-02",
+  "label": "2.12.1-KS \u00b7 2 November 2026",
   "board": "tx16smk3",
-  "commit": "2f9b47ff21d5a1d1f2df3ed1655f884a04aefa1f",
-  "releaseURL": "https://github.com/kylestacy2/KSE-Touch/releases/tag/trial-2026-10-31",
+  "commit": "560d98b80427739bba783e9f9bd94ab47b81772e",
+  "releaseURL": "https://github.com/kylestacy2/KSE-Touch/releases/tag/trial-2026-11-02",
   "zip": {
     "name": "EdgeTXKSE.zip",
-    "sha256": "f872e4f3c5fe0cefca2ecbb5159104546621e863a29da91076aa03429de62209",
-    "size": 100436761
+    "sha256": "b79605091e650280ab9114b7cf6745fcfaeca37c6995963dae69b9753a369b9a",
+    "size": 100572242
   },
   "files": [
     {
       "path": "IMAGES/EdgeTXKSE-README.txt",
       "archive": "EdgeTXKSE/SD-CARD/IMAGES/EdgeTXKSE-README.txt",
-      "sha256": "0cd45afca84c0443ce213d6ba886f72a377fc2ba7efc2a605466e144c59e3435",
-      "size": 142
+      "sha256": "38a31420f0eaf2e1352de3f8b78d7adf67b712f546bb7b0a057020afb1368317",
+      "size": 233
     },
     {
       "path": "LOGS/EdgeTXKSE-README.txt",
@@ -28,12 +28,6 @@
       "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/FUNCTIONS/GBLED.lua",
       "sha256": "2124bc1b4de20bb472dcbf2713fdea6cad2a481ff5c33159aceeccf3d523ca8a",
       "size": 26107
-    },
-    {
-      "path": "SCRIPTS/IMGR/core.lua",
-      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/IMGR/core.lua",
-      "sha256": "e9881b046275707f638bac9352270bd453f10d14f549fa5d15e5e755b9de9740",
-      "size": 14402
     },
     {
       "path": "SCRIPTS/RF2/COMPILE/compile.lua",
@@ -2284,12 +2278,6 @@
       "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/TOOLS/Custom Colors.lua",
       "sha256": "652af3fa4954277d112085a9fda06a7303740567c983264b11fc77faef327d5e",
       "size": 49404
-    },
-    {
-      "path": "SCRIPTS/TOOLS/IMGR.lua",
-      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/TOOLS/IMGR.lua",
-      "sha256": "673c42774f8cf5fdfcb467cee937eea6ba9d8ba4912f65726393602f1437d7dc",
-      "size": 10837
     },
     {
       "path": "SCRIPTS/TOOLS/RM Sensor Configurator.lua",
