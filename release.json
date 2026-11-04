@@ -1,14 +1,14 @@
 {
   "schema": 1,
-  "id": "trial-2026-11-02",
-  "label": "2.12.1-KS \u00b7 2 November 2026",
+  "id": "trial-2026-11-03",
+  "label": "2.12.1-KS \u00b7 3 November 2026",
   "board": "tx16smk3",
-  "commit": "560d98b80427739bba783e9f9bd94ab47b81772e",
-  "releaseURL": "https://github.com/kylestacy2/KSE-Touch/releases/tag/trial-2026-11-02",
+  "commit": "072d365694b9edb278edc8675cd5fd6fc3b344f4",
+  "releaseURL": "https://github.com/kylestacy2/KSE-Touch/releases/tag/trial-2026-11-03",
   "zip": {
     "name": "EdgeTXKSE.zip",
-    "sha256": "b79605091e650280ab9114b7cf6745fcfaeca37c6995963dae69b9753a369b9a",
-    "size": 100572242
+    "sha256": "6f1ef82dbb05597676601be4fc88da633660d4dc6f804f253985ce97f380a54e",
+    "size": 102379851
   },
   "files": [
     {
@@ -2360,8 +2360,8 @@
     {
       "path": "WIDGETS/KSETouch/main.lua",
       "archive": "EdgeTXKSE/SD-CARD/WIDGETS/KSETouch/main.lua",
-      "sha256": "8a4a64ce17b3f8cdb44f539d4ace6d7ccc2a2ee0681082d6c132def7de41a6aa",
-      "size": 311792
+      "sha256": "a6b3926f4355b801164d54e73e5c8849ad6205a0178e249d004e18a8c506b44f",
+      "size": 311817
     },
     {
       "path": "WIDGETS/KSETouch/telemetryTiles.lua",
@@ -2384,8 +2384,8 @@
   ],
   "firmware": {
     "archive": "EdgeTXKSE/Firmware/TX16S-MK3-MAX-2.12.1-KS.uf2",
-    "sha256": "ed9a744945c2ecbea1f1f23ab403bcb0d279a9a42bfa22fe4a8b9eb2196372cb",
-    "size": 3099136
+    "sha256": "1682dcca293db2662b240c7ba60db614149c083b653d16180c75fe20159e9717",
+    "size": 3099648
   },
   "settings": {
     "path": "SCRIPTS/RF2/settings.lua",
