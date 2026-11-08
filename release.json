@@ -1,21 +1,39 @@
 {
   "schema": 1,
-  "id": "trial-2026-11-03",
-  "label": "2.12.1-KS \u00b7 3 November 2026",
+  "id": "trial-2026-11-08",
+  "label": "KSE Touch Full \u00b7 8 November 2026",
   "board": "tx16smk3",
-  "commit": "072d365694b9edb278edc8675cd5fd6fc3b344f4",
-  "releaseURL": "https://github.com/kylestacy2/KSE-Touch/releases/tag/trial-2026-11-03",
+  "commit": "301f26e8812e243ab31d6c6af059b61fdfb815b5",
+  "releaseURL": "https://github.com/kylestacy2/KSE-Touch/releases/tag/trial-2026-11-08",
   "zip": {
     "name": "EdgeTXKSE.zip",
-    "sha256": "6f1ef82dbb05597676601be4fc88da633660d4dc6f804f253985ce97f380a54e",
-    "size": 102379851
+    "sha256": "49aed9404f86783e12a5d2ba2ec9ffe544edd7185218cf36a050c6f6a4e14df8",
+    "size": 111394335
   },
   "files": [
     {
       "path": "IMAGES/EdgeTXKSE-README.txt",
       "archive": "EdgeTXKSE/SD-CARD/IMAGES/EdgeTXKSE-README.txt",
-      "sha256": "38a31420f0eaf2e1352de3f8b78d7adf67b712f546bb7b0a057020afb1368317",
-      "size": 233
+      "sha256": "339d67522216097016292e27644c17d4abc58e7f605a96b63e3ca30f69c4db6b",
+      "size": 305
+    },
+    {
+      "path": "IMAGES/splash-canada.png",
+      "archive": "EdgeTXKSE/SD-CARD/IMAGES/splash-canada.png",
+      "sha256": "a1a83de104ffe2478c60469b00f98d3b12e3a112d904bd638691d41d5f2a486a",
+      "size": 405127
+    },
+    {
+      "path": "IMAGES/splash.png",
+      "archive": "EdgeTXKSE/SD-CARD/IMAGES/splash.png",
+      "sha256": "f58cb233d4c33a5327812c47ecf966a0638c2a0937769efd02feafb9e812ab3c",
+      "size": 323532
+    },
+    {
+      "path": "IMAGES/splash2.png",
+      "archive": "EdgeTXKSE/SD-CARD/IMAGES/splash2.png",
+      "sha256": "b3a66d27e6e752f70e091cd2736b54527c636ee10ba6c5205339923c5d380b96",
+      "size": 383541
     },
     {
       "path": "LOGS/EdgeTXKSE-README.txt",
@@ -28,18 +46,6 @@
       "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/FUNCTIONS/GBLED.lua",
       "sha256": "2124bc1b4de20bb472dcbf2713fdea6cad2a481ff5c33159aceeccf3d523ca8a",
       "size": 26107
-    },
-    {
-      "path": "SCRIPTS/RF2/COMPILE/compile.lua",
-      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/COMPILE/compile.lua",
-      "sha256": "5ac19b8f2a9ca05f67340f11fc2bb0d0fa94b2dbead5884d2396d855d973ec3e",
-      "size": 1253
-    },
-    {
-      "path": "SCRIPTS/RF2/COMPILE/scripts.lua",
-      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/COMPILE/scripts.lua",
-      "sha256": "fa13b39cb06aeee334f0c4b788c196071b6fcc30a12468692f1d1da732e5367b",
-      "size": 9061
     },
     {
       "path": "SCRIPTS/RF2/COMPILE/scripts_compiled.lua",
@@ -104,8 +110,8 @@
     {
       "path": "SCRIPTS/RF2/F/hangarConfig.lua",
       "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/F/hangarConfig.lua",
-      "sha256": "053610a1b3ff26b5772f972d1bbea05ce57f85eae5a9e7a6c7e46ca7326ed5c1",
-      "size": 3794
+      "sha256": "effcc7bd945f0294f6f31eeda34494a63775017b410544f8591fcf3ba01e43ad",
+      "size": 3998
     },
     {
       "path": "SCRIPTS/RF2/F/hasSensor.lua",
@@ -122,8 +128,8 @@
     {
       "path": "SCRIPTS/RF2/F/modelPreferences.lua",
       "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/F/modelPreferences.lua",
-      "sha256": "794e031470a2ab28760948a767cc5c1ded4970d2060e4820fa1a32fd6506a5c5",
-      "size": 7626
+      "sha256": "1986a4f6482247fa18182890f1a9f9e5f34499746a46e7990701de2bab7891c1",
+      "size": 7742
     },
     {
       "path": "SCRIPTS/RF2/F/navigation.lua",
@@ -170,8 +176,8 @@
     {
       "path": "SCRIPTS/RF2/F/uiThemes.lua",
       "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/F/uiThemes.lua",
-      "sha256": "a907aaebcebc180e03b5522d89d7560c74cbe6ae36214cf89ba778c73bac0762",
-      "size": 1026
+      "sha256": "fb8e138315077a27b03ba94c9111d27e56a4758be065b5872bb492d390098ff9",
+      "size": 1057
     },
     {
       "path": "SCRIPTS/RF2/F/writeSafety.lua",
@@ -1124,8 +1130,8 @@
     {
       "path": "SCRIPTS/RF2/LVGL/Hangar/swash_main.lua",
       "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/Hangar/swash_main.lua",
-      "sha256": "e270419e2038cf6e966c63899cdb36043a047fa0f599c05e4de99080d21a250f",
-      "size": 2530
+      "sha256": "b172b5ab2d53c534c1f7f294673ceac77d95d32c13ddbd6fafdb7c28f3e695ff",
+      "size": 3290
     },
     {
       "path": "SCRIPTS/RF2/LVGL/Hangar/themes.lua",
@@ -1166,20 +1172,20 @@
     {
       "path": "SCRIPTS/RF2/LVGL/hangarEditor.lua",
       "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/hangarEditor.lua",
-      "sha256": "7c05ec3f63f0178a8a6018a0353541384814209d7ae37c0fc3734cfbdf86222a",
-      "size": 10316
+      "sha256": "3eee8e5b2562438640db0b402b09fb18590458796ce258ad9f340cf7d73ea1da",
+      "size": 11615
     },
     {
       "path": "SCRIPTS/RF2/LVGL/hangarHome.lua",
       "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/hangarHome.lua",
-      "sha256": "81cfad505415c13ee476649d98b8e49a4f9919c1ce82cbb150f5918f3fe8fa8d",
+      "sha256": "c90e400096a520fc709657e31503f55280edbefe797cfbe4d99a3a034eed38bd",
       "size": 3806
     },
     {
       "path": "SCRIPTS/RF2/LVGL/hangarPage.lua",
       "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/hangarPage.lua",
-      "sha256": "e7b969b043e344c64a40b8e9bd8acbce21f188548d78e219950a02475c261b5f",
-      "size": 7536
+      "sha256": "a80e1c5ce2ba90db400e7a4f44b20b3afd1dddb9e5e7663d5619665ebd999245",
+      "size": 7767
     },
     {
       "path": "SCRIPTS/RF2/LVGL/hangarPlatinum.lua",
@@ -1190,8 +1196,8 @@
     {
       "path": "SCRIPTS/RF2/LVGL/hangarWidgets.lua",
       "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/hangarWidgets.lua",
-      "sha256": "ae9f0fa2b999657d030845f110ce81216a887085de8efab34c0af3a40965a65f",
-      "size": 3298
+      "sha256": "3e2dc09e52c380bcc0c3ccdbaa9d72013fc6164ea2a0f5bcdec008f80509e0f5",
+      "size": 3953
     },
     {
       "path": "SCRIPTS/RF2/LVGL/hangarWorkflow.lua",
@@ -1238,8 +1244,8 @@
     {
       "path": "SCRIPTS/RF2/LVGL/precision.lua",
       "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/precision.lua",
-      "sha256": "f773f8811405284712ca3d162cfd3c2d9f8612bce538473825a4a84f32676764",
-      "size": 8596
+      "sha256": "c03880397e3d99614715496a027ef328b042c7cfa158d214605f6590d8b1aa10",
+      "size": 9567
     },
     {
       "path": "SCRIPTS/RF2/LVGL/precisionPids.lua",
@@ -1286,8 +1292,8 @@
     {
       "path": "SCRIPTS/RF2/LVGL/waitMessage.lua",
       "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/waitMessage.lua",
-      "sha256": "1bc771aec232dd843ada13ae9acedc07f955f214298eea40b6c21c3d6782f673",
-      "size": 1060
+      "sha256": "305d8e55e73df3cd643e4155172ff3c49e55ac622583ad9db4280546c9d5934b",
+      "size": 1919
     },
     {
       "path": "SCRIPTS/RF2/LVGL/workflow.lua",
@@ -2246,8 +2252,8 @@
     {
       "path": "SCRIPTS/RF2/ui_init.lua",
       "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/ui_init.lua",
-      "sha256": "60267f0ab39de9aadbcc6846bea4e0bf7ef225f76607fc2cb2bc95bcaf80af2e",
-      "size": 1452
+      "sha256": "19a3fc853c0e3adc086f3f81cd20f28933ea2326893fc2fc7057bb29353f42f7",
+      "size": 1633
     },
     {
       "path": "SCRIPTS/RF2/ui_lcd.lua",
@@ -2258,14 +2264,14 @@
     {
       "path": "SCRIPTS/RF2/ui_lvgl_framework.lua",
       "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/ui_lvgl_framework.lua",
-      "sha256": "ddf1f90c891fa41cb10befd31d4eebf36019b24f6511bcac10466b3e56772e70",
-      "size": 30345
+      "sha256": "f7b86d76cf4695fdef4d397efe2796c2048885dbaa7155da2afbaf9903dd1601",
+      "size": 33789
     },
     {
       "path": "SCRIPTS/RF2/ui_lvgl_runner.lua",
       "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/ui_lvgl_runner.lua",
-      "sha256": "ff991d8645d785863579ffa438542f07985739a24b606c1e6b5b7384f3885d13",
-      "size": 3456
+      "sha256": "41fad8039555914a952e7b032539f7550d4ba8d7ff65957a7c4ef8296e614413",
+      "size": 3590
     },
     {
       "path": "SCRIPTS/RGBLED/README.txt",
@@ -2296,6 +2302,90 @@
       "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/TOOLS/rf2.lua",
       "sha256": "3efe7252b1098cc4488502009780e9cb43e2ff20c8a69bcb17727c15b4785d0e",
       "size": 125
+    },
+    {
+      "path": "SOUNDS/en/ksamps.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SOUNDS/en/ksamps.wav",
+      "sha256": "3e10c7d66710b0701520935023fef69ed0089c4a8704edfac54b106989d81168",
+      "size": 45868
+    },
+    {
+      "path": "SOUNDS/en/ksbatlo.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SOUNDS/en/ksbatlo.wav",
+      "sha256": "d8b41922b17e710ec00ca85723a0643048d246f1de2ec8e6bd1441a6616c8e57",
+      "size": 82798
+    },
+    {
+      "path": "SOUNDS/en/ksbatpct.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SOUNDS/en/ksbatpct.wav",
+      "sha256": "aeeb44b8289d5d42ced9add270a72eb217d72ec420ca2bc454ca1e2edd4e443e",
+      "size": 79826
+    },
+    {
+      "path": "SOUNDS/en/ksbechi.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SOUNDS/en/ksbechi.wav",
+      "sha256": "a0a33c8086008f017c5e0dd64a240005612f8162fdad8b7fc751f10564a41d1f",
+      "size": 92680
+    },
+    {
+      "path": "SOUNDS/en/ksbeclo.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SOUNDS/en/ksbeclo.wav",
+      "sha256": "ef4f733fa311fed0ee88fab45906069c14ad9329e5406870300762c66f61715b",
+      "size": 91716
+    },
+    {
+      "path": "SOUNDS/en/kscello.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SOUNDS/en/kscello.wav",
+      "sha256": "7b16d99efc6c874d6221cd55fd18e2dc7b62f85c93845aaf1432f88c87bfb4fa",
+      "size": 72396
+    },
+    {
+      "path": "SOUNDS/en/kseschi.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SOUNDS/en/kseschi.wav",
+      "sha256": "ef3085ffdfc567e066c66263fb2a0536e9e226e75ea1d690c988596d7e2fd164",
+      "size": 89706
+    },
+    {
+      "path": "SOUNDS/en/kslqlo.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SOUNDS/en/kslqlo.wav",
+      "sha256": "92f17415d743538fbbd64617d561a2024e09f6a138111274437362bd28a3ee87",
+      "size": 68682
+    },
+    {
+      "path": "SOUNDS/en/ksrpmhi.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SOUNDS/en/ksrpmhi.wav",
+      "sha256": "45207b562ff22d73b332b6d1695a6e089102a63a1830ad24c0249c564f87a292",
+      "size": 62214
+    },
+    {
+      "path": "SOUNDS/en/ksrpmlo.wav",
+      "archive": "EdgeTXKSE/SD-CARD/SOUNDS/en/ksrpmlo.wav",
+      "sha256": "2a07f104e520f173d52649b5bd5712ad020818636e5c6c0c7e30ca6ca30c99fd",
+      "size": 60508
+    },
+    {
+      "path": "THEMES/KSE Dark/background.png",
+      "archive": "EdgeTXKSE/SD-CARD/THEMES/KSE Dark/background.png",
+      "sha256": "af861a721929e6f7b45e90ce8f80072fbf0de427c906384f2ff6a1ef2939777c",
+      "size": 349602
+    },
+    {
+      "path": "THEMES/KSE Dark/theme.yml",
+      "archive": "EdgeTXKSE/SD-CARD/THEMES/KSE Dark/theme.yml",
+      "sha256": "bf1f33b9a620d865bbb9a61dbf54b42631a5d5b838f04f5f4581766e426b443e",
+      "size": 373
+    },
+    {
+      "path": "THEMES/KSE Light/background.png",
+      "archive": "EdgeTXKSE/SD-CARD/THEMES/KSE Light/background.png",
+      "sha256": "2c9ce97b4f18f81c6fc956b1c30db8aee385469e590f9f08fc08ab6555f8d650",
+      "size": 356270
+    },
+    {
+      "path": "THEMES/KSE Light/theme.yml",
+      "archive": "EdgeTXKSE/SD-CARD/THEMES/KSE Light/theme.yml",
+      "sha256": "777e3eb09a370d9516c7bbdb20d2b46e85bae16c12103585a27a8c7835032fda",
+      "size": 375
     },
     {
       "path": "WIDGETS/KSETouch/BatterySounds/0%.wav",
@@ -2354,26 +2444,26 @@
     {
       "path": "WIDGETS/KSETouch/layoutEditor.lua",
       "archive": "EdgeTXKSE/SD-CARD/WIDGETS/KSETouch/layoutEditor.lua",
-      "sha256": "026395a7165784f56abdaeeb74192741c01b7661e2d6ca2ef5876398f19ed3fe",
-      "size": 9421
+      "sha256": "dc7b0f4efbff08978898c1e8872cb95002e25c93b8ed226322f9e734e55f9ae6",
+      "size": 15551
     },
     {
       "path": "WIDGETS/KSETouch/main.lua",
       "archive": "EdgeTXKSE/SD-CARD/WIDGETS/KSETouch/main.lua",
-      "sha256": "a6b3926f4355b801164d54e73e5c8849ad6205a0178e249d004e18a8c506b44f",
-      "size": 311817
+      "sha256": "dc52b69316dc7756ed9c35bcc5b314959b86f4114842960494615597eb9563c8",
+      "size": 322051
     },
     {
       "path": "WIDGETS/KSETouch/telemetryTiles.lua",
       "archive": "EdgeTXKSE/SD-CARD/WIDGETS/KSETouch/telemetryTiles.lua",
-      "sha256": "2e62af33becd817abf9e628e6a04da23cda6550f6e58b34212ef4033ce6ed0b1",
-      "size": 6689
+      "sha256": "f52d493c474d7361f71b6497a94a362947cec78d138ee36dc310f1f5eca372f8",
+      "size": 7357
     },
     {
       "path": "WIDGETS/RfTool/app.lua",
       "archive": "EdgeTXKSE/SD-CARD/WIDGETS/RfTool/app.lua",
-      "sha256": "e786c5dbb366bcc920608b74c7369ffac32d37f0773e40f79d157e4456cef915",
-      "size": 13372
+      "sha256": "d23feaf0b87beff8477374b00c45606fac4399704da972d52cbf1a1aaff309be",
+      "size": 14798
     },
     {
       "path": "WIDGETS/RfTool/main.lua",
@@ -2384,8 +2474,8 @@
   ],
   "firmware": {
     "archive": "EdgeTXKSE/Firmware/TX16S-MK3-MAX-2.12.1-KS.uf2",
-    "sha256": "1682dcca293db2662b240c7ba60db614149c083b653d16180c75fe20159e9717",
-    "size": 3099648
+    "sha256": "cb12c3ad084628113d71fd17a6e48c2ab1127b5ed45acab36c475dba364da8d6",
+    "size": 4825088
   },
   "settings": {
     "path": "SCRIPTS/RF2/settings.lua",

@@ -9,6 +9,9 @@ export const ownProgram=p=>ROOTS.some(r=>p.startsWith(r))&&!protectedUser(p)&&/\
 const legacy=p=>/^SCRIPTS\/TOOLS\/Flight Modifier\.(lua|luac)$/.test(p);
 const hasExistingElrs=before=>Object.keys(before).some(p=>/^SCRIPTS\/TOOLS\/[^/]*(elrs|expresslrs)[^/]*\.(lua|luac)$/i.test(p));
 const preservedElrs=(path,hasElrs)=>hasElrs&&/elrs/i.test(path)&&path.startsWith('SCRIPTS/TOOLS/');
+// Themes and root image assets are additions only, including FAT case aliases.
+// Existing wallpapers/startup screens belong to the user even if names match.
+const preservedAsset=(path,existing)=>/^(?:THEMES|IMAGES)\//i.test(path)&&existing.has(path.toLowerCase());
 const check=(value,message)=>{if(!value)throw Error(message);};
 const restartRadio='Wait for any writing to finish. Eject the radio drives, unplug USB, turn the radio off, enter bootloader mode again, reconnect USB and reselect both drives.';
 export async function readOptional(fs,path){return await fs.exists(path)?fs.read(path):null;}
@@ -94,7 +97,7 @@ export function buildPlan(manifest,before){
   const plan=[],notes=[];
   const existing=new Map();
   for(const path of Object.keys(before)){safePath(path);const key=path.toLowerCase();check(!existing.has(key),'Ambiguous SD filename: '+path);existing.set(key,path);}
-  for(const f of [...manifest.files,manifest.settings]){const alias=existing.get(f.path.toLowerCase());check(!alias||alias===f.path,'Filename casing differs from the package: '+alias+'. Resolve it before installing.');}
+  for(const f of [...manifest.files,manifest.settings]){const alias=existing.get(f.path.toLowerCase());check(!alias||alias===f.path||preservedAsset(f.path,existing),'Filename casing differs from the package: '+alias+'. Resolve it before installing.');}
   const hasElrs=hasExistingElrs(before);
   const packagePaths=new Set(manifest.files.map(f=>safePath(f.path)));
   const add=(path,after)=>{const prior=before[path]?.sha256||null;if(prior!==after)plan.push({path,before:prior,after,operation:after===null?'remove':prior?'update':'add'});};
@@ -102,6 +105,7 @@ export function buildPlan(manifest,before){
     check(!/^RADIO\/|^MODELS\/|^flights-count/i.test(f.path),'Package contains protected radio files');
     check(!protectedUser(f.path)||f.path==='SCRIPTS/RF2/PREFS/README.txt','Package contains personal preferences');
     if(preservedElrs(f.path,hasElrs)){notes.push('Your existing ExpressLRS tool will be kept.');continue;}
+    if(preservedAsset(f.path,existing)){notes.push('Existing themes and images will be kept, including matching filenames.');continue;}
     add(f.path,f.sha256);
   }
   const settings=Object.keys(before).some(p=>/^SCRIPTS\/RF2\/settings(?:_backup|_pending)?\.lua$/i.test(p));
@@ -286,7 +290,8 @@ export class Installer {
     // already current in step 4; exclude the user's deliberately preserved ELRS
     // and settings. Regenerated caches and unrelated files are not install targets.
     const hasElrs=hasExistingElrs(this.journal.before);
-    const targets=this.manifest.files.filter(f=>!preservedElrs(f.path,hasElrs));
+    const existing=new Set(Object.keys(this.journal.before).map(p=>p.toLowerCase()));
+    const targets=this.manifest.files.filter(f=>!preservedElrs(f.path,hasElrs)&&!preservedAsset(f.path,existing));
     if(this.journal.operations.some(op=>op.path===this.manifest.settings.path&&op.after!==null))targets.push(this.manifest.settings);
     for(let i=0;i<targets.length;i++){
       const f=targets[i];let bytes;
