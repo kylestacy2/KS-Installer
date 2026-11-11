@@ -1,14 +1,14 @@
 {
   "schema": 1,
-  "id": "trial-2026-11-08",
-  "label": "KSE Touch Full \u00b7 8 November 2026",
+  "id": "trial-2026-11-11",
+  "label": "KSE Touch Full \u00b7 11 November 2026",
   "board": "tx16smk3",
-  "commit": "301f26e8812e243ab31d6c6af059b61fdfb815b5",
-  "releaseURL": "https://github.com/kylestacy2/KSE-Touch/releases/tag/trial-2026-11-08",
+  "commit": "d41018f918ee956cc41453f44cbaa21bcdeef8ef",
+  "releaseURL": "https://github.com/kylestacy2/KSE-Touch/releases/tag/trial-2026-11-11",
   "zip": {
     "name": "EdgeTXKSE.zip",
-    "sha256": "49aed9404f86783e12a5d2ba2ec9ffe544edd7185218cf36a050c6f6a4e14df8",
-    "size": 111394335
+    "sha256": "c6972b06e7753b4487c7a85faa94f35f5888b1c3043fecc703739ccd17482147",
+    "size": 111818586
   },
   "files": [
     {
@@ -1538,8 +1538,8 @@
     {
       "path": "SCRIPTS/RF2/MSP/mspQueue.lua",
       "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/MSP/mspQueue.lua",
-      "sha256": "42451dba0a2b8000ffea4c59b9815d8320eb24be2eec35b9fc1b1cddd6b34011",
-      "size": 16553
+      "sha256": "9270090ee6a1dc0143ccec60946a3e16a924221f8db0d4625eac8d6107a17121",
+      "size": 17259
     },
     {
       "path": "SCRIPTS/RF2/MSP/mspRcTuning.lua",
@@ -2186,14 +2186,14 @@
     {
       "path": "SCRIPTS/RF2/background.lua",
       "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/background.lua",
-      "sha256": "f40814a065a3146d04efd6f59e886a2a524e18b4edcb9a5832aa7a92a2a637ba",
-      "size": 7154
+      "sha256": "2a0b6465e3eccd1dc3a8bff28e5cf4609049b9139a942d99cafac9f5ef009b10",
+      "size": 7128
     },
     {
       "path": "SCRIPTS/RF2/background_init.lua",
       "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/background_init.lua",
-      "sha256": "ed59439f183d0cde1e2e8c4918ae11204ab10b4333fced2ad8b5e375a0e16144",
-      "size": 11865
+      "sha256": "174e1886cade256d9fdb3e140669da36bd07819848c566259a4de183cf400c82",
+      "size": 12418
     },
     {
       "path": "SCRIPTS/RF2/pages.lua",
@@ -2444,14 +2444,14 @@
     {
       "path": "WIDGETS/KSETouch/layoutEditor.lua",
       "archive": "EdgeTXKSE/SD-CARD/WIDGETS/KSETouch/layoutEditor.lua",
-      "sha256": "dc7b0f4efbff08978898c1e8872cb95002e25c93b8ed226322f9e734e55f9ae6",
-      "size": 15551
+      "sha256": "fbec9215cdbe7bf6eb6ec3e4f53ce5dc064d28f3b5d7a70e40f307c5603911de",
+      "size": 15219
     },
     {
       "path": "WIDGETS/KSETouch/main.lua",
       "archive": "EdgeTXKSE/SD-CARD/WIDGETS/KSETouch/main.lua",
-      "sha256": "dc52b69316dc7756ed9c35bcc5b314959b86f4114842960494615597eb9563c8",
-      "size": 322051
+      "sha256": "ad6ee7da3e154fbead47ed567cc33c9f8370724c5688516b18d798c094dae90b",
+      "size": 323583
     },
     {
       "path": "WIDGETS/KSETouch/telemetryTiles.lua",
@@ -2462,8 +2462,8 @@
     {
       "path": "WIDGETS/RfTool/app.lua",
       "archive": "EdgeTXKSE/SD-CARD/WIDGETS/RfTool/app.lua",
-      "sha256": "d23feaf0b87beff8477374b00c45606fac4399704da972d52cbf1a1aaff309be",
-      "size": 14798
+      "sha256": "2d9f94355e76c23d9bf2468cc46313d8fc364d9c548e2e011feca450561f25d3",
+      "size": 17116
     },
     {
       "path": "WIDGETS/RfTool/main.lua",
@@ -2474,8 +2474,8 @@
   ],
   "firmware": {
     "archive": "EdgeTXKSE/Firmware/TX16S-MK3-MAX-2.12.1-KS.uf2",
-    "sha256": "cb12c3ad084628113d71fd17a6e48c2ab1127b5ed45acab36c475dba364da8d6",
-    "size": 4825088
+    "sha256": "7544672c89e39997d84381c024105e7334a45fd1945bbcae0c33a09b8c3b0b3b",
+    "size": 4833280
   },
   "settings": {
     "path": "SCRIPTS/RF2/settings.lua",
