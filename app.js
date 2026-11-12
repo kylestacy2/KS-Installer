@@ -19,12 +19,13 @@ function showStep(key){
 function drawSteps(){
   if(busy)return; // Never hide controls or move focus during a file operation.
   const connected=!!sd&&!!boot&&$('one-radio').checked;
-  const done={release:!!files,radio:scanned&&$('one-radio').checked&&(connected||sdReady),backup:backupReady,sd:sdReady,
+  const skipped=!!engine?.backupSkipped;
+  const done={release:!!files,radio:scanned&&$('one-radio').checked&&(connected||sdReady),backup:backupReady||skipped,sd:sdReady,
     firmware:complete||engine?.journal?.phase==='firmware-copied',verify:complete};
   const summaries={
     release:demo?'Demo release verified':release?.label+' · ZIP verified',
     radio:sdReady?'Initial radio check complete · reconnect in step 06':$('plan').hidden?'Drives selected · recovery checks available':$('plan-summary').textContent,
-    backup:'Original firmware + SD files saved · backup ZIP verified',
+    backup:skipped?'Backup skipped · no recovery backup saved':'Original firmware + SD files saved · backup ZIP verified',
     sd:'Installed files and preserved settings verified',
     firmware:complete?'Firmware verified after reconnect':'UF2 copied · restart the radio, reconnect and verify',
     verify:'Installed release files, firmware and bootloader verified'
@@ -35,6 +36,7 @@ function drawSteps(){
     if(now&&!was){card.open=false;advanced=true;}
     else if(was&&!now)card.open=true;
     card.classList.toggle('done',now);
+    if(key==='backup')card.classList.toggle('skipped',skipped);
     $('step-'+key+'-summary').textContent=summaries[key];$('step-'+key+'-summary').hidden=!now;
     stepDone.set(key,now);
   }
@@ -57,9 +59,9 @@ function reconnectRequired(){
 }
 function journalState(){
   const phase=engine?.journal?.phase;
-  backupReady=['backup-verified',...sdPhases].includes(phase);
+  backupReady=!engine?.backupSkipped&&['backup-verified',...sdPhases].includes(phase);
   sdReady=sdPhases.includes(phase);resumeReady=sdReady;
-  recoveryReady=!!engine?.journal;
+  recoveryReady=!!engine?.journal&&!engine.backupSkipped;
 }
 const supported=()=>isSecureContext&&'showDirectoryPicker'in window&&'DecompressionStream'in window&&!!crypto.subtle;
 function log(text,error=false){const at=new Date().toLocaleTimeString();activity.push({at,text,error});const p=document.createElement('p');p.textContent=at+'  '+text;if(error)p.className='error';$('log').append(p);$('log').scrollTop=$('log').scrollHeight;}
@@ -68,6 +70,7 @@ function stage(title,detail){$('stage-title').textContent=title;$('stage-detail'
 function progress(n,total){$('progress').value=total?Math.round(n/total*100):0;}
 function draw(){
   const active=busy,ready=!!files,canUse=demo||supported();
+  const skipped=!!engine?.backupSkipped,prepared=backupReady||(skipped&&engine.journal.phase==='backup-skipped');
   $('choose-zip').disabled=active||demo||!release||!canUse;
   const pending=firmwareAttempted(),connected=sd&&boot&&$('one-radio').checked;
   $('radio-title').textContent='Connect your radio';
@@ -75,30 +78,36 @@ function draw(){
   for(const [id,enabled]of Object.entries({
     'choose-sd':ready&&canUse,'choose-boot':ready&&canUse,
     'reselect-sd':ready&&canUse&&(sdReady||resumeReady),'reselect-boot':ready&&canUse&&(sdReady||resumeReady),
-    'scan':ready&&connected&&!engine?.journal,'choose-backup':ready&&connected&&canUse,
-    'backup':scanned&&backup&&!backupReady&&!pending&&connected,
-    'install':backupReady&&!sdReady&&!complete&&connected,
-    'firmware':sdReady&&!complete&&!pending&&connected&&backup,
-    'verify':files&&connected&&backup&&(sdReady||resumeReady)&&$('reconnected').checked,
-    'restore':files&&connected&&backup&&recoveryReady&&!pending&&!complete,
+    'scan':ready&&connected&&!engine?.journal,'choose-backup':ready&&connected&&canUse&&!skipped,
+    'backup':scanned&&backup&&!backupReady&&!skipped&&!pending&&connected,
+    'skip-backup':scanned&&!backupReady&&!skipped&&!pending&&connected&&(!engine?.journal||engine.journal.phase==='backup-incomplete'),
+    'install':prepared&&!sdReady&&!complete&&connected,
+    'firmware':sdReady&&!complete&&!pending&&connected&&(backup||skipped),
+    'verify':files&&connected&&(backup||skipped)&&(sdReady||resumeReady)&&$('reconnected').checked,
+    'restore':files&&connected&&backup&&recoveryReady&&!skipped&&!pending&&!complete,
     'manual-firmware':!demo&&sdReady&&ready&&!complete,
     'demo-reconnect':demo&&pending&&!sd&&!boot,
     'demo':!engine?.journal||demo||complete,'reset':true,'report':activity.length>0
   }))$(id).disabled=active||!enabled;
   $('choose-zip').disabled||=!!engine?.journal&&!complete;
   $('one-radio').disabled=active;$('reconnected').disabled=active||!sd||!boot;
-  $('cancel').hidden=!active||engine?.journal?.phase==='firmware-copying';$('cancel').disabled=cancel;
+  $('cancel').hidden=!active||engine?.journal?.phase==='firmware-copying';$('cancel').disabled=cancel;$('cancel').textContent=skipped?'Cancel':'Cancel safely';
   $('reconnect-step').hidden=!(sdReady||resumeReady);
   $('demo-reconnect').hidden=!demo||!pending||!!sd||!!boot;
   const labels={package:ready,radio:scanned,backup:backupReady,sd:sdReady,firmware:complete};
   for(const [k,v]of Object.entries(labels))$('status-'+k).classList.toggle('done',!!v);
+  $('status-backup').textContent=skipped?'Backup skipped':'Backup verified';$('status-backup').classList.toggle('skipped',skipped);
   $('release-status').textContent=ready?'Verified':'Not loaded';$('release-status').classList.toggle('good',ready);
-  $('backup-status').textContent=backupReady?'Verified':'Required';$('backup-status').classList.toggle('good',backupReady);
+  $('backup-status').textContent=skipped?'Skipped':backupReady?'Verified':'Recommended';$('backup-status').classList.toggle('good',backupReady);$('backup-status').classList.toggle('skipped',skipped);
   $('sd-name').textContent=sd?.name||'Contains RADIO, MODELS and SCRIPTS';$('boot-name').textContent=boot?.name||'Contains INFO_UF2.TXT and CURRENT.UF2';
   $('reselect-sd-name').textContent=sd?.name||'Select the reconnected SD card';$('reselect-boot-name').textContent=boot?.name||'Select the reconnected EDGETX_UF2 drive';
   $('backup-name').textContent=backup?'Backup folder: '+backup.name:'Choose a folder outside the radio drives. Keep it for recovery.';
   const archive=backupReady&&engine?.journal?.archive;
-  $('backup-archive').textContent=archive?'Verified ZIP: '+archive.path+' · '+(archive.size/1048576).toFixed(1)+' MB. Saved inside your backup folder.':'A dated ZIP is created automatically and checked before installation can begin.';
+  $('backup-archive').textContent=skipped?'No recovery backup was saved. Keep this tab open until verification finishes; this installation cannot be resumed after closing the tab.':archive?'Verified ZIP: '+archive.path+' · '+(archive.size/1048576).toFixed(1)+' MB. Saved inside your backup folder.':'A dated ZIP is created automatically and checked when you choose to back up.';
+  $('no-backup-notice').hidden=!skipped;
+  $('sd-install-note').textContent='The installer replaces the matching program files and clears their old program caches. Your existing ExpressLRS tool is kept. '+(skipped?'Backup was skipped, so failed or cancelled writes cannot be rolled back.':'If a write fails, it attempts to restore the previous SD files from your backup.');
+  $('firmware-backup-note').textContent=(skipped?'No original firmware backup was saved.':'The original firmware stays in your backup folder and ZIP.')+' Firmware copying cannot be cancelled once it begins.';
+  $('recovery-instructions').hidden=skipped;
   $('firmware').textContent=demo?'Copy UF2 to demo radio':'Copy UF2 to radio';$('next-steps').hidden=!complete;
   drawSteps();
 }
@@ -170,11 +179,26 @@ $('scan').onclick=()=>action('Checking the radio…',async()=>{
   $('plan-files').replaceChildren();for(const op of summary.operations){const li=document.createElement('li');li.textContent=op.operation.toUpperCase()+'  '+op.path;$('plan-files').append(li);}
   $('plan-notes').replaceChildren();for(const text of summary.notes){const p=document.createElement('p');p.textContent=text;$('plan-notes').append(p);}
   if(summary.deferredFiles){const p=document.createElement('p');p.textContent=summary.deferredFiles+' other SD files were checked by name and size. Their contents will be fully read and verified during backup.';$('plan-notes').append(p);}
-  stage('MK3 radio identified.','Preview ready. Choose an empty computer folder for the complete backup and content verification.');log('MK3 identity and install targets checked. '+summary.deferredFiles+' untouched files await full content verification during backup. No radio files changed.');
+  stage('MK3 radio identified.','Preview ready. Back up to an empty computer folder, or choose Skip backup to continue without a recovery copy.');log('MK3 identity and install targets checked. '+summary.deferredFiles+' untouched files can be fully backed up if you choose the backup option. No radio files changed.');
 },'radio');
 $('backup').onclick=()=>action('Backing up your radio…',async()=>{
   await getEngine().createBackup();backupReady=true;recoveryReady=true;stage('Backup folder + ZIP verified.','Your original firmware and SD files are saved on your computer. You can now install the SD files.');log('Backup folder and '+engine.journal.archive.path+' verified. Every ZIP entry was reopened and checked. Radio unchanged.');
 },'backup');
+$('skip-backup').onclick=()=>{
+  if(busy||$('skip-backup').disabled)return;
+  $('skip-backup-dialog').showModal();
+};
+$('cancel-skip-backup').onclick=()=>$('skip-backup-dialog').close();
+$('confirm-skip-backup').onclick=()=>{
+  if(busy||!$('skip-backup-dialog').open||$('skip-backup').disabled)return;
+  $('skip-backup-dialog').close();
+  return action('Preparing installation without a backup…',async()=>{
+    await getEngine().skipBackup({confirmed:true});backupReady=false;recoveryReady=false;
+    stage('Backup skipped.','No recovery backup will be saved. Keep this tab open through installation, the radio restart and final verification.');
+    $('sd-result').textContent='Ready to install without a backup. Previous files cannot be restored if installation fails.';
+    log('User confirmed skipping the backup. No backup folder or ZIP created; automatic rollback is unavailable.');
+  },'backup');
+};
 $('install').onclick=()=>action('Installing the SD files…',async()=>{
   await getEngine().install();sdReady=true;stage('SD files verified.','Complete the firmware step, then reconnect for the final check.');$('sd-result').textContent='Installed files and personal settings verified. After restarting, step 06 checks the installed release files and firmware.';log('SD programs and preserved settings verified. Step 06 checks the installed release files after restarting. Firmware remains unchanged.');
 },'sd');
@@ -202,7 +226,7 @@ $('manual-firmware').onclick=()=>{
 };
 $('verify').onclick=()=>action('Verifying installed files and firmware…',async()=>{
   complete=false;draw();
-  const result=await getEngine().verifyFinal({reconnected:$('reconnected').checked});backupReady=sdReady=complete=true;
+  const result=await getEngine().verifyFinal({reconnected:$('reconnected').checked});backupReady=!engine.backupSkipped;sdReady=complete=true;
   stage(demo?'Demo complete.':'Installation verified.','Firmware readback and installed release files match. Eject both drives through your computer before restarting the radio.');
   $('final-result').textContent=result.verification.installedFiles+' installed SD files and '+result.verification.applicationBlocks+' application blocks verified; original bootloader preserved. Radio operation still needs a bench check.';
   log('PASS: installed release files, firmware payload and preserved bootloader verified. This is a file check, not a radio/flight test.');
@@ -213,14 +237,14 @@ $('restore').onclick=()=>{
     await getEngine().restore();backupReady=sdReady=complete=scanned=false;stage('Previous SD files restored.','The SD matches your backup. Firmware was not changed by the installer.');log('Previous SD files restored and verified.');
   },'backup');
 };
-$('report').onclick=()=>download(encode(JSON.stringify({schema:1,prototype:true,demo,release:release?.id,activities:activity,phase:engine?.journal?.phase||'not-started',verification:engine?.journal?.verification||null},null,2)),'KSE-install-report.json','application/json');
+$('report').onclick=()=>download(encode(JSON.stringify({schema:1,prototype:true,demo,release:release?.id,backupSkipped:!!engine?.backupSkipped,activities:activity,phase:engine?.journal?.phase||'not-started',verification:engine?.journal?.verification||null},null,2)),'KSE-install-report.json','application/json');
 $('demo').onclick=()=>action('Connecting a demo radio…',async()=>{
   const d=await makeDemo();({manifest:release,files,sd,boot,backup}=d);engine=null;scanned=backupReady=sdReady=complete=resumeReady=recoveryReady=false;demo=true;demoDrives=null;$('reconnected').checked=false;$('demo-banner').hidden=false;$('plan').hidden=true;$('one-radio').checked=true;resetSteps();
   $('release-label').textContent='Demo release · no hardware writes';$('release-link').hidden=true;
   stage('Try the installation workflow.','Click Check radio & preview changes. The demo includes existing settings, a saved layout and personal files.');log('Demo uses the same backup, SD install, UF2 copy and verification steps with memory drives only.');
 },'release');
 $('reset').onclick=()=>location.reload();
-window.addEventListener('beforeunload',event=>{if(busy){event.preventDefault();event.returnValue='';}});
+window.addEventListener('beforeunload',event=>{if(busy||(engine?.backupSkipped&&!complete)){event.preventDefault();event.returnValue='';}});
 try{
   const response=await fetch('./release.json',{cache:'no-store'});if(!response.ok)throw Error('Release information is unavailable');release=await response.json();
   if(release.firmwareWriteEnabled!==true)throw Error('This release does not enable the verified UF2 copy step');
