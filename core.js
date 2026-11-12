@@ -136,20 +136,31 @@ export function expectedAfter(before,operations){
 }
 export async function writeVerified(fs,path,bytes){await fs.write(path,bytes);check(await sha256(await fs.read(path))===await sha256(bytes),'Write verification failed: '+path);}
 export class Installer {
+  #unbackedJournal=null;
+  #originalFirmware=null;
+  get backupSkipped(){return !!this.journal&&this.journal===this.#unbackedJournal;}
   constructor({manifest,files,sd,boot,backup,progress=()=>{},cancel=()=>false,status=()=>{}}){
     Object.assign(this,{manifest,files,sd,boot,backup,progress,cancel,status});this.busy=false;this.journal=null;
   }
   async lock(action){check(!this.busy,'An operation is already running.');this.busy=true;try{return await action();}finally{this.busy=false;}}
-  async record(){await writeVerified(this.backup,JOURNAL,encode(JSON.stringify(this.journal,null,2)));}
+  async record(){
+    // Opting out keeps only this tab's verification state, never a recovery file.
+    if(this.backupSkipped)return;
+    await writeVerified(this.backup,JOURNAL,encode(JSON.stringify(this.journal,null,2)));
+  }
+  async originalFirmware(){return this.backupSkipped?this.#originalFirmware:await this.backup.read('CURRENT.UF2');}
+  checkpointIncludes(path){
+    return !/^(?:IMAGES|SOUNDS|LOGS)\//i.test(path)||this.manifest.files.some(f=>f.path===path)||path===this.manifest.settings.path||(this.journal?.operations||[]).some(o=>o.path===path);
+  }
   async checkpoint(expected){
     // Pre-write checkpoints retain complete path-set checks. Untouched bulk
     // media/log contents are backed up but not compared again; nothing there is written
     // unless it is an explicit, checksummed release/operation target.
-    const targets=new Set([...this.manifest.files.map(f=>f.path),this.manifest.settings.path,...(this.journal?.operations||[]).map(o=>o.path)]);
-    return verifyInventory(this.sd,expected,this.progress,p=>! /^(?:IMAGES|SOUNDS|LOGS)\//i.test(p)||targets.has(p));
+    return verifyInventory(this.sd,expected,this.progress,p=>this.checkpointIncludes(p));
   }
   async scan(){return this.lock(async()=>{
     this.preview=this.before=this.plan=this.identity=this.journal=null;
+    this.#unbackedJournal=this.#originalFirmware=null;
     this.identity=await identify(this.sd,this.boot);
     const preview=await previewInventory(this.sd,this.manifest,{names:this.identity.names,progress:this.progress,cancel:this.cancel});
     const radioPath=Object.keys(preview).find(p=>p.toLowerCase()==='radio/radio.yml');
@@ -162,7 +173,37 @@ export class Installer {
     const entries=Object.values(preview),deferred=entries.filter(f=>!f.sha256);
     return {operations:this.plan,notes:this.notes,files:entries.length,bytes:entries.reduce((s,f)=>s+f.size,0),deferredFiles:deferred.length,deferredBytes:deferred.reduce((s,f)=>s+f.size,0)};
   });}
+  async skipBackup({confirmed=false}={}){return this.lock(async()=>{
+    check(confirmed===true,'Confirm that you want to continue without a backup.');
+    check(this.preview&&this.identity&&this.plan,'Scan the radio first.');
+    check(!this.journal||this.journal.phase==='backup-incomplete','An installation is already prepared.');
+    const identity=await identify(this.sd,this.boot);
+    check(identity.radioHash===this.identity.radioHash&&identity.firmwareHash===this.identity.firmwareHash,'The selected radio changed. Scan again.');
+    const before=structuredClone(this.preview),names=Object.keys(before);
+    check(JSON.stringify(identity.names.slice().sort())===JSON.stringify(names.slice().sort()),'The SD file list changed. Scan again before installing.');
+    // Complete the program/settings fingerprints without copying any SD files.
+    // Untouched bulk media is left alone, as at the normal pre-write checkpoints.
+    for(let i=0;i<names.length;i++){
+      check(!this.cancel(),'Preparation cancelled. Radio unchanged.');const p=names[i];
+      if(this.checkpointIncludes(p)&&!before[p].sha256){
+        const bytes=await this.sd.read(p);check(bytes.length===before[p].size,'File changed since preview: '+p);
+        before[p].sha256=await sha256(bytes);
+      }
+      this.progress(i+1,names.length,p);
+    }
+    await this.checkpoint(before);
+    check(JSON.stringify(buildPlan(this.manifest,before).operations)===JSON.stringify(this.plan),'The install plan changed. Scan again before installing.');
+    check(await sha256(await this.boot.read('CURRENT.UF2'))===identity.firmwareHash,'Firmware changed during preparation.');
+    check(!this.cancel(),'Preparation cancelled. Radio unchanged.');
+    this.before=before;
+    this.journal=this.#unbackedJournal={schema:1,release:this.manifest.id,created:new Date().toISOString(),board:identity.board,radioHash:identity.radioHash,firmwareHash:identity.firmwareHash,before,operations:structuredClone(this.plan),touched:[],phase:'backup-skipped',backupSkipped:true,firmwareWritten:false};
+    // A temporary firmware reference is needed to check the preserved bootloader.
+    // It is never written to disk and cannot recover a closed-tab installation.
+    this.#originalFirmware=identity.firmware;
+    return this.journal;
+  });}
   async createBackup(){return this.lock(async()=>{
+    check(!this.backupSkipped,'Backup was skipped for this installation.');
     check(this.preview&&this.identity&&this.plan,'Scan the radio first.');check(this.backup,'Choose a backup folder.');
     check(!(await this.backup.list()).length,'Choose an empty backup folder.');
     this.before=this.journal=null;
@@ -170,7 +211,7 @@ export class Installer {
     check(identity.radioHash===this.identity.radioHash&&identity.firmwareHash===this.identity.firmwareHash,'The selected radio changed. Scan again.');
     const names=Object.keys(this.preview),before={};
     check(JSON.stringify(identity.names.slice().sort())===JSON.stringify(names.slice().sort()),'The SD file list changed. Scan again before backing up.');
-    this.status('Backing up and checking every SD file…','Images, sounds and all other accessible files are fully read, checksummed and backed up before installation can begin.');
+    this.status('Backing up and checking every SD file…','This process can take 10–20 minutes, depending on how much data is on your radio’s SD card. Keep the radio connected while every file is backed up and checked.');
     await writeVerified(this.backup,'CURRENT.UF2',identity.firmware);await writeVerified(this.backup,'INFO_UF2.TXT',identity.info);
     for(let i=0;i<names.length;i++){
       check(!this.cancel(),'Backup cancelled. Radio unchanged. Choose a new empty backup folder to retry.');const p=names[i],bytes=await this.sd.read(p);
@@ -195,7 +236,7 @@ export class Installer {
       for(const [path,bytes]of Object.entries(extras)){await writeVerified(this.backup,path,bytes);entries.push({path,size:bytes.length,sha256:await sha256(bytes)});}
       const sums=encode(entries.map(e=>e.sha256+'  '+e.path).join('\n')+'\n');await writeVerified(this.backup,'SHA256SUMS.txt',sums);entries.push({path:'SHA256SUMS.txt',size:sums.length,sha256:await sha256(sums)});
       const path='KSE-radio-backup-'+this.journal.created.replace(/[:.]/g,'-')+'.zip';
-      this.status('Creating and verifying your backup ZIP…','The current firmware and all backed-up SD files are being archived on your computer.');
+      this.status('Creating and verifying your backup ZIP…','The full backup process can take 10–20 minutes, depending on how much data is on your radio’s SD card. Your backup ZIP is now being created and checked.');
       this.journal.archive=await createBackupZip(this.backup,path,entries,{created:this.journal.created,progress:this.progress,cancel:this.cancel});
       this.status('Checking settings and installation files…','The complete backup is verified. Checking the file list, programs and settings before installation.');
       await this.checkpoint(this.before);
@@ -210,22 +251,23 @@ export class Installer {
   }
   async validateJournal({compareRadioSettings=true}={}){
     const j=this.journal;check(j?.schema===1&&j.release===this.manifest.id&&j.board==='tx16smk3','Backup belongs to another installer release.');
+    check(!j.backupSkipped||this.backupSkipped,'An installation without a backup cannot be resumed from a saved journal.');
     check(Array.isArray(j.operations)&&Array.isArray(j.touched)&&j.before&&typeof j.before==='object','Invalid recovery journal');
     const seen=new Set();for(const op of j.operations){check(!seen.has(op.path)&&this.allowed(op),'Journal contains an unrecognized file operation');seen.add(op.path);check(op.before===(j.before[op.path]?.sha256||null),'Backup journal mismatch');}
     check(new Set(j.touched).size===j.touched.length&&j.touched.every(p=>seen.has(p)),'Invalid recovery list');
-    check(await sha256(await this.backup.read('CURRENT.UF2'))===j.firmwareHash,'Firmware backup is damaged');
+    check(await sha256(await this.originalFirmware())===j.firmwareHash,this.backupSkipped?'Original firmware reference is unavailable':'Firmware backup is damaged');
     const radio=await this.sd.read('RADIO/radio.yml');
     if(compareRadioSettings)check(await sha256(radio)===j.radioHash,'This SD card does not match the backup.');
     else check(/^board:\s*["']?tx16smk3["']?\s*$/im.test(utf8.decode(radio)),'Select the root of an existing MK3 radio SD card.');
     const info=utf8.decode(await this.boot.read('INFO_UF2.TXT'));check(/^Board-ID:\s*tx16smk3\s*$/im.test(info),'Wrong bootloader drive');
   }
   async install(){return this.lock(async()=>{
-    check(this.journal?.phase==='backup-verified','Complete a verified backup first.');await this.validateJournal();
-    await verifyBackupZip(this.backup,this.journal.archive,{progress:this.progress,cancel:this.cancel});
+    check(this.journal?.phase==='backup-verified'||(this.backupSkipped&&this.journal.phase==='backup-skipped'),'Complete a verified backup or confirm skipping it first.');await this.validateJournal();
+    if(!this.backupSkipped)await verifyBackupZip(this.backup,this.journal.archive,{progress:this.progress,cancel:this.cancel});
     await this.checkpoint(this.journal.before);
     check(await sha256(await this.boot.read('CURRENT.UF2'))===this.journal.firmwareHash,'Firmware changed since backup.');
     for(const op of this.journal.operations){
-      if(op.before)check(await sha256(await this.backup.read('SD/'+op.path))===op.before,'Backup is damaged: '+op.path);
+      if(op.before&&!this.backupSkipped)check(await sha256(await this.backup.read('SD/'+op.path))===op.before,'Backup is damaged: '+op.path);
       if(op.after)check(this.files.has(op.path)&&await sha256(this.files.get(op.path))===op.after,'Package changed: '+op.path);
     }
     this.journal.phase='installing';await this.record();
@@ -240,11 +282,16 @@ export class Installer {
       check(await sha256(await this.boot.read('CURRENT.UF2'))===this.journal.firmwareHash,'Firmware changed unexpectedly.');
       this.journal.phase='sd-verified';await this.record();return this.journal;
     }catch(error){
+      if(this.backupSkipped){
+        this.journal.phase='install-failed';this.journal.error=error.message;
+        throw Error(error.message+' Backup was skipped: previous SD files cannot be restored. Do not start the radio normally with an incomplete installation. Reconnect in bootloader mode and reload the installer to start a new installation.');
+      }
       this.journal.error=error.message;try{await this.rollback();}catch(recovery){this.journal.phase='recovery-required';this.journal.recoveryError=recovery.message;await this.record().catch(()=>{});throw Error(error.message+' Reconnect the same radio and use Restore SD files with this backup.');}
       throw Error(error.message+' Previous SD files restored and verified; firmware was not written.');
     }
   });}
   async rollback(){
+    check(!this.backupSkipped,'Backup was skipped. No backup is available to restore.');
     check(!this.journal?.firmwareAttempt&&!FIRMWARE_PHASES.includes(this.journal?.phase)&&!this.journal?.firmwareWritten,'Firmware copying has been attempted. '+restartRadio+' Verify first; use the full backup instructions to restore firmware and SD files together.');
     await this.validateJournal();const ops=new Map(this.journal.operations.map(o=>[o.path,o]));
     check(await sha256(await this.boot.read('CURRENT.UF2'))===this.journal.firmwareHash,'Firmware has changed. Restore firmware and SD files together using the full backup instructions.');
@@ -256,7 +303,7 @@ export class Installer {
     }
     await verifyInventory(this.sd,this.journal.before,this.progress);this.journal.phase='restored';await this.record();return this.journal;
   }
-  async restore(){return this.lock(async()=>{this.journal=JSON.parse(utf8.decode(await this.backup.read(JOURNAL)));return this.rollback();});}
+  async restore(){return this.lock(async()=>{check(!this.backupSkipped,'Backup was skipped. No backup is available to restore.');this.journal=JSON.parse(utf8.decode(await this.backup.read(JOURNAL)));return this.rollback();});}
   async copyFirmware(){return this.lock(async()=>{
     if(!this.journal)this.journal=JSON.parse(utf8.decode(await this.backup.read(JOURNAL)));
     check(this.manifest.firmwareWriteEnabled===true,'Firmware copying is disabled for this release.');
@@ -267,7 +314,7 @@ export class Installer {
     const target=this.files.get('@firmware')?.slice();
     check(target&&await sha256(target)===this.manifest.firmware.sha256,'Firmware checksum mismatch');parseUF2(target,{installer:true});
     await this.validateJournal();
-    await verifyBackupZip(this.backup,this.journal.archive,{progress:this.progress,cancel:this.cancel});
+    if(!this.backupSkipped)await verifyBackupZip(this.backup,this.journal.archive,{progress:this.progress,cancel:this.cancel});
     await this.checkpoint(expectedAfter(this.journal.before,this.journal.operations));
     check(await sha256(await this.boot.read('CURRENT.UF2'))===this.journal.firmwareHash,'Firmware changed since backup. '+restartRadio+' Verify before proceeding.');
     check(!this.cancel(),'Firmware copy cancelled before writing.');
@@ -310,7 +357,7 @@ export class Installer {
     await this.validateJournal({compareRadioSettings:false});
     const target=this.files.get('@firmware');check(target&&await sha256(target)===this.manifest.firmware.sha256,'Load the verified release first.');
     const installedFiles=await this.verifyInstalledFiles();
-    const result=verifyFirmware(await this.boot.read('CURRENT.UF2'),await this.backup.read('CURRENT.UF2'),target);
+    const result=verifyFirmware(await this.boot.read('CURRENT.UF2'),await this.originalFirmware(),target);
     this.journal.phase='verified';this.journal.firmwareWritten=true;this.journal.verification={...result,installedFiles,sdScope:'installed-release-files',at:new Date().toISOString(),hardwareRuntimeVerified:false};await this.record();return this.journal;
   });}
 }
