@@ -6,10 +6,10 @@ const $=id=>document.getElementById(id);
 let release,files,sd,boot,backup,engine,demo=false,busy=false,cancel=false,scanned=false,backupReady=false,sdReady=false,complete=false,resumeReady=false,recoveryReady=false;
 const activity=[];let messageTimer,demoDrives;
 const sdPhases=['sd-verified','verified',...FIRMWARE_PHASES];
-const stepKeys=['release','radio','backup','sd','firmware','verify'];
+const stepKeys=['release','radio','backup','sd','verify'];
 const stepDone=new Map();let revealStep=null;
 const PICKER_CANCELLED=Symbol('picker-cancelled');
-const radioRestartInstructions='Wait for Writing complete. Eject the radio drives on your computer, then unplug USB. Turn the radio off, enter bootloader mode again with USB unplugged, and reconnect USB. Reselect both drives, then confirm the restart in step 06. Keep this installer tab open.';
+const radioRestartInstructions='Wait for Writing complete. Eject the radio drives on your computer, then unplug USB. Turn the radio off, enter bootloader mode again with USB unplugged, and reconnect USB. Reselect both drives, then confirm the restart in step 05. Keep this installer tab open.';
 function resetSteps(){stepDone.clear();for(const key of stepKeys)$('step-'+key).open=true;}
 function showStep(key){
   const card=$('step-'+key);card.open=true;
@@ -20,14 +20,13 @@ function drawSteps(){
   if(busy)return; // Never hide controls or move focus during a file operation.
   const connected=!!sd&&!!boot&&$('one-radio').checked;
   const skipped=!!engine?.backupSkipped;
-  const done={release:!!files,radio:scanned&&$('one-radio').checked&&(connected||sdReady),backup:backupReady||skipped,sd:sdReady,
-    firmware:complete||engine?.journal?.phase==='firmware-copied',verify:complete};
+  const done={release:!!files,radio:scanned&&$('one-radio').checked&&(connected||sdReady),backup:backupReady||skipped,
+    sd:complete||engine?.journal?.phase==='firmware-copied',verify:complete};
   const summaries={
     release:demo?'Demo release verified':release?.label+' · ZIP verified',
-    radio:sdReady?'Initial radio check complete · reconnect in step 06':$('plan').hidden?'Drives selected · recovery checks available':$('plan-summary').textContent,
+    radio:sdReady?'Initial radio check complete · reconnect in step 05':$('plan').hidden?'Drives selected · recovery checks available':$('plan-summary').textContent,
     backup:skipped?'Backup skipped · no recovery backup saved':'Original firmware + SD files saved · backup ZIP verified',
-    sd:'Installed files and preserved settings verified',
-    firmware:complete?'Firmware verified after reconnect':'UF2 copied · restart the radio, reconnect and verify',
+    sd:complete?'SD files and firmware verified':'SD files verified · UF2 copied · restart and reconnect',
     verify:'Installed release files, firmware and bootloader verified'
   };
   let advanced=false;
@@ -45,7 +44,7 @@ function drawSteps(){
     const next=sdReady&&connected&&firmwareAttempted()&&!complete?'verify':stepKeys.find(key=>!done[key]);
     if(next)showStep(next);
     else{
-      // All six stay collapsed; keep the separate startup instructions visible.
+      // All five stay collapsed; keep the separate startup instructions visible.
       $('step-verify-heading').focus({preventScroll:true});
       $('step-verify').scrollIntoView({block:'start',behavior:'instant'});
     }
@@ -74,15 +73,14 @@ function draw(){
   $('choose-zip').disabled=active||demo||!release||!canUse;
   const pending=firmwareAttempted(),connected=sd&&boot&&$('one-radio').checked;
   $('radio-title').textContent='Connect your radio';
-  $('radio-instructions').textContent='Start in bootloader mode, then select both radio drives. After copying firmware, reselect the drives directly in step 06.';
+  $('radio-instructions').textContent='Start in bootloader mode, then select both radio drives. After copying firmware, reselect the drives directly in step 05.';
   for(const [id,enabled]of Object.entries({
     'choose-sd':ready&&canUse,'choose-boot':ready&&canUse,
     'reselect-sd':ready&&canUse&&(sdReady||resumeReady),'reselect-boot':ready&&canUse&&(sdReady||resumeReady),
     'scan':ready&&connected&&!engine?.journal,'choose-backup':ready&&connected&&canUse&&!skipped,
     'backup':scanned&&backup&&!backupReady&&!skipped&&!pending&&connected,
     'skip-backup':scanned&&!backupReady&&!skipped&&!pending&&connected&&(!engine?.journal||engine.journal.phase==='backup-incomplete'),
-    'install':prepared&&!sdReady&&!complete&&connected,
-    'firmware':sdReady&&!complete&&!pending&&connected&&(backup||skipped),
+    'install':ready&&(prepared||sdReady)&&!complete&&!pending&&connected&&(backup||skipped),
     'verify':files&&connected&&(backup||skipped)&&(sdReady||resumeReady)&&$('reconnected').checked,
     'restore':files&&connected&&backup&&recoveryReady&&!skipped&&!pending&&!complete,
     'manual-firmware':!demo&&sdReady&&ready&&!complete,
@@ -108,7 +106,7 @@ function draw(){
   $('sd-install-note').textContent='The installer replaces the matching program files and clears their old program caches. Your existing ExpressLRS tool is kept. '+(skipped?'Backup was skipped, so failed or cancelled writes cannot be rolled back.':'If a write fails, it attempts to restore the previous SD files from your backup.');
   $('firmware-backup-note').textContent=(skipped?'No original firmware backup was saved.':'The original firmware stays in your backup folder and ZIP.')+' Firmware copying cannot be cancelled once it begins.';
   $('recovery-instructions').hidden=skipped;
-  $('firmware').textContent=demo?'Copy UF2 to demo radio':'Copy UF2 to radio';$('next-steps').hidden=!complete;
+  $('install').textContent=sdReady&&!pending&&!complete?'Continue update':'Install update';$('next-steps').hidden=!complete;
   drawSteps();
 }
 function getEngine(){
@@ -161,8 +159,8 @@ function chooseFolder(kind,step,buttonId){
       if(await fs.exists(JOURNAL)){const j=JSON.parse(utf8.decode(await fs.read(JOURNAL)));if(j.schema!==1||j.release!==release.id)throw Error('This backup belongs to another release.');getEngine().journal=j;journalState();scanned=true;complete=false;$('reconnected').checked=false;}
     }
     if(kind!=='backup'&&!engine?.journal)scanned=false;
-    stage('Folder selected.',sdReady?'Select both drives here in step 06, confirm the radio restart, then verify.':'Check the radio, or continue a verification/recovery using the same radio and backup.');log('Selected '+kind+': '+fs.name);
-    if(sdReady)revealStep='verify';
+    stage('Folder selected.',sdReady?(firmwareAttempted()?'Select both drives here in step 05, confirm the radio restart, then verify.':'Continue the update in step 04 to copy the firmware after its preflight checks.'):'Check the radio, or continue a verification/recovery using the same radio and backup.');log('Selected '+kind+': '+fs.name);
+    if(sdReady)revealStep=firmwareAttempted()||engine?.journal?.phase==='verified'?'verify':'sd';
   },step,()=>{
     stage(previous.title,previous.detail);$('progress').value=previous.progress;
     log((kind==='boot'?'UF2 drive':kind==='sd'?'SD card':'Backup folder')+' selection cancelled. Existing selections and installation progress kept; you can select the folder again.');
@@ -182,7 +180,7 @@ $('scan').onclick=()=>action('Checking the radio…',async()=>{
   stage('MK3 radio identified.','Preview ready. Back up to an empty computer folder, or choose Skip backup to continue without a recovery copy.');log('MK3 identity and install targets checked. '+summary.deferredFiles+' untouched files can be fully backed up if you choose the backup option. No radio files changed.');
 },'radio');
 $('backup').onclick=()=>action('Backing up your radio…',async()=>{
-  await getEngine().createBackup();backupReady=true;recoveryReady=true;stage('Backup folder + ZIP verified.','Your original firmware and SD files are saved on your computer. You can now install the SD files.');log('Backup folder and '+engine.journal.archive.path+' verified. Every ZIP entry was reopened and checked. Radio unchanged.');
+  await getEngine().createBackup();backupReady=true;recoveryReady=true;stage('Backup folder + ZIP verified.','Your original firmware and SD files are saved on your computer. You can now install the SD files and firmware in one step.');log('Backup folder and '+engine.journal.archive.path+' verified. Every ZIP entry was reopened and checked. Radio unchanged.');
 },'backup');
 $('skip-backup').onclick=()=>{
   if(busy||$('skip-backup').disabled)return;
@@ -199,20 +197,28 @@ $('confirm-skip-backup').onclick=()=>{
     log('User confirmed skipping the backup. No backup folder or ZIP created; automatic rollback is unavailable.');
   },'backup');
 };
-$('install').onclick=()=>action('Installing the SD files…',async()=>{
-  await getEngine().install();sdReady=true;stage('SD files verified.','Complete the firmware step, then reconnect for the final check.');$('sd-result').textContent='Installed files and personal settings verified. After restarting, step 06 checks the installed release files and firmware.';log('SD programs and preserved settings verified. Step 06 checks the installed release files after restarting. Firmware remains unchanged.');
-},'sd');
-$('cancel').onclick=()=>{cancel=true;draw();log('Cancellation requested. Waiting for the current file operation to finish.');};
-$('firmware').onclick=()=>action('Checking before the firmware copy…',async()=>{
-  if(!sdReady)throw Error('Verify the SD installation first.');
+$('install').onclick=()=>action('Installing the update…',async()=>{
+  const installer=getEngine();
   try{
-    await getEngine().copyFirmware();
+    if(!sdReady){
+      stage('Installing and verifying SD files…','Firmware will copy automatically after the SD files pass verification. Keep the radio connected.');
+      await installer.install();sdReady=true;
+      $('sd-result').textContent='SD files verified. Checking the radio before automatically copying firmware.';
+      log('SD programs and preserved settings verified. Continuing automatically to the firmware copy.');
+    }
+    progress(0,1);stage('Checking before the firmware copy…','SD files are verified. Keep this tab open and the USB cable connected.');draw();
+    await installer.copyFirmware();
+    $('sd-result').textContent='SD files verified and UF2 copied. Restart the radio and reconnect for the final check.';
     log('UF2 stream closed. Firmware has NOT yet passed readback verification.');
-    stage('UF2 copied — restart and reconnect.',demo?'Use Simulate radio restart in step 06, then run the final check.':radioRestartInstructions);
+    stage('UF2 copied — restart and reconnect.',demo?'Use Simulate radio restart in step 05, then run the final check.':radioRestartInstructions);
+  }catch(error){
+    if(sdReady&&!firmwareAttempted())$('sd-result').textContent='SD files are verified, but firmware copying has not started. Resolve the error, then choose Continue update; the SD installation will not be repeated.';
+    throw error;
   }finally{
     if(firmwareAttempted())reconnectRequired();
   }
-},'firmware');
+},'sd');
+$('cancel').onclick=()=>{cancel=true;draw();log('Cancellation requested. Waiting for the current file operation to finish.');};
 $('demo-reconnect').onclick=()=>{
   if(!demo||!demoDrives||busy)return;
   ({sd,boot}=demoDrives);demoDrives=null;$('reconnected').checked=true;revealStep='verify';
