@@ -1,14 +1,14 @@
 {
   "schema": 1,
-  "id": "trial-2026-11-12",
-  "label": "KSE Touch Full \u00b7 12 November 2026",
+  "id": "trial-2026-11-12-fixed-wing",
+  "label": "KSE Touch Full \u00b7 Fixed Wing \u00b7 12 November 2026",
   "board": "tx16smk3",
-  "commit": "69aaeaba7b36a57ef3f0551c07cc5fc776b774dd",
-  "releaseURL": "https://github.com/kylestacy2/KSE-Touch/releases/tag/trial-2026-11-12",
+  "commit": "a5fc4b505ecf16f9be5f525efb19835b0de9ee4b",
+  "releaseURL": "https://github.com/kylestacy2/KSE-Touch/releases/tag/trial-2026-11-12-fixed-wing",
   "zip": {
     "name": "EdgeTXKSE.zip",
-    "sha256": "e7943ff2934151e35bf1ee1ce566ff353c9bdb6556b0674007731507bb20beb8",
-    "size": 111823879
+    "sha256": "b962f17fff1d04c996a04d9f76f0da2c64b1a29a8eac582a72ba5bdbb308f64e",
+    "size": 113062305
   },
   "files": [
     {
@@ -128,8 +128,8 @@
     {
       "path": "SCRIPTS/RF2/F/modelPreferences.lua",
       "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/F/modelPreferences.lua",
-      "sha256": "1986a4f6482247fa18182890f1a9f9e5f34499746a46e7990701de2bab7891c1",
-      "size": 7742
+      "sha256": "e4a2bf6cd82b85a1500e2447ffd864642bbaaf3b9467bbedfc3127ffcda45d24",
+      "size": 7752
     },
     {
       "path": "SCRIPTS/RF2/F/navigation.lua",
@@ -2442,6 +2442,12 @@
       "size": 9257
     },
     {
+      "path": "WIDGETS/KSETouch/fixedwing.png",
+      "archive": "EdgeTXKSE/SD-CARD/WIDGETS/KSETouch/fixedwing.png",
+      "sha256": "e636472fe8148def6980e4b6fdd5af90cd918e994f1fac03136453149d0a950f",
+      "size": 651340
+    },
+    {
       "path": "WIDGETS/KSETouch/layoutEditor.lua",
       "archive": "EdgeTXKSE/SD-CARD/WIDGETS/KSETouch/layoutEditor.lua",
       "sha256": "fbec9215cdbe7bf6eb6ec3e4f53ce5dc064d28f3b5d7a70e40f307c5603911de",
@@ -2450,8 +2456,8 @@
     {
       "path": "WIDGETS/KSETouch/main.lua",
       "archive": "EdgeTXKSE/SD-CARD/WIDGETS/KSETouch/main.lua",
-      "sha256": "8bee768c197f899c15cb7fc230e32c04c98c137a4caabfccb6a5063cc2c90fc8",
-      "size": 325062
+      "sha256": "5bc08c653793e5379187e3b00c39798e92f081d36b65ad62a204bd2be7dba50b",
+      "size": 327457
     },
     {
       "path": "WIDGETS/KSETouch/telemetryTiles.lua",
@@ -2474,8 +2480,8 @@
   ],
   "firmware": {
     "archive": "EdgeTXKSE/Firmware/TX16S-MK3-MAX-2.12.1-KS.uf2",
-    "sha256": "f6c8801fc4149a22ccd810ba1294bb33bb9a2abffa59b4eeccbb36212fd48183",
-    "size": 4834304
+    "sha256": "a38bfacf539ca7f2f9cd50562ec7f4be997aa71e7b9f13d14008a107dfa2c6fe",
+    "size": 4847616
   },
   "settings": {
     "path": "SCRIPTS/RF2/settings.lua",
