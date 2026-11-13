@@ -1,14 +1,14 @@
 {
   "schema": 1,
-  "id": "trial-2026-11-12-fixed-wing",
-  "label": "KSE Touch Full \u00b7 Fixed Wing \u00b7 12 November 2026",
+  "id": "trial-2026-11-13-usb",
+  "label": "KSE Touch Full \u00b7 USB and Wallpapers \u00b7 13 November 2026",
   "board": "tx16smk3",
-  "commit": "a5fc4b505ecf16f9be5f525efb19835b0de9ee4b",
-  "releaseURL": "https://github.com/kylestacy2/KSE-Touch/releases/tag/trial-2026-11-12-fixed-wing",
+  "commit": "850d16b7c0f4f0d8af769559f86205d63b269b67",
+  "releaseURL": "https://github.com/kylestacy2/KSE-Touch/releases/tag/trial-2026-11-13-usb",
   "zip": {
     "name": "EdgeTXKSE.zip",
-    "sha256": "b962f17fff1d04c996a04d9f76f0da2c64b1a29a8eac582a72ba5bdbb308f64e",
-    "size": 113062305
+    "sha256": "3bda301e63d4b91160270842e83d2f01f550ab406b49ae2931a84758f1ac39f8",
+    "size": 116741086
   },
   "files": [
     {
@@ -16,6 +16,42 @@
       "archive": "EdgeTXKSE/SD-CARD/IMAGES/EdgeTXKSE-README.txt",
       "sha256": "339d67522216097016292e27644c17d4abc58e7f605a96b63e3ca30f69c4db6b",
       "size": 305
+    },
+    {
+      "path": "IMAGES/Wallpapers/KSE Dark.png",
+      "archive": "EdgeTXKSE/SD-CARD/IMAGES/Wallpapers/KSE Dark.png",
+      "sha256": "af861a721929e6f7b45e90ce8f80072fbf0de427c906384f2ff6a1ef2939777c",
+      "size": 349602
+    },
+    {
+      "path": "IMAGES/Wallpapers/KSE Light.png",
+      "archive": "EdgeTXKSE/SD-CARD/IMAGES/Wallpapers/KSE Light.png",
+      "sha256": "2c9ce97b4f18f81c6fc956b1c30db8aee385469e590f9f08fc08ab6555f8d650",
+      "size": 356270
+    },
+    {
+      "path": "IMAGES/Wallpapers/README.txt",
+      "archive": "EdgeTXKSE/SD-CARD/IMAGES/Wallpapers/README.txt",
+      "sha256": "8812afa47c87d9ba837faa5c2e8b769a4056c55475cb6116c76ce8b5bc174c20",
+      "size": 755
+    },
+    {
+      "path": "IMAGES/Wallpapers/splash-canada.png",
+      "archive": "EdgeTXKSE/SD-CARD/IMAGES/Wallpapers/splash-canada.png",
+      "sha256": "a1a83de104ffe2478c60469b00f98d3b12e3a112d904bd638691d41d5f2a486a",
+      "size": 405127
+    },
+    {
+      "path": "IMAGES/Wallpapers/splash.png",
+      "archive": "EdgeTXKSE/SD-CARD/IMAGES/Wallpapers/splash.png",
+      "sha256": "f58cb233d4c33a5327812c47ecf966a0638c2a0937769efd02feafb9e812ab3c",
+      "size": 323532
+    },
+    {
+      "path": "IMAGES/Wallpapers/splash2.png",
+      "archive": "EdgeTXKSE/SD-CARD/IMAGES/Wallpapers/splash2.png",
+      "sha256": "b3a66d27e6e752f70e091cd2736b54527c636ee10ba6c5205339923c5d380b96",
+      "size": 383541
     },
     {
       "path": "IMAGES/splash-canada.png",
@@ -2456,8 +2492,8 @@
     {
       "path": "WIDGETS/KSETouch/main.lua",
       "archive": "EdgeTXKSE/SD-CARD/WIDGETS/KSETouch/main.lua",
-      "sha256": "5bc08c653793e5379187e3b00c39798e92f081d36b65ad62a204bd2be7dba50b",
-      "size": 327457
+      "sha256": "42b8a1701cbf1e24d207aa27e062ceef921673c749d9a2509a09000bdfa4c9a5",
+      "size": 332139
     },
     {
       "path": "WIDGETS/KSETouch/telemetryTiles.lua",
@@ -2480,8 +2516,8 @@
   ],
   "firmware": {
     "archive": "EdgeTXKSE/Firmware/TX16S-MK3-MAX-2.12.1-KS.uf2",
-    "sha256": "a38bfacf539ca7f2f9cd50562ec7f4be997aa71e7b9f13d14008a107dfa2c6fe",
-    "size": 4847616
+    "sha256": "497248d4a14bffca744fb9e5bed479e1c74b2b8e2a472dcf8802320c013150f9",
+    "size": 4858368
   },
   "settings": {
     "path": "SCRIPTS/RF2/settings.lua",
