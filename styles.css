@@ -37,3 +37,14 @@
 .pill.skipped{color:#ffd28c;background:#42351f}.checklist .skipped{color:#ffd28c}.checklist .skipped:before{content:"!";border-color:#bd965a;color:#ffd28c;background:transparent}
 .step.skipped>.card-heading .number{background:#42351f;color:#ffd28c}.step.skipped>.card-heading .step-summary{color:#ffd28c}
 dialog{color:var(--text);background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:28px;width:min(520px,calc(100% - 32px));max-height:calc(100dvh - 32px);overflow:auto;box-shadow:0 24px 90px #0009}dialog::backdrop{background:#080e16b8}dialog p{margin:18px 0}dialog .hint{color:var(--muted);font-size:13px}dialog .actions{margin-top:24px}dialog h2{font-size:21px}
+
+/* Green is reserved for verified completion; the installer keeps its blue theme. */
+.completion-dialog{text-align:center;padding:36px 32px}
+.completion-check{display:flex;align-items:center;justify-content:center;width:88px;height:88px;margin:0 auto 24px;border-radius:50%;color:#86efac;background:#153e28;border:1px solid #348353;box-shadow:0 0 0 8px #153e283d}
+.completion-dialog h2{font-size:30px;letter-spacing:-.035em}
+.completion-dialog>p{color:#c3c9ce;font-size:15px;margin:14px 0 24px}
+.completion-next{text-align:left;background:#141b21;border:1px solid var(--border);border-radius:10px;padding:18px;font-size:14px;margin-bottom:24px}
+.completion-next p{color:var(--muted);margin:8px 0 0;font-size:13px}
+.completion-dialog>button{width:100%}
+#next-steps>strong{color:#86efac}#next-steps:focus{outline:2px solid var(--accent);outline-offset:4px}
+@media(max-width:600px){.completion-dialog{padding:28px 22px}.completion-dialog h2{font-size:26px}}
