@@ -1,14 +1,14 @@
 {
   "schema": 1,
-  "id": "trial-2026-11-13-sys",
-  "label": "KSE Touch Full \u00b7 SYS and RF loading \u00b7 13 November 2026",
+  "id": "trial-2026-11-14-themes",
+  "label": "KSE Touch Full \u00b7 Themes and transparent logo \u00b7 14 November 2026",
   "board": "tx16smk3",
-  "commit": "ebf1c04ea5f9ec4e4aa69776e71f3cd7e9eaca32",
-  "releaseURL": "https://github.com/kylestacy2/KSE-Touch/releases/tag/trial-2026-11-13-sys",
+  "commit": "b89507e0b1031f718933a5be3f06502c08af090b",
+  "releaseURL": "https://github.com/kylestacy2/KSE-Touch/releases/tag/trial-2026-11-14-themes",
   "zip": {
     "name": "EdgeTXKSE.zip",
-    "sha256": "cda7e6f581a1d0b66a3b87f8d2d61e74c6793353d86b53b3046e9f043e9c8b37",
-    "size": 116820389
+    "sha256": "04ca493f4c891b78320a4e3eabcb916580c0618d1047feda2a04d1b0f16ed535",
+    "size": 93682422
   },
   "files": [
     {
@@ -876,6 +876,12 @@
       "size": 617
     },
     {
+      "path": "SCRIPTS/RF2/IMAGES/setup-light.png",
+      "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/setup-light.png",
+      "sha256": "d2362ad39f592f8fbd00140f179244519f80a2717c14ee7dd036090a9cc4162f",
+      "size": 14735
+    },
+    {
       "path": "SCRIPTS/RF2/IMAGES/setup.png",
       "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/IMAGES/setup.png",
       "sha256": "0a135450cf4beecf1c7c39ea61f75c12d9843d3d1390c694e818dd429dde8293",
@@ -1238,8 +1244,8 @@
     {
       "path": "SCRIPTS/RF2/LVGL/hangarWidgets.lua",
       "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/hangarWidgets.lua",
-      "sha256": "3e2dc09e52c380bcc0c3ccdbaa9d72013fc6164ea2a0f5bcdec008f80509e0f5",
-      "size": 3953
+      "sha256": "13c92c4d0546eddab4757795f891aaa2e2d6f2cdd7f9c43fca59484bddd4cb91",
+      "size": 4244
     },
     {
       "path": "SCRIPTS/RF2/LVGL/hangarWorkflow.lua",
@@ -1286,8 +1292,8 @@
     {
       "path": "SCRIPTS/RF2/LVGL/precision.lua",
       "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/precision.lua",
-      "sha256": "c03880397e3d99614715496a027ef328b042c7cfa158d214605f6590d8b1aa10",
-      "size": 9567
+      "sha256": "17ae765a0a489934820f3aa0ae94f4139cdbdc91debc1dd5e0107b8041c1e59d",
+      "size": 9727
     },
     {
       "path": "SCRIPTS/RF2/LVGL/precisionPids.lua",
@@ -1334,8 +1340,8 @@
     {
       "path": "SCRIPTS/RF2/LVGL/waitMessage.lua",
       "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/RF2/LVGL/waitMessage.lua",
-      "sha256": "aeea0193687442aa6477ba46ab897ffdee2e77cdcc221cae181b555964637314",
-      "size": 3084
+      "sha256": "5f9e9f22db4c20e1576ae0a543008f998c25a55481b67dcf1be705882f028e0b",
+      "size": 3071
     },
     {
       "path": "SCRIPTS/RF2/LVGL/workflow.lua",
@@ -2406,6 +2412,42 @@
       "size": 60508
     },
     {
+      "path": "THEMES/KSE Dark - Blue/background.png",
+      "archive": "EdgeTXKSE/SD-CARD/THEMES/KSE Dark - Blue/background.png",
+      "sha256": "af861a721929e6f7b45e90ce8f80072fbf0de427c906384f2ff6a1ef2939777c",
+      "size": 349602
+    },
+    {
+      "path": "THEMES/KSE Dark - Blue/theme.yml",
+      "archive": "EdgeTXKSE/SD-CARD/THEMES/KSE Dark - Blue/theme.yml",
+      "sha256": "7b5ad79ca06fb16ca06aa3c595de5b515c7c86799d075acbae9581922d4a394e",
+      "size": 380
+    },
+    {
+      "path": "THEMES/KSE Dark - Green/background.png",
+      "archive": "EdgeTXKSE/SD-CARD/THEMES/KSE Dark - Green/background.png",
+      "sha256": "af861a721929e6f7b45e90ce8f80072fbf0de427c906384f2ff6a1ef2939777c",
+      "size": 349602
+    },
+    {
+      "path": "THEMES/KSE Dark - Green/theme.yml",
+      "archive": "EdgeTXKSE/SD-CARD/THEMES/KSE Dark - Green/theme.yml",
+      "sha256": "3b9baeacb9dc1b68a63ea7cb6047d9fe3136ba7286308f63d13a37693cb9a1c7",
+      "size": 370
+    },
+    {
+      "path": "THEMES/KSE Dark - Red/background.png",
+      "archive": "EdgeTXKSE/SD-CARD/THEMES/KSE Dark - Red/background.png",
+      "sha256": "af861a721929e6f7b45e90ce8f80072fbf0de427c906384f2ff6a1ef2939777c",
+      "size": 349602
+    },
+    {
+      "path": "THEMES/KSE Dark - Red/theme.yml",
+      "archive": "EdgeTXKSE/SD-CARD/THEMES/KSE Dark - Red/theme.yml",
+      "sha256": "7d511715d076ebbefa7f52772f7187c0942ac1c54b136dbfe584669c18f787cd",
+      "size": 366
+    },
+    {
       "path": "THEMES/KSE Dark/background.png",
       "archive": "EdgeTXKSE/SD-CARD/THEMES/KSE Dark/background.png",
       "sha256": "af861a721929e6f7b45e90ce8f80072fbf0de427c906384f2ff6a1ef2939777c",
@@ -2416,6 +2458,42 @@
       "archive": "EdgeTXKSE/SD-CARD/THEMES/KSE Dark/theme.yml",
       "sha256": "bf1f33b9a620d865bbb9a61dbf54b42631a5d5b838f04f5f4581766e426b443e",
       "size": 373
+    },
+    {
+      "path": "THEMES/KSE Light - Blue/background.png",
+      "archive": "EdgeTXKSE/SD-CARD/THEMES/KSE Light - Blue/background.png",
+      "sha256": "2c9ce97b4f18f81c6fc956b1c30db8aee385469e590f9f08fc08ab6555f8d650",
+      "size": 356270
+    },
+    {
+      "path": "THEMES/KSE Light - Blue/theme.yml",
+      "archive": "EdgeTXKSE/SD-CARD/THEMES/KSE Light - Blue/theme.yml",
+      "sha256": "cf18b0ed2a2850e87eb7f478f3d109912a79b56d94548f7d7c307c0e40dc17b9",
+      "size": 382
+    },
+    {
+      "path": "THEMES/KSE Light - Green/background.png",
+      "archive": "EdgeTXKSE/SD-CARD/THEMES/KSE Light - Green/background.png",
+      "sha256": "2c9ce97b4f18f81c6fc956b1c30db8aee385469e590f9f08fc08ab6555f8d650",
+      "size": 356270
+    },
+    {
+      "path": "THEMES/KSE Light - Green/theme.yml",
+      "archive": "EdgeTXKSE/SD-CARD/THEMES/KSE Light - Green/theme.yml",
+      "sha256": "635f2fa79ed64e7f5563efc8b1481ac785cb53125550d6cfc54a2a43e32ed337",
+      "size": 372
+    },
+    {
+      "path": "THEMES/KSE Light - Red/background.png",
+      "archive": "EdgeTXKSE/SD-CARD/THEMES/KSE Light - Red/background.png",
+      "sha256": "2c9ce97b4f18f81c6fc956b1c30db8aee385469e590f9f08fc08ab6555f8d650",
+      "size": 356270
+    },
+    {
+      "path": "THEMES/KSE Light - Red/theme.yml",
+      "archive": "EdgeTXKSE/SD-CARD/THEMES/KSE Light - Red/theme.yml",
+      "sha256": "b91f777b8113c2d01f1d7dcc5c75f2fe4dab9007e60c122c77e2a20f58ce447d",
+      "size": 368
     },
     {
       "path": "THEMES/KSE Light/background.png",
@@ -2522,8 +2600,8 @@
   ],
   "firmware": {
     "archive": "EdgeTXKSE/Firmware/TX16S-MK3-MAX-2.12.1-KS.uf2",
-    "sha256": "b25abc6c8cd23ed4e6e22c46b4e3b3fe50e04ca9a282d9fe7c92dc24269af2a9",
-    "size": 4867584
+    "sha256": "595f7530082ab3d90d4283c2b1dfa53662ce39ce5877a476480a8f4de82b6fe7",
+    "size": 4868608
   },
   "settings": {
     "path": "SCRIPTS/RF2/settings.lua",
