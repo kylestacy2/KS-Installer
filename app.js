@@ -7,7 +7,7 @@ let release,files,sd,boot,backup,engine,demo=false,busy=false,cancel=false,scann
 const activity=[];let messageTimer,demoDrives;
 const sdPhases=['sd-verified','verified',...FIRMWARE_PHASES];
 const stepKeys=['release','radio','backup','sd','verify'];
-const stepDone=new Map();let revealStep=null;
+const stepDone=new Map();let revealStep=null,completionShown=false;
 const PICKER_CANCELLED=Symbol('picker-cancelled');
 const radioRestartInstructions='Wait for Writing complete. Eject the radio drives on your computer, then unplug USB. Turn the radio off, enter bootloader mode again with USB unplugged, and reconnect USB. Reselect both drives, then confirm the restart in step 05. Keep this installer tab open.';
 function resetSteps(){stepDone.clear();for(const key of stepKeys)$('step-'+key).open=true;}
@@ -102,13 +102,28 @@ function draw(){
   $('backup-name').textContent=backup?'Backup folder: '+backup.name:'Choose a folder outside the radio drives. Keep it for recovery.';
   const archive=backupReady&&engine?.journal?.archive;
   $('backup-archive').textContent=skipped?'No recovery backup was saved. Keep this tab open until verification finishes; this installation cannot be resumed after closing the tab.':archive?'Verified ZIP: '+archive.path+' · '+(archive.size/1048576).toFixed(1)+' MB. Saved inside your backup folder.':'A dated ZIP is created automatically and checked when you choose to back up.';
-  $('no-backup-notice').hidden=!skipped;
+  $('no-backup-notice').hidden=!skipped||complete;
   $('sd-install-note').textContent='The installer replaces the matching program files and clears their old program caches. Your existing ExpressLRS tool is kept. '+(skipped?'Backup was skipped, so failed or cancelled writes cannot be rolled back.':'If a write fails, it attempts to restore the previous SD files from your backup.');
   $('firmware-backup-note').textContent=(skipped?'No original firmware backup was saved.':'The original firmware stays in your backup folder and ZIP.')+' Firmware copying cannot be cancelled once it begins.';
   $('recovery-instructions').hidden=skipped;
   $('install').textContent=sdReady&&!pending&&!complete?'Continue update':'Install update';$('next-steps').hidden=!complete;
   drawSteps();
+  const completion=$('completion-dialog');
+  if(!complete){
+    completionShown=false;
+    if(completion.open)completion.close();
+  }else if(!busy&&!completionShown){
+    // Announce success only after final readback and the action cleanup finish.
+    completionShown=true;
+    $('completion-title').textContent=demo?'Demo complete!':'Update complete!';
+    $('completion-description').textContent=demo?'The demo SD files and firmware passed verification. No files on your computer or radio were changed.':'KSE Touch is installed. Your SD files and firmware passed verification.';
+    $('completion-next').hidden=demo;
+    $('completion-banner-title').textContent=demo?'Demo complete — all checks passed':'Update complete — all checks passed';
+    completion.showModal();$('close-completion').focus();
+  }
 }
+$('close-completion').onclick=()=>$('completion-dialog').close();
+$('completion-dialog').onclose=()=>{if(complete)$('next-steps').focus({preventScroll:true});};
 function getEngine(){
   if(!engine)engine=new Installer({manifest:release,files,sd,boot,backup,progress,cancel:()=>cancel,status:(title,detail)=>{stage(title,detail);draw();}});
   Object.assign(engine,{sd,boot,backup,files,manifest:release});return engine;
