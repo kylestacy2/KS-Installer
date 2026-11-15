@@ -5,14 +5,38 @@ export const UF2_FILENAME='KSE.UF2';
 export const FIRMWARE_PHASES=['firmware-copying','firmware-copied','firmware-check-required'];
 const ROOTS=['SCRIPTS/RF2/','WIDGETS/KSETouch/','WIDGETS/RfTool/'];
 const protectedUser=p=>/^SCRIPTS\/RF2\/(PREFS\/|settings[^/]*\.(lua|luac)$|background_error\.log$)/i.test(p);
-export const ownProgram=p=>ROOTS.some(r=>p.startsWith(r))&&!protectedUser(p)&&/\.(lua|luac)$/.test(p);
-const legacy=p=>/^SCRIPTS\/TOOLS\/Flight Modifier\.(lua|luac)$/.test(p);
+export const ownProgram=p=>ROOTS.some(r=>p.toLowerCase().startsWith(r.toLowerCase()))&&!protectedUser(p)&&/\.(lua|luac)$/i.test(p);
+const legacy=p=>/^SCRIPTS\/TOOLS\/Flight Modifier\.(lua|luac)$/i.test(p);
 const hasExistingElrs=before=>Object.keys(before).some(p=>/^SCRIPTS\/TOOLS\/[^/]*(elrs|expresslrs)[^/]*\.(lua|luac)$/i.test(p));
-const preservedElrs=(path,hasElrs)=>hasElrs&&/elrs/i.test(path)&&path.startsWith('SCRIPTS/TOOLS/');
+const preservedElrs=(path,hasElrs)=>hasElrs&&/elrs/i.test(path)&&/^SCRIPTS\/TOOLS\//i.test(path);
 // Themes and root image assets are additions only, including FAT case aliases.
 // Existing wallpapers/startup screens belong to the user even if names match.
 const preservedAsset=(path,existing)=>/^(?:THEMES|IMAGES)\//i.test(path)&&existing.has(path.toLowerCase());
 const check=(value,message)=>{if(!value)throw Error(message);};
+const pathKey=path=>safePath(path).toLowerCase();
+function pathIndex(paths){
+  const index=new Map();
+  for(const path of paths){const key=pathKey(path);check(!index.has(key),'Ambiguous SD filename: '+path+' conflicts with '+index.get(key));index.set(key,path);}
+  return index;
+}
+function checkFileList(names,expectedNames){
+  // FAT paths are case-insensitive but retain their existing spelling. Keep the
+  // real paths for reads/backups; normalize only identity, never file contents.
+  const actual=pathIndex(names),expected=pathIndex(expectedNames);
+  const missing=[...expected].filter(([key])=>!actual.has(key)).map(([,path])=>path).sort();
+  const unexpected=[...actual].filter(([key])=>!expected.has(key)).map(([,path])=>path).sort();
+  if(missing.length||unexpected.length){
+    const describe=(label,paths)=>paths.length?label+' ('+paths.length+'): '+paths.slice(0,8).map(p=>JSON.stringify(p)).join(', ')+(paths.length>8?' … (full list in activity report)':'')+'. ':'';
+    const error=Error('The SD file list changed. '+describe('Missing',missing)+describe('Unexpected',unexpected)+'Check these files and scan again before installing.');
+    error.fileListDiff={missing,unexpected};throw error;
+  }
+  return expected;
+}
+function installationError(error,suffix){
+  const result=Error(error.message+suffix);
+  if(error.fileListDiff)result.fileListDiff=error.fileListDiff;
+  return result;
+}
 const restartRadio='Wait for any writing to finish. Eject the radio drives, unplug USB, turn the radio off, enter bootloader mode again, reconnect USB and reselect both drives.';
 export async function readOptional(fs,path){return await fs.exists(path)?fs.read(path):null;}
 export function parseUF2(bytes,{installer=false}={}){
@@ -72,10 +96,10 @@ export async function identify(sd,boot){
 // Untouched media/logs get size/path checks only. Their content baseline is
 // established during backup, never inferred from timestamps or file sizes.
 export async function previewInventory(fs,manifest,{names,progress=()=>{},cancel=()=>false}={}){
-  names=names||await fs.list();const result={},targets=new Set([...manifest.files.map(f=>f.path),manifest.settings.path]);let total=0;
+  names=names||await fs.list();pathIndex(names);const result={},targets=new Set([...manifest.files.map(f=>pathKey(f.path)),pathKey(manifest.settings.path)]);let total=0;
   for(let i=0;i<names.length;i++){
     check(!cancel(),'Cancelled before completing the preview.');const path=safePath(names[i]);
-    const hash=targets.has(path)||(path.endsWith('.luac')&&targets.has(path.slice(0,-1)))||ownProgram(path)||legacy(path)||/^(?:RADIO\/|MODELS\/|SCRIPTS\/RF2\/(?:PREFS\/|settings[^/]*\.(?:lua|luac)$))/i.test(path);
+    const key=pathKey(path),hash=targets.has(key)||(key.endsWith('.luac')&&targets.has(key.slice(0,-1)))||ownProgram(path)||legacy(path)||/^(?:RADIO\/|MODELS\/|SCRIPTS\/RF2\/(?:PREFS\/|settings[^/]*\.(?:lua|luac)$))/i.test(path);
     if(hash){const bytes=await fs.read(path);result[path]={sha256:await sha256(bytes),size:bytes.length};}
     else result[path]={size:(await fs.stat(path)).size};
     const size=result[path].size;
@@ -95,12 +119,11 @@ export async function inventory(fs,progress=()=>{},cancel=()=>false){
 }
 export function buildPlan(manifest,before){
   const plan=[],notes=[];
-  const existing=new Map();
-  for(const path of Object.keys(before)){safePath(path);const key=path.toLowerCase();check(!existing.has(key),'Ambiguous SD filename: '+path);existing.set(key,path);}
-  for(const f of [...manifest.files,manifest.settings]){const alias=existing.get(f.path.toLowerCase());check(!alias||alias===f.path||preservedAsset(f.path,existing),'Filename casing differs from the package: '+alias+'. Resolve it before installing.');}
+  const existing=pathIndex(Object.keys(before));
+  pathIndex([...manifest.files.map(f=>f.path),manifest.settings.path]);
   const hasElrs=hasExistingElrs(before);
-  const packagePaths=new Set(manifest.files.map(f=>safePath(f.path)));
-  const add=(path,after)=>{const prior=before[path]?.sha256||null;if(prior!==after)plan.push({path,before:prior,after,operation:after===null?'remove':prior?'update':'add'});};
+  const packagePaths=new Set(manifest.files.map(f=>pathKey(f.path)));
+  const add=(path,after)=>{path=existing.get(pathKey(path))||path;const prior=before[path]?.sha256||null;if(prior!==after)plan.push({path,before:prior,after,operation:after===null?'remove':prior?'update':'add'});};
   for(const f of manifest.files){
     check(!/^RADIO\/|^MODELS\/|^flights-count/i.test(f.path),'Package contains protected radio files');
     check(!protectedUser(f.path)||f.path==='SCRIPTS/RF2/PREFS/README.txt','Package contains personal preferences');
@@ -110,28 +133,28 @@ export function buildPlan(manifest,before){
   }
   const settings=Object.keys(before).some(p=>/^SCRIPTS\/RF2\/settings(?:_backup|_pending)?\.lua$/i.test(p));
   if(!settings)add(manifest.settings.path,manifest.settings.sha256);
-  else if(!before[manifest.settings.path])notes.push('RF2 recovery settings exist without settings.lua. Restore your settings before opening RF Lua; neutral defaults will not overwrite recovery data.');
+  else if(!existing.has(pathKey(manifest.settings.path)))notes.push('RF2 recovery settings exist without settings.lua. Restore your settings before opening RF Lua; neutral defaults will not overwrite recovery data.');
   for(const p of Object.keys(before)){
-    const compiled=p.endsWith('.luac')&&packagePaths.has(p.slice(0,-1));
+    const key=pathKey(p),compiled=key.endsWith('.luac')&&packagePaths.has(key.slice(0,-1));
     const keepElrs=hasElrs&&/^SCRIPTS\/TOOLS\/.*(elrs|expresslrs)/i.test(p);
     // Keep preferences; remove only old executable program files in owned trees,
     // compiled companions for supplied tools, and the incompatible legacy tool.
-    if(!keepElrs&&((ownProgram(p)&&!packagePaths.has(p))||compiled||legacy(p)))add(p,null);
+    if(!keepElrs&&((ownProgram(p)&&!packagePaths.has(key))||compiled||legacy(p)))add(p,null);
     if(/^SCRIPTS\/RF2\/settings(?:_backup|_pending)?\.luac$/i.test(p))add(p,null);
   }
-  const keys=new Set();for(const op of plan){check(!keys.has(op.path),'Duplicate install operation');keys.add(op.path);}
+  const keys=new Set();for(const op of plan){const key=pathKey(op.path);check(!keys.has(key),'Duplicate install operation');keys.add(key);}
   return {operations:plan.sort((a,b)=>a.path.localeCompare(b.path)),notes:[...new Set(notes)]};
 }
 export async function verifyInventory(fs,expected,progress=()=>{},include=()=>true){
-  const names=await fs.list();check(JSON.stringify(names.slice().sort())===JSON.stringify(Object.keys(expected).sort()),'The SD file list changed. Scan again before installing.');
+  const names=await fs.list(),index=checkFileList(names,Object.keys(expected));
   const selected=names.filter(include);
   for(let i=0;i<selected.length;i++){
-    const p=selected[i];check(await sha256(await fs.read(p))===expected[p].sha256,'File changed or failed verification: '+p);progress(i+1,selected.length,p);
+    const p=selected[i];check(await sha256(await fs.read(p))===expected[index.get(pathKey(p))].sha256,'File changed or failed verification: '+p);progress(i+1,selected.length,p);
   }
 }
 export function expectedAfter(before,operations){
-  const after=structuredClone(before);
-  for(const op of operations){if(op.after===null)delete after[op.path];else after[op.path]={sha256:op.after};}
+  const after=structuredClone(before),index=pathIndex(Object.keys(before));
+  for(const op of operations){const key=pathKey(op.path),path=index.get(key)||op.path;if(op.after===null){delete after[path];index.delete(key);}else{after[path]={sha256:op.after};index.set(key,path);}}
   return after;
 }
 export async function writeVerified(fs,path,bytes){await fs.write(path,bytes);check(await sha256(await fs.read(path))===await sha256(bytes),'Write verification failed: '+path);}
@@ -150,7 +173,8 @@ export class Installer {
   }
   async originalFirmware(){return this.backupSkipped?this.#originalFirmware:await this.backup.read('CURRENT.UF2');}
   checkpointIncludes(path){
-    return !/^(?:IMAGES|SOUNDS|LOGS)\//i.test(path)||this.manifest.files.some(f=>f.path===path)||path===this.manifest.settings.path||(this.journal?.operations||[]).some(o=>o.path===path);
+    const key=pathKey(path);
+    return !/^(?:IMAGES|SOUNDS|LOGS)\//i.test(path)||this.manifest.files.some(f=>pathKey(f.path)===key)||key===pathKey(this.manifest.settings.path)||(this.journal?.operations||[]).some(o=>pathKey(o.path)===key);
   }
   async checkpoint(expected){
     // Pre-write checkpoints retain complete path-set checks. Untouched bulk
@@ -180,7 +204,7 @@ export class Installer {
     const identity=await identify(this.sd,this.boot);
     check(identity.radioHash===this.identity.radioHash&&identity.firmwareHash===this.identity.firmwareHash,'The selected radio changed. Scan again.');
     const before=structuredClone(this.preview),names=Object.keys(before);
-    check(JSON.stringify(identity.names.slice().sort())===JSON.stringify(names.slice().sort()),'The SD file list changed. Scan again before installing.');
+    checkFileList(identity.names,names);
     // Complete the program/settings fingerprints without copying any SD files.
     // Untouched bulk media is left alone, as at the normal pre-write checkpoints.
     for(let i=0;i<names.length;i++){
@@ -210,7 +234,7 @@ export class Installer {
     const identity=await identify(this.sd,this.boot);
     check(identity.radioHash===this.identity.radioHash&&identity.firmwareHash===this.identity.firmwareHash,'The selected radio changed. Scan again.');
     const names=Object.keys(this.preview),before={};
-    check(JSON.stringify(identity.names.slice().sort())===JSON.stringify(names.slice().sort()),'The SD file list changed. Scan again before backing up.');
+    checkFileList(identity.names,names);
     this.status('Backing up and checking every SD file…','This process can take 10–20 minutes, depending on how much data is on your radio’s SD card. Keep the radio connected while every file is backed up and checked.');
     await writeVerified(this.backup,'CURRENT.UF2',identity.firmware);await writeVerified(this.backup,'INFO_UF2.TXT',identity.info);
     for(let i=0;i<names.length;i++){
@@ -244,17 +268,22 @@ export class Installer {
       check(!this.cancel(),'Backup cancelled. Radio unchanged.');this.journal.phase='backup-verified';await this.record();
     }catch(error){this.journal.phase='backup-incomplete';throw error;}return this.journal;
   });}
+  releaseFile(path){
+    const key=pathKey(path);
+    return this.manifest.files.find(f=>pathKey(f.path)===key)||(key===pathKey(this.manifest.settings.path)?this.manifest.settings:null);
+  }
   allowed(op){
-    safePath(op.path);const supplied=this.manifest.files.find(f=>f.path===op.path)||(op.path===this.manifest.settings.path?this.manifest.settings:null);
+    const supplied=this.releaseFile(op.path);
     if(op.after!==null)return !!supplied&&op.after===supplied.sha256;
-    return ownProgram(op.path)||legacy(op.path)||/^SCRIPTS\/RF2\/settings(?:_backup|_pending)?\.luac$/i.test(op.path)||(op.path.endsWith('.luac')&&this.manifest.files.some(f=>f.path===op.path.slice(0,-1)));
+    return ownProgram(op.path)||legacy(op.path)||/^SCRIPTS\/RF2\/settings(?:_backup|_pending)?\.luac$/i.test(op.path)||(/\.luac$/i.test(op.path)&&this.manifest.files.some(f=>pathKey(f.path)===pathKey(op.path.slice(0,-1))));
   }
   async validateJournal({compareRadioSettings=true}={}){
     const j=this.journal;check(j?.schema===1&&j.release===this.manifest.id&&j.board==='tx16smk3','Backup belongs to another installer release.');
     check(!j.backupSkipped||this.backupSkipped,'An installation without a backup cannot be resumed from a saved journal.');
     check(Array.isArray(j.operations)&&Array.isArray(j.touched)&&j.before&&typeof j.before==='object','Invalid recovery journal');
-    const seen=new Set();for(const op of j.operations){check(!seen.has(op.path)&&this.allowed(op),'Journal contains an unrecognized file operation');seen.add(op.path);check(op.before===(j.before[op.path]?.sha256||null),'Backup journal mismatch');}
-    check(new Set(j.touched).size===j.touched.length&&j.touched.every(p=>seen.has(p)),'Invalid recovery list');
+    const before=pathIndex(Object.keys(j.before)),seen=new Set(),paths=new Set();
+    for(const op of j.operations){const key=pathKey(op.path);check(!seen.has(key)&&this.allowed(op),'Journal contains an unrecognized file operation');seen.add(key);paths.add(op.path);check(op.before===(j.before[before.get(key)]?.sha256||null),'Backup journal mismatch');check(!op.before||before.get(key)===op.path,'Backup path spelling differs from the journal');}
+    check(new Set(j.touched).size===j.touched.length&&j.touched.every(p=>paths.has(p)),'Invalid recovery list');
     check(await sha256(await this.originalFirmware())===j.firmwareHash,this.backupSkipped?'Original firmware reference is unavailable':'Firmware backup is damaged');
     const radio=await this.sd.read('RADIO/radio.yml');
     if(compareRadioSettings)check(await sha256(radio)===j.radioHash,'This SD card does not match the backup.');
@@ -268,26 +297,27 @@ export class Installer {
     check(await sha256(await this.boot.read('CURRENT.UF2'))===this.journal.firmwareHash,'Firmware changed since backup.');
     for(const op of this.journal.operations){
       if(op.before&&!this.backupSkipped)check(await sha256(await this.backup.read('SD/'+op.path))===op.before,'Backup is damaged: '+op.path);
-      if(op.after)check(this.files.has(op.path)&&await sha256(this.files.get(op.path))===op.after,'Package changed: '+op.path);
+      if(op.after){const source=this.releaseFile(op.path)?.path;check(this.files.has(source)&&await sha256(this.files.get(source))===op.after,'Package changed: '+op.path);}
     }
     this.journal.phase='installing';await this.record();
     try{
       for(let i=0;i<this.journal.operations.length;i++){
         check(!this.cancel(),'Installation cancelled.');const op=this.journal.operations[i];
         this.journal.touched.push(op.path);await this.record(); // Intent persisted before changing a radio file.
-        if(op.after)await writeVerified(this.sd,op.path,this.files.get(op.path));else await this.sd.remove(op.path);
+        if(op.after)await writeVerified(this.sd,op.path,this.files.get(this.releaseFile(op.path).path));else await this.sd.remove(op.path);
         this.progress(i+1,this.journal.operations.length,op.path);
       }
       await this.checkpoint(expectedAfter(this.journal.before,this.journal.operations));
       check(await sha256(await this.boot.read('CURRENT.UF2'))===this.journal.firmwareHash,'Firmware changed unexpectedly.');
       this.journal.phase='sd-verified';await this.record();return this.journal;
     }catch(error){
+      if(error.fileListDiff)this.journal.fileListDiff=error.fileListDiff;
       if(this.backupSkipped){
         this.journal.phase='install-failed';this.journal.error=error.message;
-        throw Error(error.message+' Backup was skipped: previous SD files cannot be restored. Do not start the radio normally with an incomplete installation. Reconnect in bootloader mode and reload the installer to start a new installation.');
+        throw installationError(error,' Backup was skipped: previous SD files cannot be restored. Do not start the radio normally with an incomplete installation. Reconnect in bootloader mode and reload the installer to start a new installation.');
       }
-      this.journal.error=error.message;try{await this.rollback();}catch(recovery){this.journal.phase='recovery-required';this.journal.recoveryError=recovery.message;await this.record().catch(()=>{});throw Error(error.message+' Reconnect the same radio and use Restore SD files with this backup.');}
-      throw Error(error.message+' Previous SD files restored and verified; firmware was not written.');
+      this.journal.error=error.message;try{await this.rollback();}catch(recovery){this.journal.phase='recovery-required';this.journal.recoveryError=recovery.message;await this.record().catch(()=>{});throw installationError(error,' Reconnect the same radio and use Restore SD files with this backup.');}
+      throw installationError(error,' Previous SD files restored and verified; firmware was not written.');
     }
   });}
   async rollback(){
@@ -337,12 +367,12 @@ export class Installer {
     // already current in step 4; exclude the user's deliberately preserved ELRS
     // and settings. Regenerated caches and unrelated files are not install targets.
     const hasElrs=hasExistingElrs(this.journal.before);
-    const existing=new Set(Object.keys(this.journal.before).map(p=>p.toLowerCase()));
+    const existing=pathIndex(Object.keys(this.journal.before));
     const targets=this.manifest.files.filter(f=>!preservedElrs(f.path,hasElrs)&&!preservedAsset(f.path,existing));
-    if(this.journal.operations.some(op=>op.path===this.manifest.settings.path&&op.after!==null))targets.push(this.manifest.settings);
+    if(this.journal.operations.some(op=>pathKey(op.path)===pathKey(this.manifest.settings.path)&&op.after!==null))targets.push(this.manifest.settings);
     for(let i=0;i<targets.length;i++){
       const f=targets[i];let bytes;
-      try{bytes=await this.sd.read(safePath(f.path));}catch(error){throw Error('Cannot read installed file '+f.path+': '+error.message);}
+      try{bytes=await this.sd.read(existing.get(pathKey(f.path))||safePath(f.path));}catch(error){throw Error('Cannot read installed file '+f.path+': '+error.message);}
       check(await sha256(bytes)===f.sha256,'Installed file differs from the release: '+f.path);
       this.progress(i+1,targets.length,f.path);
     }

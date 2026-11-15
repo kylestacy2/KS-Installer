@@ -63,7 +63,7 @@ function journalState(){
   recoveryReady=!!engine?.journal&&!engine.backupSkipped;
 }
 const supported=()=>isSecureContext&&'showDirectoryPicker'in window&&'DecompressionStream'in window&&!!crypto.subtle;
-function log(text,error=false){const at=new Date().toLocaleTimeString();activity.push({at,text,error});const p=document.createElement('p');p.textContent=at+'  '+text;if(error)p.className='error';$('log').append(p);$('log').scrollTop=$('log').scrollHeight;}
+function log(text,error=false,fileListDiff){const at=new Date().toLocaleTimeString();activity.push({at,text,error,...(fileListDiff?{fileListDiff}: {})});const p=document.createElement('p');p.textContent=at+'  '+text;if(error)p.className='error';$('log').append(p);$('log').scrollTop=$('log').scrollHeight;}
 function message(text){$('message').textContent=text;$('message').hidden=false;clearTimeout(messageTimer);messageTimer=setTimeout(()=>$('message').hidden=true,15000);}
 function stage(title,detail){$('stage-title').textContent=title;$('stage-detail').textContent=detail;}
 function progress(n,total){$('progress').value=total?Math.round(n/total*100):0;}
@@ -132,7 +132,7 @@ async function action(title,fn,step,onPickerCancel){
   if(busy)return;const started=performance.now();busy=true;cancel=false;$('message').hidden=true;progress(0,1);stage(title,'Keep this tab open and the USB cable connected.');draw();log(title);
   let pickerCancelled=false;
   try{pickerCancelled=(await fn())===PICKER_CANCELLED;if(!pickerCancelled)progress(1,1);}catch(e){
-    const text=e.name==='AbortError'?'Selection cancelled.':e.message;log(text,true);message(text);stage(firmwareAttempted()?'Firmware verification needed.':'Stopped.',text);
+    const text=e.name==='AbortError'?'Selection cancelled.':e.message;log(text,true,e.fileListDiff);message(text);stage(firmwareAttempted()?'Firmware verification needed.':'Stopped.',text);
     journalState();
     if(engine?.journal?.phase==='restored'){scanned=false;resumeReady=false;stage('Previous SD files restored.', 'The firmware was not written. Start a fresh scan and choose an empty backup folder to try again.');}
     if(engine?.journal?.phase==='recovery-required')stage('Reconnect to recover.',text);
