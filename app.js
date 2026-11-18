@@ -2,9 +2,10 @@ import {loadRelease,encode,utf8} from './zip.js';
 import {Installer,parseUF2,JOURNAL,FIRMWARE_PHASES} from './core.js';
 import {BrowserFS,separateHandles} from './fs.js';
 import {makeDemo} from './demo.js';
+import {fetchLatestRelease,downloadRelease} from './download.js';
 const $=id=>document.getElementById(id);
 let release,files,sd,boot,backup,engine,demo=false,busy=false,cancel=false,scanned=false,backupReady=false,sdReady=false,complete=false,resumeReady=false,recoveryReady=false;
-const activity=[];let messageTimer,demoDrives;
+const activity=[];let messageTimer,demoDrives,downloadAbort;
 const sdPhases=['sd-verified','verified',...FIRMWARE_PHASES];
 const stepKeys=['release','radio','backup','sd','verify'];
 const stepDone=new Map();let revealStep=null,completionShown=false;
@@ -23,7 +24,7 @@ function drawSteps(){
   const done={release:!!files,radio:scanned&&$('one-radio').checked&&(connected||sdReady),backup:backupReady||skipped,
     sd:complete||engine?.journal?.phase==='firmware-copied',verify:complete};
   const summaries={
-    release:demo?'Demo release verified':release?.label+' · ZIP verified',
+    release:demo?'Demo release verified':release?.label+' · Files verified',
     radio:sdReady?'Initial radio check complete · reconnect in step 05':$('plan').hidden?'Drives selected · recovery checks available':$('plan-summary').textContent,
     backup:skipped?'Backup skipped · no recovery backup saved':'Original firmware + SD files saved · backup ZIP verified',
     sd:complete?'SD files and firmware verified':'SD files verified · UF2 copied · restart and reconnect',
@@ -71,6 +72,7 @@ function draw(){
   const active=busy,ready=!!files,canUse=demo||supported();
   const skipped=!!engine?.backupSkipped,prepared=backupReady||(skipped&&engine.journal.phase==='backup-skipped');
   $('choose-zip').disabled=active||demo||!release||!canUse;
+  $('grab-latest').disabled=active||demo||!canUse||(!!engine?.journal&&!complete);
   const pending=firmwareAttempted(),connected=sd&&boot&&$('one-radio').checked;
   $('radio-title').textContent='Connect your radio';
   $('radio-instructions').textContent='Start in bootloader mode, then select both radio drives. After copying firmware, reselect the drives directly in step 05.';
@@ -145,13 +147,48 @@ async function checkHandles(candidate,kind){
 function download(bytes,name,type='application/octet-stream'){
   const blob=bytes instanceof Blob?bytes:new Blob([bytes],{type}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);
 }
-$('choose-zip').onclick=()=>$('zip').click();
-$('zip').onchange=()=>action('Checking the release…',async()=>{
-  const blob=$('zip').files[0];if(!blob)return;
-  const loaded=await loadRelease(blob,release,(n,t)=>progress(n,t),()=>cancel);parseUF2(loaded.get('@firmware'),{installer:true});
-  files=loaded;engine=null;scanned=backupReady=sdReady=complete=resumeReady=recoveryReady=false;$('plan').hidden=true;resetSteps();
+const canLoadRelease=()=>!busy&&!demo&&supported()&&(!engine?.journal||complete);
+function clearLoadedRelease(){
+  files=null;engine=null;sd=boot=backup=null;
+  scanned=backupReady=sdReady=complete=resumeReady=recoveryReady=false;
+  $('one-radio').checked=$('reconnected').checked=false;$('plan').hidden=true;resetSteps();
+}
+function showRelease(){
+  $('release-label').textContent=release.label;$('release-link').href=release.releaseURL;$('release-link').hidden=false;
+  $('download-note').textContent=release.download?'Downloads '+(release.download.size/1000000).toFixed(1)+' MB. Files are checked before you select the radio.':'Get the install files automatically. No ZIP to download or select.';
+}
+function acceptRelease(candidate,loaded){
+  parseUF2(loaded.get('@firmware'),{installer:true});
+  release=candidate;files=loaded;showRelease();
   stage('Release verified.','Connect the radio in bootloader mode, then choose its two drives.');log('Release hash and all '+files.size+' install resources match '+release.id+'.');
-},'release');
+}
+$('grab-latest').onclick=()=>{
+  if(!canLoadRelease())return;
+  return action('Getting the latest KSE Touch…',async()=>{
+    clearLoadedRelease();downloadAbort=new AbortController();
+    try{
+      stage('Checking the latest release…','No radio files are being accessed.');
+      const candidate=await fetchLatestRelease({signal:downloadAbort.signal});
+      const loaded=await downloadRelease(candidate,{signal:downloadAbort.signal,
+        progress:(n,t)=>{progress(n,t);stage('Downloading KSE Touch…',(n/1000000).toFixed(1)+' of '+(t/1000000).toFixed(1)+' MB');},
+        verifyProgress:(n,t)=>{progress(n,t);stage('Checking downloaded files…',n+' of '+t+' resources verified.');}});
+      if(cancel)throw Error('Download cancelled. Radio unchanged.');
+      acceptRelease(candidate,loaded);
+    }finally{downloadAbort=null;}
+  },'release');
+};
+$('choose-zip').onclick=()=>{if(canLoadRelease())$('zip').click();};
+$('zip').onchange=()=>{
+  if(!canLoadRelease())return;
+  const blob=$('zip').files[0];if(!blob)return;
+  return action('Checking the release…',async()=>{
+    clearLoadedRelease();
+    const candidate=release;
+    const selected=blob.size===candidate.download?.size?{...candidate,zip:candidate.download}:candidate;
+    try{acceptRelease(candidate,await loadRelease(blob,selected,(n,t)=>progress(n,t),()=>cancel));}
+    finally{$('zip').value='';}
+  },'release');
+};
 function chooseFolder(kind,step,buttonId){
   if(busy)return;
   if(demo){log('Demo '+kind+' folder is already selected.');return;}
@@ -233,7 +270,7 @@ $('install').onclick=()=>action('Installing the update…',async()=>{
     if(firmwareAttempted())reconnectRequired();
   }
 },'sd');
-$('cancel').onclick=()=>{cancel=true;draw();log('Cancellation requested. Waiting for the current file operation to finish.');};
+$('cancel').onclick=()=>{cancel=true;downloadAbort?.abort();draw();log(downloadAbort?'Download cancellation requested. Radio unchanged.':'Cancellation requested. Waiting for the current file operation to finish.');};
 $('demo-reconnect').onclick=()=>{
   if(!demo||!demoDrives||busy)return;
   ({sd,boot}=demoDrives);demoDrives=null;$('reconnected').checked=true;revealStep='verify';
@@ -267,8 +304,8 @@ $('demo').onclick=()=>action('Connecting a demo radio…',async()=>{
 $('reset').onclick=()=>location.reload();
 window.addEventListener('beforeunload',event=>{if(busy||(engine?.backupSkipped&&!complete)){event.preventDefault();event.returnValue='';}});
 try{
-  const response=await fetch('./release.json',{cache:'no-store'});if(!response.ok)throw Error('Release information is unavailable');release=await response.json();
-  if(release.firmwareWriteEnabled!==true)throw Error('This release does not enable the verified UF2 copy step');
-  $('release-label').textContent=release.label;$('release-link').href=release.releaseURL;
+  const response=await fetch('./release.json',{cache:'no-store'});if(!response.ok)throw Error('Release information is unavailable');const candidate=await response.json();
+  if(candidate.firmwareWriteEnabled!==true)throw Error('This release does not enable the verified UF2 copy step');
+  if(!busy&&!files&&!demo){release=candidate;showRelease();}
   if(!supported()){stage('Open this in desktop Chrome or Edge.','This browser cannot access selected drive folders. You can still try the demo.');log('Drive access unavailable in this browser. Demo remains available.');}
-}catch(e){message(e.message);stage('Release unavailable.',e.message);}draw();
+}catch(e){if(!busy&&!files&&!demo){message(e.message);stage('Release unavailable.','Try Grab latest KSE Touch again.');}}draw();
