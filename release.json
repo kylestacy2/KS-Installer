@@ -2609,5 +2609,11 @@
     "sha256": "209a66d38a7083f33a4aa56e45799db08750293516f0a36b6e2f2cef0ee2b7bb",
     "size": 165
   },
-  "firmwareWriteEnabled": true
+  "firmwareWriteEnabled": true,
+  "download": {
+    "path": "payloads/02628db8a7b171b84473c6e3681128e35430e030ea1bc070d68966e10308b7f2.zip",
+    "name": "KSE-Touch-Radio.zip",
+    "sha256": "02628db8a7b171b84473c6e3681128e35430e030ea1bc070d68966e10308b7f2",
+    "size": 10589020
+  }
 }
