@@ -1,14 +1,14 @@
 {
   "schema": 1,
-  "id": "trial-2026-11-14-themes",
-  "label": "KSE Touch Full \u00b7 Themes and transparent logo \u00b7 14 November 2026",
+  "id": "trial-2026-11-17-startup",
+  "label": "KSE Touch Full \u00b7 Startup lighting and Custom Colors \u00b7 17 November 2026",
   "board": "tx16smk3",
-  "commit": "b89507e0b1031f718933a5be3f06502c08af090b",
-  "releaseURL": "https://github.com/kylestacy2/KSE-Touch/releases/tag/trial-2026-11-14-themes",
+  "commit": "fb18ae2c010ee7bbb6541a029f022de6b5b06be4",
+  "releaseURL": "https://github.com/kylestacy2/KSE-Touch/releases/tag/trial-2026-11-17-startup",
   "zip": {
     "name": "EdgeTXKSE.zip",
-    "sha256": "04ca493f4c891b78320a4e3eabcb916580c0618d1047feda2a04d1b0f16ed535",
-    "size": 93682422
+    "sha256": "a8aa49bb4abb64143a90dc4b37c8be8fd6cc770cbd5d6916fd14f1f5768f9296",
+    "size": 93809706
   },
   "files": [
     {
@@ -80,8 +80,8 @@
     {
       "path": "SCRIPTS/FUNCTIONS/GBLED.lua",
       "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/FUNCTIONS/GBLED.lua",
-      "sha256": "2124bc1b4de20bb472dcbf2713fdea6cad2a481ff5c33159aceeccf3d523ca8a",
-      "size": 26107
+      "sha256": "9706e219615e03c7d78893d053ba0256f6b3086b8dd40a95168f989878f07a3a",
+      "size": 26394
     },
     {
       "path": "SCRIPTS/RF2/COMPILE/scripts_compiled.lua",
@@ -2330,8 +2330,8 @@
     {
       "path": "SCRIPTS/TOOLS/Custom Colors.lua",
       "archive": "EdgeTXKSE/SD-CARD/SCRIPTS/TOOLS/Custom Colors.lua",
-      "sha256": "652af3fa4954277d112085a9fda06a7303740567c983264b11fc77faef327d5e",
-      "size": 49404
+      "sha256": "4c75cb2f227c6adfa70780677f711923dba2845b626aafa6f988385f4a0bbf94",
+      "size": 53373
     },
     {
       "path": "SCRIPTS/TOOLS/RM Sensor Configurator.lua",
@@ -2600,8 +2600,8 @@
   ],
   "firmware": {
     "archive": "EdgeTXKSE/Firmware/TX16S-MK3-MAX-2.12.1-KS.uf2",
-    "sha256": "595f7530082ab3d90d4283c2b1dfa53662ce39ce5877a476480a8f4de82b6fe7",
-    "size": 4868608
+    "sha256": "77c06aa1934ecfbfff5b03550196b8712a2a501bab8a6d48c4e76eab1ad5f695",
+    "size": 4874240
   },
   "settings": {
     "path": "SCRIPTS/RF2/settings.lua",
