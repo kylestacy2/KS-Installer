@@ -3,9 +3,11 @@ import {Installer,parseUF2,JOURNAL,FIRMWARE_PHASES} from './core.js';
 import {BrowserFS,separateHandles} from './fs.js';
 import {makeDemo} from './demo.js';
 import {fetchLatestRelease,downloadRelease} from './download.js';
+import {loadCatalog,loadArtwork,selectArtwork,artworkIdentity,artworkThumbnailURL} from './artwork.js';
 const $=id=>document.getElementById(id);
 let release,files,sd,boot,backup,engine,demo=false,busy=false,cancel=false,scanned=false,backupReady=false,sdReady=false,complete=false,resumeReady=false,recoveryReady=false;
 const activity=[];let messageTimer,demoDrives,downloadAbort;
+let artworkCatalog=null,artwork=[],artworkFiles=new Map(),artworkIds=new Set(),artworkControls=[];
 const sdPhases=['sd-verified','verified',...FIRMWARE_PHASES];
 const stepKeys=['release','radio','backup','sd','verify'];
 const stepDone=new Map();let revealStep=null,completionShown=false;
@@ -30,10 +32,10 @@ function drawSteps(){
     sd:complete?'SD files and firmware verified':'SD files verified · UF2 copied · restart and reconnect',
     verify:'Installed release files, firmware and bootloader verified'
   };
-  let advanced=false;
+  let advanced=false,releaseJustLoaded=false;
   for(const key of stepKeys){
     const card=$('step-'+key),was=stepDone.get(key)||false,now=!!done[key];
-    if(now&&!was){card.open=false;advanced=true;}
+    if(now&&!was){card.open=false;advanced=true;if(key==='release')releaseJustLoaded=true;}
     else if(was&&!now)card.open=true;
     card.classList.toggle('done',now);
     if(key==='backup')card.classList.toggle('skipped',skipped);
@@ -42,7 +44,7 @@ function drawSteps(){
   }
   if(revealStep){const key=revealStep;revealStep=null;showStep(key);}
   else if(advanced){
-    const next=sdReady&&connected&&firmwareAttempted()&&!complete?'verify':stepKeys.find(key=>!done[key]);
+    const next=releaseJustLoaded&&!scanned?'artwork':sdReady&&connected&&firmwareAttempted()&&!complete?'verify':stepKeys.find(key=>!done[key]);
     if(next)showStep(next);
     else{
       // All five stay collapsed; keep the separate startup instructions visible.
@@ -109,6 +111,19 @@ function draw(){
   $('firmware-backup-note').textContent=(skipped?'No original firmware backup was saved.':'The original firmware stays in your backup folder and ZIP.')+' Firmware copying cannot be cancelled once it begins.';
   $('recovery-instructions').hidden=skipped;
   $('install').textContent=sdReady&&!pending&&!complete?'Continue update':'Install update';$('next-steps').hidden=!complete;
+  const artworkLocked=active||!!engine?.journal;
+  $('choose-artwork').disabled=!ready||!canUse||artworkLocked;
+  $('continue-artwork').disabled=artworkLocked||!ready;
+  $('continue-artwork').textContent=artwork.length?'Continue with selected images':'Continue without extra images';
+  $('clear-artwork').disabled=artworkLocked||!artwork.length;
+  $('artwork-search').disabled=active;$('artwork-category').disabled=active;
+  for(const {input} of artworkControls){input.disabled=artworkLocked;input.checked=artworkIds.has(input.value);}
+  $('artwork-summary').textContent=artwork.length?artwork.length+' image'+(artwork.length===1?'':'s')+' selected · '+(artwork.reduce((n,f)=>n+f.size,0)/1048576).toFixed(1)+' MB':'No extra images selected';
+  $('artwork-lock-note').hidden=!engine?.journal;
+  if(engine?.journal)$('step-artwork').open=false;
+  $('artwork-selection').replaceChildren();for(const item of artwork){const li=document.createElement('li');li.textContent=item.title+' → /'+item.path;$('artwork-selection').append(li);}
+  $('artwork-after-install').hidden=!complete||!artwork.length;
+  $('completion-artwork').hidden=!artwork.length||demo;
   drawSteps();
   const completion=$('completion-dialog');
   if(!complete){
@@ -127,8 +142,53 @@ function draw(){
 $('close-completion').onclick=()=>$('completion-dialog').close();
 $('completion-dialog').onclose=()=>{if(complete)$('next-steps').focus({preventScroll:true});};
 function getEngine(){
-  if(!engine)engine=new Installer({manifest:release,files,sd,boot,backup,progress,cancel:()=>cancel,status:(title,detail)=>{stage(title,detail);draw();}});
-  Object.assign(engine,{sd,boot,backup,files,manifest:release});return engine;
+  const payload=new Map([...(files||[]),...artworkFiles]);
+  if(!engine)engine=new Installer({manifest:release,files:payload,sd,boot,backup,artwork,progress,cancel:()=>cancel,status:(title,detail)=>{stage(title,detail);draw();}});
+  Object.assign(engine,{sd,boot,backup,files:payload,manifest:release});return engine;
+}
+function resetArtwork(){artwork=[];artworkIds=new Set();artworkFiles=new Map();}
+function changeArtwork(ids){
+  if(busy||engine?.journal)return;
+  try{
+    const chosen=selectArtwork(release,artworkCatalog.filter(item=>ids.has(item.id)));
+    artwork=chosen;artworkIds=ids;artworkFiles=new Map();engine=null;scanned=backupReady=sdReady=complete=resumeReady=recoveryReady=false;
+    $('plan').hidden=true;stage('Artwork selection updated.','Check the radio again before preparing your backup. Selected images copy with the SD files.');draw();
+  }catch(error){message(error.message);draw();}
+}
+function filterArtwork(){
+  const query=$('artwork-search').value.trim().toLowerCase(),group=$('artwork-category').value;
+  let count=0;for(const {item,card} of artworkControls){card.hidden=!!((group&&item.group!==group)||(query&&!((item.title+' '+item.file).toLowerCase().includes(query))));if(!card.hidden)count++;}
+  $('artwork-results').textContent=count+' images shown';
+}
+function renderArtwork(){
+  artworkControls=[];$('artwork-grid').replaceChildren();
+  for(const item of artworkCatalog){
+    const card=document.createElement('label');card.className='artwork-card';
+    const input=document.createElement('input');input.type='checkbox';input.value=item.id;input.checked=artworkIds.has(item.id);
+    const img=document.createElement('img');img.src=artworkThumbnailURL(item);img.alt='';img.loading='lazy';img.width=320;img.height=192;
+    const title=document.createElement('strong');title.textContent=item.title;
+    const detail=document.createElement('small');detail.textContent=({'model-images':'Model image','wallpapers':'Wallpaper','startup-screens':'Startup screen'})[item.group];
+    input.onchange=()=>{const ids=new Set(artworkIds);if(input.checked)ids.add(item.id);else ids.delete(item.id);changeArtwork(ids);};
+    for(const node of [input,img,title,detail])card.append(node);$('artwork-grid').append(card);artworkControls.push({item,card,input});
+  }
+  filterArtwork();
+}
+$('choose-artwork').onclick=()=>action('Loading the artwork collection…',async()=>{
+  artworkCatalog=await loadCatalog();renderArtwork();$('artwork-panel').hidden=false;$('step-artwork').open=true;
+  stage('Choose your artwork.','Select any images you want, or continue with none. Your selections will copy before the firmware.');
+},'artwork');
+$('clear-artwork').onclick=()=>changeArtwork(new Set());
+$('continue-artwork').onclick=()=>{if(busy||$('continue-artwork').disabled)return;$('step-artwork').open=false;showStep('radio');};
+$('artwork-search').oninput=filterArtwork;$('artwork-category').onchange=filterArtwork;
+async function restoreArtworkSelection(journal){
+  if(journal.artwork===undefined||Array.isArray(journal.artwork)&&!journal.artwork.length){resetArtwork();engine=null;return;}
+  if(!Array.isArray(journal.artwork))throw Error('Invalid saved artwork selection.');
+  const catalog=await loadCatalog(),ids=new Set(journal.artwork.map(item=>item.id));
+  const chosen=selectArtwork(release,catalog.filter(item=>ids.has(item.id)));
+  if(artworkIdentity(chosen)!==artworkIdentity(journal.artwork))throw Error('This backup uses artwork that differs from the current collection. Keep your backup; do not start another flash. Use the original collection to resume, or restore from the full backup instructions.');
+  artworkCatalog=catalog;artwork=chosen;artworkIds=ids;artworkFiles=new Map();engine=null;
+  // Recovery and final readback need trusted checksums, not image downloads.
+  if(!$('artwork-panel').hidden)renderArtwork();
 }
 async function action(title,fn,step,onPickerCancel){
   if(busy)return;const started=performance.now();busy=true;cancel=false;$('message').hidden=true;progress(0,1);stage(title,'Keep this tab open and the USB cable connected.');draw();log(title);
@@ -149,7 +209,7 @@ function download(bytes,name,type='application/octet-stream'){
 }
 const canLoadRelease=()=>!busy&&!demo&&supported()&&(!engine?.journal||complete);
 function clearLoadedRelease(){
-  files=null;engine=null;sd=boot=backup=null;
+  files=null;engine=null;resetArtwork();sd=boot=backup=null;
   scanned=backupReady=sdReady=complete=resumeReady=recoveryReady=false;
   $('one-radio').checked=$('reconnected').checked=false;$('plan').hidden=true;resetSteps();
 }
@@ -160,7 +220,7 @@ function showRelease(){
 function acceptRelease(candidate,loaded){
   parseUF2(loaded.get('@firmware'),{installer:true});
   release=candidate;files=loaded;showRelease();
-  stage('Release verified.','Connect the radio in bootloader mode, then choose its two drives.');log('Release hash and all '+files.size+' install resources match '+release.id+'.');
+  stage('Release verified.','Choose any optional images, then connect the radio in bootloader mode and select its two drives.');log('Release hash and all '+files.size+' install resources match '+release.id+'.');
 }
 $('grab-latest').onclick=()=>{
   if(!canLoadRelease())return;
@@ -208,7 +268,7 @@ function chooseFolder(kind,step,buttonId){
     complete=false;
     if(kind==='sd'){sd=fs;$('reconnected').checked=false;}else if(kind==='boot'){boot=fs;$('reconnected').checked=false;}else{
       backup=fs;backupReady=sdReady=resumeReady=recoveryReady=false;if(engine)engine.journal=null;
-      if(await fs.exists(JOURNAL)){const j=JSON.parse(utf8.decode(await fs.read(JOURNAL)));if(j.schema!==1||j.release!==release.id)throw Error('This backup belongs to another release.');getEngine().journal=j;journalState();scanned=true;complete=false;$('reconnected').checked=false;}
+      if(await fs.exists(JOURNAL)){const j=JSON.parse(utf8.decode(await fs.read(JOURNAL)));if(j.schema!==1||j.release!==release.id)throw Error('This backup belongs to another release.');await restoreArtworkSelection(j);getEngine().journal=j;journalState();scanned=true;complete=false;$('reconnected').checked=false;}
     }
     if(kind!=='backup'&&!engine?.journal)scanned=false;
     stage('Folder selected.',sdReady?(firmwareAttempted()?'Select both drives here in step 05, confirm the radio restart, then verify.':'Continue the update in step 04 to copy the firmware after its preflight checks.'):'Check the radio, or continue a verification/recovery using the same radio and backup.');log('Selected '+kind+': '+fs.name);
@@ -224,6 +284,7 @@ for(const kind of ['sd','boot'])$('reselect-'+kind).onclick=()=>chooseFolder(kin
 $('one-radio').onchange=draw;$('reconnected').onchange=()=>{if($('reconnected').checked)revealStep='verify';draw();};
 $('scan').onclick=()=>action('Checking the radio…',async()=>{
   if(!demo&&!(await boot.exists('INFO_UF2.TXT')))throw Error('Select the root of EDGETX_UF2.');
+  if(artwork.length){stage('Downloading and checking selected images…','All selected images are checked before any radio files are changed.');artworkFiles=await loadArtwork(artwork,{cancel:()=>cancel,progress});log(artwork.length+' selected artwork files downloaded and checksummed.');}
   const summary=await getEngine().scan();scanned=true;backupReady=sdReady=complete=false;
   $('plan').hidden=false;$('plan-summary').textContent=summary.operations.length+' file changes · '+summary.files+' existing files · '+(summary.bytes/1048576).toFixed(1)+' MB of SD files to back up';
   $('plan-files').replaceChildren();for(const op of summary.operations){const li=document.createElement('li');li.textContent=op.operation.toUpperCase()+'  '+op.path;$('plan-files').append(li);}
@@ -250,13 +311,14 @@ $('confirm-skip-backup').onclick=()=>{
   },'backup');
 };
 $('install').onclick=()=>action('Installing the update…',async()=>{
+  if(!sdReady&&artwork.length&&!artworkFiles.size)artworkFiles=await loadArtwork(artwork,{cancel:()=>cancel,progress});
   const installer=getEngine();
   try{
     if(!sdReady){
       stage('Installing and verifying SD files…','Firmware will copy automatically after the SD files pass verification. Keep the radio connected.');
       await installer.install();sdReady=true;
       $('sd-result').textContent='SD files verified. Checking the radio before automatically copying firmware.';
-      log('SD programs and preserved settings verified. Continuing automatically to the firmware copy.');
+      log('SD programs, selected artwork and preserved settings verified. Continuing automatically to the firmware copy.');
     }
     progress(0,1);stage('Checking before the firmware copy…','SD files are verified. Keep this tab open and the USB cable connected.');draw();
     await installer.copyFirmware();
@@ -297,7 +359,7 @@ $('restore').onclick=()=>{
 };
 $('report').onclick=()=>download(encode(JSON.stringify({schema:1,prototype:true,demo,release:release?.id,backupSkipped:!!engine?.backupSkipped,activities:activity,phase:engine?.journal?.phase||'not-started',verification:engine?.journal?.verification||null},null,2)),'KSE-install-report.json','application/json');
 $('demo').onclick=()=>action('Connecting a demo radio…',async()=>{
-  const d=await makeDemo();({manifest:release,files,sd,boot,backup}=d);engine=null;scanned=backupReady=sdReady=complete=resumeReady=recoveryReady=false;demo=true;demoDrives=null;$('reconnected').checked=false;$('demo-banner').hidden=false;$('plan').hidden=true;$('one-radio').checked=true;resetSteps();
+  const d=await makeDemo();({manifest:release,files,sd,boot,backup}=d);engine=null;resetArtwork();scanned=backupReady=sdReady=complete=resumeReady=recoveryReady=false;demo=true;demoDrives=null;$('reconnected').checked=false;$('demo-banner').hidden=false;$('plan').hidden=true;$('one-radio').checked=true;resetSteps();
   $('release-label').textContent='Demo release · no hardware writes';$('release-link').hidden=true;
   stage('Try the installation workflow.','Click Check radio & preview changes. The demo includes existing settings, a saved layout and personal files.');log('Demo uses the same backup, SD install, UF2 copy and verification steps with memory drives only.');
 },'release');

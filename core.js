@@ -1,5 +1,6 @@
 import {encode,utf8,sha256,safePath} from './zip.js';
 import {createBackupZip,verifyBackupZip} from './backup-zip.js';
+import {validateArtwork,artworkIdentity} from './artwork.js';
 export const JOURNAL='installation.json';
 export const UF2_FILENAME='KSE.UF2';
 export const FIRMWARE_PHASES=['firmware-copying','firmware-copied','firmware-check-required'];
@@ -117,7 +118,8 @@ export async function inventory(fs,progress=()=>{},cancel=()=>false){
   }
   return result;
 }
-export function buildPlan(manifest,before){
+export function buildPlan(manifest,before,{replaceAssets=[]}={}){
+  const selected=new Set(replaceAssets.map(pathKey));
   const plan=[],notes=[];
   const existing=pathIndex(Object.keys(before));
   pathIndex([...manifest.files.map(f=>f.path),manifest.settings.path]);
@@ -128,7 +130,7 @@ export function buildPlan(manifest,before){
     check(!/^RADIO\/|^MODELS\/|^flights-count/i.test(f.path),'Package contains protected radio files');
     check(!protectedUser(f.path)||f.path==='SCRIPTS/RF2/PREFS/README.txt','Package contains personal preferences');
     if(preservedElrs(f.path,hasElrs)){notes.push('Your existing ExpressLRS tool will be kept.');continue;}
-    if(preservedAsset(f.path,existing)){notes.push('Existing themes and images will be kept, including matching filenames.');continue;}
+    if(preservedAsset(f.path,existing)&&!selected.has(pathKey(f.path))){notes.push('Existing themes and images will be kept, including matching filenames.');continue;}
     add(f.path,f.sha256);
   }
   const settings=Object.keys(before).some(p=>/^SCRIPTS\/RF2\/settings(?:_backup|_pending)?\.lua$/i.test(p));
@@ -161,10 +163,20 @@ export async function writeVerified(fs,path,bytes){await fs.write(path,bytes);ch
 export class Installer {
   #unbackedJournal=null;
   #originalFirmware=null;
+  #artwork=[];
   get backupSkipped(){return !!this.journal&&this.journal===this.#unbackedJournal;}
-  constructor({manifest,files,sd,boot,backup,progress=()=>{},cancel=()=>false,status=()=>{}}){
+  constructor({manifest,files,sd,boot,backup,artwork=[],progress=()=>{},cancel=()=>false,status=()=>{}}){
     Object.assign(this,{manifest,files,sd,boot,backup,progress,cancel,status});this.busy=false;this.journal=null;
+    this.#artwork=structuredClone(validateArtwork(artwork));
+    // Gallery bytes never replace a different file pinned in the release.
+    for(const item of this.#artwork){const pinned=manifest.files.find(f=>pathKey(f.path)===pathKey(item.path));check(!pinned||pinned.sha256===item.sha256,'Artwork conflicts with a release file.');}
   }
+  get artwork(){return structuredClone(this.#artwork);}
+  get installManifest(){
+    const selected=new Set(this.#artwork.map(f=>pathKey(f.path)));
+    return {...this.manifest,files:[...this.manifest.files.filter(f=>!selected.has(pathKey(f.path))),...this.#artwork]};
+  }
+  makePlan(before){return buildPlan(this.installManifest,before,{replaceAssets:this.#artwork.map(f=>f.path)});}
   async lock(action){check(!this.busy,'An operation is already running.');this.busy=true;try{return await action();}finally{this.busy=false;}}
   async record(){
     // Opting out keeps only this tab's verification state, never a recovery file.
@@ -174,7 +186,7 @@ export class Installer {
   async originalFirmware(){return this.backupSkipped?this.#originalFirmware:await this.backup.read('CURRENT.UF2');}
   checkpointIncludes(path){
     const key=pathKey(path);
-    return !/^(?:IMAGES|SOUNDS|LOGS)\//i.test(path)||this.manifest.files.some(f=>pathKey(f.path)===key)||key===pathKey(this.manifest.settings.path)||(this.journal?.operations||[]).some(o=>pathKey(o.path)===key);
+    return !/^(?:IMAGES|SOUNDS|LOGS)\//i.test(path)||this.installManifest.files.some(f=>pathKey(f.path)===key)||key===pathKey(this.manifest.settings.path)||(this.journal?.operations||[]).some(o=>pathKey(o.path)===key);
   }
   async checkpoint(expected){
     // Pre-write checkpoints retain complete path-set checks. Untouched bulk
@@ -186,10 +198,10 @@ export class Installer {
     this.preview=this.before=this.plan=this.identity=this.journal=null;
     this.#unbackedJournal=this.#originalFirmware=null;
     this.identity=await identify(this.sd,this.boot);
-    const preview=await previewInventory(this.sd,this.manifest,{names:this.identity.names,progress:this.progress,cancel:this.cancel});
+    const preview=await previewInventory(this.sd,this.installManifest,{names:this.identity.names,progress:this.progress,cancel:this.cancel});
     const radioPath=Object.keys(preview).find(p=>p.toLowerCase()==='radio/radio.yml');
     check(preview[radioPath]?.sha256===this.identity.radioHash,'Radio settings changed during the preview. Scan again.');
-    const plan=buildPlan(this.manifest,preview);
+    const plan=this.makePlan(preview);
     // An incomplete fingerprint must never silently classify an existing target
     // as a new file or omit it from the recovery journal.
     for(const op of plan.operations)check(!preview[op.path]||/^[a-f0-9]{64}$/.test(preview[op.path].sha256),'Preview is missing an install-target checksum: '+op.path);
@@ -216,11 +228,11 @@ export class Installer {
       this.progress(i+1,names.length,p);
     }
     await this.checkpoint(before);
-    check(JSON.stringify(buildPlan(this.manifest,before).operations)===JSON.stringify(this.plan),'The install plan changed. Scan again before installing.');
+    check(JSON.stringify(this.makePlan(before).operations)===JSON.stringify(this.plan),'The install plan changed. Scan again before installing.');
     check(await sha256(await this.boot.read('CURRENT.UF2'))===identity.firmwareHash,'Firmware changed during preparation.');
     check(!this.cancel(),'Preparation cancelled. Radio unchanged.');
     this.before=before;
-    this.journal=this.#unbackedJournal={schema:1,release:this.manifest.id,created:new Date().toISOString(),board:identity.board,radioHash:identity.radioHash,firmwareHash:identity.firmwareHash,before,operations:structuredClone(this.plan),touched:[],phase:'backup-skipped',backupSkipped:true,firmwareWritten:false};
+    this.journal=this.#unbackedJournal={schema:1,release:this.manifest.id,artwork:this.artwork,created:new Date().toISOString(),board:identity.board,radioHash:identity.radioHash,firmwareHash:identity.firmwareHash,before,operations:structuredClone(this.plan),touched:[],phase:'backup-skipped',backupSkipped:true,firmwareWritten:false};
     // A temporary firmware reference is needed to check the preserved bootloader.
     // It is never written to disk and cannot recover a closed-tab installation.
     this.#originalFirmware=identity.firmware;
@@ -246,10 +258,10 @@ export class Installer {
       // verifies the closed ZIP. Avoid an extra duplicate local read here.
       await this.backup.write('SD/'+p,bytes);this.progress(i+1,names.length,p);
     }
-    check(JSON.stringify(buildPlan(this.manifest,before).operations)===JSON.stringify(this.plan),'The install plan changed. Scan again before installing.');
+    check(JSON.stringify(this.makePlan(before).operations)===JSON.stringify(this.plan),'The install plan changed. Scan again before installing.');
     this.before=before;
     check(await sha256(await this.boot.read('CURRENT.UF2'))===this.identity.firmwareHash,'Firmware changed during backup.');
-    this.journal={schema:1,release:this.manifest.id,created:new Date().toISOString(),board:this.identity.board,radioHash:this.identity.radioHash,firmwareHash:this.identity.firmwareHash,before:this.before,operations:this.plan,touched:[],phase:'backup-incomplete',firmwareWritten:false};
+    this.journal={schema:1,release:this.manifest.id,artwork:this.artwork,created:new Date().toISOString(),board:this.identity.board,radioHash:this.identity.radioHash,firmwareHash:this.identity.firmwareHash,before:this.before,operations:this.plan,touched:[],phase:'backup-incomplete',firmwareWritten:false};
     try{
       const entries=[{path:'CURRENT.UF2',size:identity.firmware.length,sha256:identity.firmwareHash},{path:'INFO_UF2.TXT',size:identity.info.length,sha256:await sha256(identity.info)},...names.map(p=>({path:'SD/'+p,...this.before[p]}))];
       const metadata={schema:1,created:this.journal.created,board:identity.board,plannedRelease:this.manifest.id,firmware:{file:'CURRENT.UF2',sha256:identity.firmwareHash,description:'Exact firmware read from the radio before installation; may be stock EdgeTX or KS.'},files:entries};
@@ -270,7 +282,7 @@ export class Installer {
   });}
   releaseFile(path){
     const key=pathKey(path);
-    return this.manifest.files.find(f=>pathKey(f.path)===key)||(key===pathKey(this.manifest.settings.path)?this.manifest.settings:null);
+    return this.installManifest.files.find(f=>pathKey(f.path)===key)||(key===pathKey(this.manifest.settings.path)?this.manifest.settings:null);
   }
   allowed(op){
     const supplied=this.releaseFile(op.path);
@@ -279,6 +291,7 @@ export class Installer {
   }
   async validateJournal({compareRadioSettings=true}={}){
     const j=this.journal;check(j?.schema===1&&j.release===this.manifest.id&&j.board==='tx16smk3','Backup belongs to another installer release.');
+    check(artworkIdentity(j.artwork||[])===artworkIdentity(this.#artwork),'Load the same verified artwork selection as this backup before continuing.');
     check(!j.backupSkipped||this.backupSkipped,'An installation without a backup cannot be resumed from a saved journal.');
     check(Array.isArray(j.operations)&&Array.isArray(j.touched)&&j.before&&typeof j.before==='object','Invalid recovery journal');
     const before=pathIndex(Object.keys(j.before)),seen=new Set(),paths=new Set();
@@ -368,7 +381,8 @@ export class Installer {
     // and settings. Regenerated caches and unrelated files are not install targets.
     const hasElrs=hasExistingElrs(this.journal.before);
     const existing=pathIndex(Object.keys(this.journal.before));
-    const targets=this.manifest.files.filter(f=>!preservedElrs(f.path,hasElrs)&&!preservedAsset(f.path,existing));
+    const selected=new Set(this.#artwork.map(f=>pathKey(f.path)));
+    const targets=this.installManifest.files.filter(f=>!preservedElrs(f.path,hasElrs)&&(!preservedAsset(f.path,existing)||selected.has(pathKey(f.path))));
     if(this.journal.operations.some(op=>pathKey(op.path)===pathKey(this.manifest.settings.path)&&op.after!==null))targets.push(this.manifest.settings);
     for(let i=0;i<targets.length;i++){
       const f=targets[i];let bytes;
