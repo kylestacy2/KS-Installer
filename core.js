@@ -140,8 +140,11 @@ export function buildPlan(manifest,before,{replaceAssets=[]}={}){
     const key=pathKey(p),compiled=key.endsWith('.luac')&&packagePaths.has(key.slice(0,-1));
     const keepElrs=hasElrs&&/^SCRIPTS\/TOOLS\/.*(elrs|expresslrs)/i.test(p);
     // Keep preferences; remove only old executable program files in owned trees,
-    // compiled companions for supplied tools, and the incompatible legacy tool.
-    if(!keepElrs&&((ownProgram(p)&&!packagePaths.has(key))||compiled||legacy(p)))add(p,null);
+    // compiled companions for supplied tools, and the legacy Flight Modifier
+    // only when the release no longer supplies it. Releases since 23 November
+    // include a compatible Flight Modifier: removing it here deleted the file
+    // (or, with an older copy, failed with "Duplicate install operation").
+    if(!keepElrs&&((ownProgram(p)&&!packagePaths.has(key))||compiled||(legacy(p)&&!packagePaths.has(key))))add(p,null);
     if(/^SCRIPTS\/RF2\/settings(?:_backup|_pending)?\.luac$/i.test(p))add(p,null);
   }
   const keys=new Set();for(const op of plan){const key=pathKey(op.path);check(!keys.has(key),'Duplicate install operation');keys.add(key);}
