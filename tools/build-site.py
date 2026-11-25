@@ -14,7 +14,7 @@ from zipfile import ZipFile
 ROOT = Path(__file__).resolve().parents[1]
 INSTALLER_ASSETS = {
     '.nojekyll', 'index.html', 'styles.css', 'site-nav.css', 'app.js',
-    'core.js', 'download.js', 'fs.js', 'zip.js', 'backup-zip.js', 'demo.js', 'release.json', 'artwork.js',
+    'core.js', 'fs.js', 'zip.js', 'backup-zip.js', 'demo.js', 'release.json', 'artwork.js',
 }
 GALLERY_FOLDERS = {'wallpapers', 'model-images', 'startup-screens', 'preview', 'thumbnails', 'packs', 'tiles'}
 
@@ -41,30 +41,9 @@ class Page(HTMLParser):
             self.links.append(attrs['value'])
 
 
-def validate_payloads(site, manifest):
-    # Old clients may still need a previously published immutable URL.
-    # Validate every retained payload by its content address, and check the
-    # active bundle member-by-member against the current release manifest.
-    payloads = site / 'payloads'
-    download = manifest['download']
-    assert download['path'] == 'payloads/' + download['sha256'] + '.zip', 'Invalid download path'
-    for payload in payloads.iterdir():
-        assert payload.is_file() and re.fullmatch(r'[0-9a-f]{64}\.zip', payload.name), payload.name
-        assert hashlib.sha256(payload.read_bytes()).hexdigest() == payload.stem, payload.name
-    current = site / download['path']
-    assert current.stat().st_size == download['size'], 'Release download size mismatch'
-    records = [*manifest['files'], manifest['settings'], manifest['firmware']]
-    with ZipFile(current) as archive:
-        assert sorted(archive.namelist()) == sorted(record['archive'] for record in records), 'Release ZIP contents mismatch'
-        for record in records:
-            info = archive.getinfo(record['archive'])
-            assert info.file_size == record['size'], info.filename
-            assert hashlib.sha256(archive.read(info)).hexdigest() == record['sha256'], info.filename
-
-
 def validate_site(site):
     site = site.resolve()
-    assert {p.name for p in site.iterdir()} == INSTALLER_ASSETS | {'gallery', 'payloads'}, 'Unexpected publish root'
+    assert {p.name for p in site.iterdir()} == INSTALLER_ASSETS | {'gallery'}, 'Unexpected publish root'
     files = [p for p in site.rglob('*') if p.is_file()]
     assert not any(p.is_symlink() for p in site.rglob('*')), 'Symlink in publish artifact'
     assert sum(p.stat().st_size for p in files) < 512 * 1024 * 1024, 'Unexpected publish size'
@@ -87,7 +66,7 @@ def validate_site(site):
             if path.suffix == '.js':
                 for imported in re.findall(r"from\s*['\"]([^'\"]+)['\"]", text):
                     assert imported.startswith('./') and (path.parent / imported).is_file(), imported
-        if path.suffix == '.zip' and relative.parts[0] != 'payloads':
+        if path.suffix == '.zip':
             assert relative.parts[:2] == ('gallery', 'packs'), 'Unexpected ZIP in publish artifact'
             with ZipFile(path) as archive:
                 members = archive.namelist()
@@ -126,7 +105,9 @@ def validate_site(site):
     assert manifest['zip']['name'] == 'EdgeTXKSE.zip'
     assert re.fullmatch('[0-9a-f]{64}', manifest['zip']['sha256'])
     assert manifest['releaseURL'] == 'https://github.com/kylestacy2/KSE-Touch/releases/tag/' + manifest['id']
-    validate_payloads(site, manifest)
+    # Closed beta: release files come only from the private KSE-Touch release.
+    # Never publish an install bundle or a download pointer on Pages.
+    assert 'download' not in manifest, 'release.json must not offer a public download'
     print(f'Validated {len(files)} published files and {len(pages)} pages; all local links and image ZIPs checked.')
 
 
@@ -139,11 +120,6 @@ def main():
         staged.mkdir()
         for name in INSTALLER_ASSETS:
             shutil.copyfile(ROOT / name, staged / name)
-        (staged / 'payloads').mkdir()
-        for payload in (ROOT / 'payloads').glob('*.zip'):
-            if payload.is_symlink():
-                raise ValueError(f'Unexpected payload symlink: {payload.name}')
-            shutil.copyfile(payload, staged / 'payloads' / payload.name)
         gallery.main(destination=staged / 'gallery')
         validate_site(staged)
         destination = ROOT / '_site'

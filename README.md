@@ -2,7 +2,7 @@
 
 [Open the radio installer](https://kylestacy2.github.io/KS-Installer/) · [Browse the artwork gallery](https://kylestacy2.github.io/KS-Installer/gallery/)
 
-Use **Grab latest KSE Touch** to install the current release on a TX16S MK3 or MK3 MAX from a supported desktop browser. You can also choose a release ZIP you already have.
+KSE Touch is a closed beta. Download `EdgeTXKSE.zip` from the private KSE-Touch release named on the installer page (beta access required), then choose it in step 01 on a TX16S MK3 or MK3 MAX from a supported desktop browser. The installer never offers release files itself; it only checks the ZIP you choose against `release.json`.
 
 1. Load the release. In **Make it yours**, choose any model images, wallpapers or startup screens you want to add, or continue with the release as supplied.
 2. Connect the radio in bootloader mode, select its SD and UF2 drives, and preview the changes.
@@ -24,6 +24,6 @@ python3 tools/build-site.py
 python3 -m http.server 8790 --directory _site
 ```
 
-Open `http://localhost:8790/` to test the installer and gallery. The build verifies local links, gallery checksums, ZIP packs and the public firmware download against `release.json`. GitHub Actions publishes the generated site on pushes to `main`.
+Open `http://localhost:8790/` to test the installer and gallery. The build verifies local links, gallery checksums and ZIP packs, and fails if `release.json` offers a public download. GitHub Actions publishes the generated site on pushes to `main`.
 
 To update artwork from the master PNG collections, run `python3 gallery/sync_images.py` before building. See the [gallery guide](gallery/README.md).

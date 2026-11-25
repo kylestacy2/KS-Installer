@@ -63,7 +63,7 @@ export class ReleaseZip {
 export async function loadRelease(blob,manifest,progress=()=>{},cancel=()=>false) {
   if(cancel())throw Error('Release check cancelled. Radio unchanged.');
   // Name the expected release: a ZIP from another KSE Touch release differs in size.
-  if(blob.size!==manifest.zip.size&&manifest.label)throw Error('This ZIP is from a different KSE Touch release. This installer installs “'+manifest.label+'”. Use Grab latest KSE Touch, or download EdgeTXKSE.zip from that release.');
+  if(blob.size!==manifest.zip.size&&manifest.label)throw Error('This ZIP is from a different KSE Touch release. This installer installs “'+manifest.label+'”. Download EdgeTXKSE.zip from that release and choose it here.');
   const zip=await ReleaseZip.open(blob,manifest.zip), files=new Map();
   const all=[...manifest.files,manifest.settings,manifest.firmware];
   for(let i=0;i<all.length;i++){

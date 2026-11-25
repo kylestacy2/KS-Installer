@@ -2,11 +2,10 @@ import {loadRelease,encode,utf8} from './zip.js';
 import {Installer,parseUF2,JOURNAL,FIRMWARE_PHASES} from './core.js';
 import {BrowserFS,separateHandles} from './fs.js';
 import {makeDemo} from './demo.js';
-import {fetchLatestRelease,downloadRelease} from './download.js';
 import {loadCatalog,loadArtwork,selectArtwork,artworkIdentity,artworkThumbnailURL} from './artwork.js';
 const $=id=>document.getElementById(id);
 let release,files,sd,boot,backup,engine,demo=false,busy=false,cancel=false,scanned=false,backupReady=false,sdReady=false,complete=false,resumeReady=false,recoveryReady=false;
-const activity=[];let messageTimer,demoDrives,downloadAbort;
+const activity=[];let messageTimer,demoDrives;
 let artworkCatalog=null,artwork=[],artworkFiles=new Map(),artworkIds=new Set(),artworkControls=[];
 const sdPhases=['sd-verified','verified',...FIRMWARE_PHASES];
 const stepKeys=['release','radio','backup','sd','verify'];
@@ -74,7 +73,6 @@ function draw(){
   const active=busy,ready=!!files,canUse=demo||supported();
   const skipped=!!engine?.backupSkipped,prepared=backupReady||(skipped&&engine.journal.phase==='backup-skipped');
   $('choose-zip').disabled=active||demo||!release||!canUse;
-  $('grab-latest').disabled=active||demo||!canUse||(!!engine?.journal&&!complete);
   const pending=firmwareAttempted(),connected=sd&&boot&&$('one-radio').checked;
   $('radio-title').textContent='Connect your radio';
   $('radio-instructions').textContent='Start in bootloader mode, then select both radio drives. After copying firmware, reselect the drives directly in step 05.';
@@ -215,28 +213,12 @@ function clearLoadedRelease(){
 }
 function showRelease(){
   $('release-label').textContent=release.label;$('release-link').href=release.releaseURL;$('release-link').hidden=false;
-  $('download-note').textContent=release.download?'Downloads '+(release.download.size/1000000).toFixed(1)+' MB. Files are checked before you select the radio.':'Get the install files automatically. No ZIP to download or select.';
 }
 function acceptRelease(candidate,loaded){
   parseUF2(loaded.get('@firmware'),{installer:true});
   release=candidate;files=loaded;showRelease();
   stage('Release verified.','Choose any optional images, then connect the radio in bootloader mode and select its two drives.');log('Release hash and all '+files.size+' install resources match '+release.id+'.');
 }
-$('grab-latest').onclick=()=>{
-  if(!canLoadRelease())return;
-  return action('Getting the latest KSE Touch…',async()=>{
-    clearLoadedRelease();downloadAbort=new AbortController();
-    try{
-      stage('Checking the latest release…','No radio files are being accessed.');
-      const candidate=await fetchLatestRelease({signal:downloadAbort.signal});
-      const loaded=await downloadRelease(candidate,{signal:downloadAbort.signal,
-        progress:(n,t)=>{progress(n,t);stage('Downloading KSE Touch…',(n/1000000).toFixed(1)+' of '+(t/1000000).toFixed(1)+' MB');},
-        verifyProgress:(n,t)=>{progress(n,t);stage('Checking downloaded files…',n+' of '+t+' resources verified.');}});
-      if(cancel)throw Error('Download cancelled. Radio unchanged.');
-      acceptRelease(candidate,loaded);
-    }finally{downloadAbort=null;}
-  },'release');
-};
 $('choose-zip').onclick=()=>{if(canLoadRelease())$('zip').click();};
 $('zip').onchange=()=>{
   if(!canLoadRelease())return;
@@ -244,8 +226,8 @@ $('zip').onchange=()=>{
   return action('Checking the release…',async()=>{
     clearLoadedRelease();
     const candidate=release;
-    const selected=blob.size===candidate.download?.size?{...candidate,zip:candidate.download}:candidate;
-    try{acceptRelease(candidate,await loadRelease(blob,selected,(n,t)=>progress(n,t),()=>cancel));}
+    // Only the full EdgeTXKSE.zip from the private release is accepted; there is no public download.
+    try{acceptRelease(candidate,await loadRelease(blob,candidate,(n,t)=>progress(n,t),()=>cancel));}
     finally{$('zip').value='';}
   },'release');
 };
@@ -332,7 +314,7 @@ $('install').onclick=()=>action('Installing the update…',async()=>{
     if(firmwareAttempted())reconnectRequired();
   }
 },'sd');
-$('cancel').onclick=()=>{cancel=true;downloadAbort?.abort();draw();log(downloadAbort?'Download cancellation requested. Radio unchanged.':'Cancellation requested. Waiting for the current file operation to finish.');};
+$('cancel').onclick=()=>{cancel=true;draw();log('Cancellation requested. Waiting for the current file operation to finish.');};
 $('demo-reconnect').onclick=()=>{
   if(!demo||!demoDrives||busy)return;
   ({sd,boot}=demoDrives);demoDrives=null;$('reconnected').checked=true;revealStep='verify';
@@ -370,4 +352,4 @@ try{
   if(candidate.firmwareWriteEnabled!==true)throw Error('This release does not enable the verified UF2 copy step');
   if(!busy&&!files&&!demo){release=candidate;showRelease();}
   if(!supported()){stage('Open this in desktop Chrome or Edge.','This browser cannot access selected drive folders. You can still try the demo.');log('Drive access unavailable in this browser. Demo remains available.');}
-}catch(e){if(!busy&&!files&&!demo){message(e.message);stage('Release unavailable.','Try Grab latest KSE Touch again.');}}draw();
+}catch(e){if(!busy&&!files&&!demo){message(e.message);stage('Release unavailable.','Reload this page to try again.');}}draw();

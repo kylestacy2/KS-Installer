@@ -14,8 +14,7 @@ test('a ZIP from another release names the release the installer expects',async(
   });
 });
 
-test('the pinned Grab latest bundle still loads through the manual path',async()=>{
-  const bundle=new Blob([await readFile(new URL('../'+manifest.download.path,import.meta.url))]);
-  const files=await loadRelease(bundle,{...manifest,zip:manifest.download});
-  assert.equal(files.size,manifest.files.length+2);
+test('a release ZIP of the right size but changed contents is rejected',async()=>{
+  const forged=new Blob([new Uint8Array(manifest.zip.size)]);
+  await assert.rejects(loadRelease(forged,manifest),/checksum does not match/);
 });

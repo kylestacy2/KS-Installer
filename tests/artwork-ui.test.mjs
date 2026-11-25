@@ -8,23 +8,15 @@ const html=await readFile(new URL('../index.html',import.meta.url),'utf8');
 const manifest=JSON.parse(await readFile(new URL('../release.json',import.meta.url)));
 const element=()=>({disabled:false,hidden:false,checked:false,open:false,value:'',textContent:'',children:[],classList:{toggle(){}},focus(){document.activeElement=this;},scrollIntoView(){},append(x){this.children.push(x);},replaceChildren(){this.children=[];},showModal(){this.open=true;},close(){this.open=false;this.onclose?.();}});
 let sequence=0;
-async function setup({automatic=false}={}){
+async function setup(){
   const assets=await collection(),nodes=Object.fromEntries([...html.matchAll(/id="([^"]+)"/g)].map(m=>[m[1],element()])),requests=[];
   globalThis.document={getElementById:id=>{assert(nodes[id],id);return nodes[id];},createElement:element};
   globalThis.window={addEventListener(){}};
-  if(automatic){
-    window.DecompressionStream=DecompressionStream;
-    window.showDirectoryPicker=()=>assert.fail('Loading the release and choosing artwork should never open a drive');
-  }
   globalThis.isSecureContext=true;
   const state={nodes,assets,requests,catalogFailure:false,imageFailure:false,engine:null};
   globalThis.fetch=async url=>{
     requests.push(url);
     if(url==='./release.json')return Response.json(manifest);
-    if(automatic&&url==='./'+manifest.download.path){
-      const bytes=await readFile(new URL('../'+manifest.download.path,import.meta.url));
-      return new Response(bytes,{headers:{'Content-Length':String(bytes.length)}});
-    }
     if(url.endsWith('catalog.json'))return {ok:!state.catalogFailure,json:async()=>assets.catalog};
     const item=assets.catalog.items.find(item=>artworkURL(item)===url);assert(item,url);
     return {ok:!state.imageFailure,arrayBuffer:async()=>assets.files.get(item.path).slice().buffer};
@@ -37,7 +29,7 @@ async function setup({automatic=false}={}){
     try{await nodes[id].onclick();}finally{Installer.prototype.scan=scan;}
   };
   state.select=(position,checked=true)=>{const input=nodes['artwork-grid'].children[position].children[0];assert(!input.disabled);input.checked=checked;input.onchange();};
-  await state.click(automatic?'grab-latest':'demo');return state;
+  await state.click('demo');return state;
 }
 
 test('the optional section never fetches artwork or blocks the default install',async()=>{
@@ -79,15 +71,9 @@ test('skipped backup still includes selected images in installation and final ch
   await f.click('demo-reconnect');await f.click('verify');assert.equal(f.engine.journal.phase,'verified');assert.match(f.nodes['final-result'].textContent,/5 installed SD files/);
 });
 
-test('Grab latest verifies the published bundle and opens optional artwork before any drive access',async()=>{
-  const f=await setup({automatic:true});
-  assert.equal(f.nodes['release-status'].textContent,'Verified');
-  assert.equal(f.nodes['release-label'].textContent,manifest.label);
-  assert(f.requests.includes('./'+manifest.download.path));
-  assert.deepEqual(f.requests.filter(url=>url.startsWith('./gallery/')),[]);
-  await f.click('choose-artwork');
-  f.select(0);
-  assert.match(f.nodes['artwork-summary'].textContent,/1 image selected/);
-  assert.equal(f.nodes['scan'].disabled,true);
-  assert.equal(f.engine,null);
+test('closed beta: the page offers no release download, only the private release ZIP',async()=>{
+  assert(!html.includes('grab-latest'),'no automatic download button');
+  assert(!('download' in manifest),'release.json has no public bundle');
+  const f=await setup();
+  assert.deepEqual(f.requests,['./release.json']);
 });
